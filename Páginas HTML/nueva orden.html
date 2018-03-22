@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Nueva Orden</title>
+  </head>
+  <body>
+    <div class="nuevaOrden">
+      <label for="nuevaOrdenNombre">Nombre</label>
+      <input type="text" id="nuevaOrdenNombre" value="">
+      <br></br>
+      <label for="nuevaOrdenCategoria">Categoria</label>
+      <select id="nuevaOrdenCategoria">
+        <option value="1">Platos</option>
+        <option value="2">Bebidas</option>
+        <option value="3">Especiales</option>
+      </select>
+      <br></br>
+      <label for="nuevaOrdenCantidad">Cantidad</label>
+      <input type="number" id="nuevaOrdenCantidad" value="1" min="1">
+      <br></br>
+      <table style="width:40%">
+        <tr>
+          <th>ID</th><th>Producto</th><th>Total</th>
+        </tr>
+        <tr>
+          <td>124</td><td>Almuerzo Economico</td><td>$1.6</td>
+        </tr>
+        <tr>
+          <td>156</td><td>Bebida Preparada Suave</td><td>$2.5</td>
+        </tr>
+        <tr>
+          <td>156</td><td>Bebida Preparada Ketchup</td><td>$5.55</td>
+        </tr>
+        <tr>
+          <td>156</td><td>Bebida Preparada Super Demo Bin</td><td>$13.0</td>
+        </tr>
+        <tr>
+          <td>156</td><td>Bebida Preparada Mini Demo Bin</td><td>$7.0</td>
+        </tr>
+      </table>
+      <br></br>
+      <button type="button" id="btnNuevaOrden">Enviar Orden</button>
+    </div>
+
+  </body>
+</html>
