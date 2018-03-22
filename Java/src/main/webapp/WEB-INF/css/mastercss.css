@@ -1,6 +1,5 @@
 table {
     color: #040419;
-    font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
     margin-top: 2%;
@@ -8,6 +7,7 @@ table {
     padding-right: 2%;
     margin-bottom: 2%;
     border-radius: 2vw;
+    font-size: 30px;
 }
 td, th {
     border: 1px solid white;
@@ -36,8 +36,8 @@ tr:nth-child(even) {
     margin-top: 0.67vw;
     margin-bottom: 0.67vw;
     margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;  
+    margin-right: 0; 
+    font-weight: bold;
 }
 
 header{
@@ -50,7 +50,8 @@ header{
 }
 body{
     background-image: url(fondo.png);
-    font-family: "Raleway", sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Amatic SC', cursive;
 }
 a{
     position:fixed; 
@@ -71,23 +72,56 @@ a{
     font-weight: bold;
     border-radius: 1vw;
     margin-left: 60%;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Amatic SC', cursive;
+}
+.buttonC{
+    background-color: #e7a61a;
+    border: 2px solid white;
+    color: #040419;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2vw;
+    font-weight: bold;
+    border-radius: 1vw;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Amatic SC', cursive;
+}
+label{
+    color: #040419;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2vw;
+    border-radius: 1vw; 
+    font-weight: bold;
+}
+.inputText{
+    color: #040419;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    border-radius: 1vw;  
 }
 .custom-select{
-
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Amatic SC', cursive;;
     position: relative;
     display: block;
     max-width: 400px;
     min-width: 180px;
-    margin: 5% 5% 5% 5%;
+    margin-left: 3%;
     border: 1px solid ;
-    background-color: #040419;
+    background-color: indianred;
     z-index: 10;
     color: white;
     border-radius: 10px 10px 10px 10px;
-    
 }
-
-
 select{
     border: none;
     outline: none;
@@ -125,7 +159,7 @@ img{
     padding-right: 1%;
     margin-bottom: 2%;
     border-radius: 1vw;
-    border: 5px solid #000033;
+    border: 5px solid indianred;
     text-align: left;
     padding: 8px;
 }
@@ -136,8 +170,16 @@ img{
     border-radius: 10px 10px 10px 10px;
 }
 .fondoSeccionB{
-    background-color: cadetblue;
+    background-color: tan;
     margin: 1% 5% 5% 5%;
     padding: 1% 1% 1% 1%;
+    border-radius: 10px 10px 10px 10px;
+}
+.nuevaOrden{
+    background-image: url("nuevaOrden.png");
+    width: 95%; 
+    height: 100px;
+    padding: 2%;
+    background-size: 100%;
     border-radius: 10px 10px 10px 10px;
 }
