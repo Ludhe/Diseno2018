@@ -75,6 +75,26 @@ a{
     font-family: 'Quicksand', sans-serif;
     font-family: 'Amatic SC', cursive;
 }
+
+.buttonInicio{
+    background-color: #e7a61a;
+    border: 2px solid white;
+    color: #040419;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 24VW;
+    font-size: 5vw;
+    font-weight: bold;
+    border-radius: 1vw;
+    margin-left: 40%;
+    margin-bottom: 1vw;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Amatic SC', cursive;
+    padding: 1vw;
+}
+
 .buttonC{
     background-color: #e7a61a;
     border: 2px solid white;
