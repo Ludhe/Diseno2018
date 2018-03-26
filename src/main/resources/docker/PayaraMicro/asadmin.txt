@@ -1,0 +1,10 @@
+#El pool de conexiones se llama "postgres_mantenimiento_local"
+
+#Creando el pool de conexiones
+create-jdbc-connection-pool --datasourceclassname org.postgresql.ds.PGSimpleDataSource --restype javax.sql.DataSource --property user=tpi2018:password=tpipass:DatabaseName=mantenimiento:ServerName=db:port=5432 postgres_mantenimiento_local
+
+#Probando el pool de conexiones
+ping-connection-pool postgres_mantenimiento_local
+
+#Creando el resource de conexiones
+create-jdbc-resource --connectionpoolid postgres_mantenimiento_local jdbc/mantenimiento
