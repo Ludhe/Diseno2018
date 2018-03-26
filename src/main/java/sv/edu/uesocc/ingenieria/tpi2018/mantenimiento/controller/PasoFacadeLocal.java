@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Paso;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Paso;
  * @author rcarlos
  */
 @Local
-public interface PasoFacadeLocal {
-
-    void create(Paso paso);
-
-    void edit(Paso paso);
-
-    void remove(Paso paso);
-
-    Paso find(Object id);
-
-    List<Paso> findAll();
-
-    List<Paso> findRange(int[] range);
-
-    int count();
-    
+public interface PasoFacadeLocal extends AbstractInterface<Paso>{
 }

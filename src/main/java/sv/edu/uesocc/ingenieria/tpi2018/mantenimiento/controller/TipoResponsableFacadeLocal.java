@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoResponsable;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoResponsable;
  * @author rcarlos
  */
 @Local
-public interface TipoResponsableFacadeLocal {
-
-    void create(TipoResponsable tipoResponsable);
-
-    void edit(TipoResponsable tipoResponsable);
-
-    void remove(TipoResponsable tipoResponsable);
-
-    TipoResponsable find(Object id);
-
-    List<TipoResponsable> findAll();
-
-    List<TipoResponsable> findRange(int[] range);
-
-    int count();
-    
+public interface TipoResponsableFacadeLocal extends AbstractInterface<TipoResponsable>{
 }

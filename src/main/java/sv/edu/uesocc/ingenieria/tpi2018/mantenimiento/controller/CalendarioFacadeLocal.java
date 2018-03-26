@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Calendario;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Calendario;
  * @author rcarlos
  */
 @Local
-public interface CalendarioFacadeLocal {
-
-    void create(Calendario calendario);
-
-    void edit(Calendario calendario);
-
-    void remove(Calendario calendario);
-
-    Calendario find(Object id);
-
-    List<Calendario> findAll();
-
-    List<Calendario> findRange(int[] range);
-
-    int count();
-    
+public interface CalendarioFacadeLocal extends AbstractInterface<Calendario> {
 }

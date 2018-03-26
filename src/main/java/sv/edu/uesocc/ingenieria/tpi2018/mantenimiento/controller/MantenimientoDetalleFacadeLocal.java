@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.MantenimientoDetalle;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.MantenimientoDetall
  * @author rcarlos
  */
 @Local
-public interface MantenimientoDetalleFacadeLocal {
-
-    void create(MantenimientoDetalle mantenimientoDetalle);
-
-    void edit(MantenimientoDetalle mantenimientoDetalle);
-
-    void remove(MantenimientoDetalle mantenimientoDetalle);
-
-    MantenimientoDetalle find(Object id);
-
-    List<MantenimientoDetalle> findAll();
-
-    List<MantenimientoDetalle> findRange(int[] range);
-
-    int count();
-    
+public interface MantenimientoDetalleFacadeLocal extends AbstractInterface<MantenimientoDetalle>{
 }

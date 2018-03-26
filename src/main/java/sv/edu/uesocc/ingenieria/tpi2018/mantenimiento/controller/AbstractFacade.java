@@ -6,6 +6,8 @@
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 /**
@@ -21,18 +23,65 @@ public abstract class AbstractFacade<T> {
     }
 
     protected abstract EntityManager getEntityManager();
-
-    public void create(T entity) {
-        getEntityManager().persist(entity);
+    
+    public boolean create(T entity){
+        boolean salida = false;
+        T e = this.crear(entity);
+        if(e != null){
+        salida =true;
+    }
+        return salida;
+    }
+    
+    public T crear(T entity){
+      T salida = null;
+      try{
+          EntityManager em = getEntityManager();
+          if(em != null && entity != null){
+              em.persist(entity);
+              salida = entity;
+          }
+      }catch(Exception e){
+          Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+      }
+      return salida;
+    }
+    
+    
+        
+    public boolean edit(T entity) {
+        boolean salida = false;
+        T e = this.editar(entity);
+        if(e != null){
+        salida =true;
+    }
+        return salida;
+    }
+    
+    public T editar(T entity){
+      T salida = null;
+      try{
+          EntityManager em = getEntityManager();
+          if(em != null && entity != null){
+              em.merge(entity);
+              salida = entity;
+          }
+      }catch(Exception e){
+          Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+      }
+      return salida;
     }
 
-    public void edit(T entity) {
-        getEntityManager().merge(entity);
+    public boolean remove(T entity) {
+        try {
+           getEntityManager().remove(getEntityManager().merge(entity));
+           return true;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);            
+        }
+        return false;            
     }
-
-    public void remove(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
-    }
+    
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
@@ -44,12 +93,12 @@ public abstract class AbstractFacade<T> {
         return getEntityManager().createQuery(cq).getResultList();
     }
 
-    public List<T> findRange(int[] range) {
+    public List<T> findRange(int desde, int hasta) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
-        q.setMaxResults(range[1] - range[0] + 1);
-        q.setFirstResult(range[0]);
+        q.setMaxResults(hasta);
+        q.setFirstResult(desde);
         return q.getResultList();
     }
 

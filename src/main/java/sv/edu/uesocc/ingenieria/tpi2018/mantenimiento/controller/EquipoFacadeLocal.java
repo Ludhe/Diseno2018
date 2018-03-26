@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Equipo;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Equipo;
  * @author rcarlos
  */
 @Local
-public interface EquipoFacadeLocal {
-
-    void create(Equipo equipo);
-
-    void edit(Equipo equipo);
-
-    void remove(Equipo equipo);
-
-    Equipo find(Object id);
-
-    List<Equipo> findAll();
-
-    List<Equipo> findRange(int[] range);
-
-    int count();
-    
+public interface EquipoFacadeLocal extends AbstractInterface<Equipo> {    
 }

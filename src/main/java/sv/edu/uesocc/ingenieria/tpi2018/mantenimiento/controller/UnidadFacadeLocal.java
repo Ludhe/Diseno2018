@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Unidad;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Unidad;
  * @author rcarlos
  */
 @Local
-public interface UnidadFacadeLocal {
-
-    void create(Unidad unidad);
-
-    void edit(Unidad unidad);
-
-    void remove(Unidad unidad);
-
-    Unidad find(Object id);
-
-    List<Unidad> findAll();
-
-    List<Unidad> findRange(int[] range);
-
-    int count();
-    
+public interface UnidadFacadeLocal extends AbstractInterface<Unidad>{
 }

@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Prioridad;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Prioridad;
  * @author rcarlos
  */
 @Local
-public interface PrioridadFacadeLocal {
-
-    void create(Prioridad prioridad);
-
-    void edit(Prioridad prioridad);
-
-    void remove(Prioridad prioridad);
-
-    Prioridad find(Object id);
-
-    List<Prioridad> findAll();
-
-    List<Prioridad> findRange(int[] range);
-
-    int count();
-    
+public interface PrioridadFacadeLocal extends AbstractInterface<Prioridad>{
 }

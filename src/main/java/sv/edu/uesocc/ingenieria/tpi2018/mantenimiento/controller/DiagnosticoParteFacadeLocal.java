@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.DiagnosticoParte;
 
@@ -14,20 +13,6 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.DiagnosticoParte;
  * @author rcarlos
  */
 @Local
-public interface DiagnosticoParteFacadeLocal {
-
-    void create(DiagnosticoParte diagnosticoParte);
-
-    void edit(DiagnosticoParte diagnosticoParte);
-
-    void remove(DiagnosticoParte diagnosticoParte);
-
-    DiagnosticoParte find(Object id);
-
-    List<DiagnosticoParte> findAll();
-
-    List<DiagnosticoParte> findRange(int[] range);
-
-    int count();
+public interface DiagnosticoParteFacadeLocal extends AbstractInterface<DiagnosticoParte>{
     
 }

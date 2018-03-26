@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
-import java.util.List;
 import javax.ejb.Local;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Modelo;
 
@@ -14,20 +13,5 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Modelo;
  * @author rcarlos
  */
 @Local
-public interface ModeloFacadeLocal {
-
-    void create(Modelo modelo);
-
-    void edit(Modelo modelo);
-
-    void remove(Modelo modelo);
-
-    Modelo find(Object id);
-
-    List<Modelo> findAll();
-
-    List<Modelo> findRange(int[] range);
-
-    int count();
-    
+public interface ModeloFacadeLocal extends AbstractInterface<Modelo>{
 }
