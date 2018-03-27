@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
-import java.awt.PageAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,29 +20,29 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.CalendarioExcepcionFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.CalendarioExcepcion;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.SolicitudFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Solicitud;
 
 /**
  *
  * @author rcarlos
  */
-@Path("calendarioexcepciones")
-public class CalendarioExcepcionResources {
+@Path("solicitud")
+public class SolicitudResources {
 
     @EJB
-    private CalendarioExcepcionFacadeLocal calendarioExcepcionFacade;
+    private SolicitudFacadeLocal solicitudFacade;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<CalendarioExcepcion> findRange(
+    public List<Solicitud> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {
         List salida = null;
         try {
-            if (calendarioExcepcionFacade != null) {
-                salida = calendarioExcepcionFacade.findRange(first, pageSize);
+            if (solicitudFacade != null) {
+                salida = solicitudFacade.findRange(first, pageSize);
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -55,13 +54,13 @@ public class CalendarioExcepcionResources {
         return salida;
     }
 
-    @GET
     @Path("count")
+    @GET
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
         try {
-            if (calendarioExcepcionFacade != null) {
-                return calendarioExcepcionFacade.count();
+            if (solicitudFacade != null) {
+                return solicitudFacade.count();
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -70,29 +69,29 @@ public class CalendarioExcepcionResources {
     }
 
     @GET
-    @Path("{idcalendarioexcepcion}")
+    @Path("{idsolicitud}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public CalendarioExcepcion findById(
-            @PathParam("idcalendarioexcepcion") Integer id
+    public Solicitud findById(
+            @PathParam("idsolicitud") Integer id
     ) {
         try {
-            if (calendarioExcepcionFacade != null && id != null && !(id < 0)) {
-                return calendarioExcepcionFacade.find(id);
+            if (solicitudFacade != null && id != null && !(id < 0)) {
+                return solicitudFacade.find(id);
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return new CalendarioExcepcion();
+        return new Solicitud();
     }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public CalendarioExcepcion create(CalendarioExcepcion registro) {
+    public Solicitud create(Solicitud registro) {
         if (registro != null) {
             try {
-                if (calendarioExcepcionFacade != null) {
-                    CalendarioExcepcion r = calendarioExcepcionFacade.crear(registro);
-                    if (r != null && r.getIdExcepcion() != null) {
+                if (solicitudFacade != null) {
+                    Solicitud r = solicitudFacade.crear(registro);
+                    if (r != null && r.getIdSolicitud() != null) {
                         return r;
                     }
                 }
@@ -100,17 +99,17 @@ public class CalendarioExcepcionResources {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return new CalendarioExcepcion();
+        return new Solicitud();
     }
 
     @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public CalendarioExcepcion edit(CalendarioExcepcion registro) {
-        if (registro != null && registro.getIdExcepcion() != null) {
+    public Solicitud edit(Solicitud registro) {
+        if (registro != null && registro.getIdSolicitud() != null) {
             try {
-                if (calendarioExcepcionFacade != null) {
-                    CalendarioExcepcion r = calendarioExcepcionFacade.editar(registro);
-                    if (r != null && r.getIdExcepcion() != null) {
+                if (solicitudFacade != null) {
+                    Solicitud r = solicitudFacade.editar(registro);
+                    if (r != null && r.getIdSolicitud() != null) {
                         return r;
                     }
                 }
@@ -118,7 +117,7 @@ public class CalendarioExcepcionResources {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return new CalendarioExcepcion();
+        return new Solicitud();
     }
 
     @DELETE
@@ -128,9 +127,9 @@ public class CalendarioExcepcionResources {
             @PathParam("id") Integer id
     ) {
         try {
-            if (calendarioExcepcionFacade != null && id != null && !(id < 0)) {
-                CalendarioExcepcion r = calendarioExcepcionFacade.find(id);
-                return calendarioExcepcionFacade.remove(r);
+            if (solicitudFacade != null && id != null && !(id < 0)) {
+                Solicitud r = solicitudFacade.find(id);
+                return solicitudFacade.remove(r);
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
