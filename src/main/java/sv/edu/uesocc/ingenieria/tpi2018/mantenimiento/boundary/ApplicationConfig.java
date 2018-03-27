@@ -23,6 +23,22 @@ public class ApplicationConfig extends Application{
     }
 
     private void addRestResourcesClasses(Set<Class<?>> resources) {
+        //Diannie
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        
+        //juanpc13
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        
+        //rcarlos97
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
+        //resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
     }
 }
