@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacadeLocal;
@@ -21,6 +22,7 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Marca;
  *
  * @author jcpleitez
  */
+@Path("marca")
 public class MarcaRest implements Serializable{
     
     @EJB
