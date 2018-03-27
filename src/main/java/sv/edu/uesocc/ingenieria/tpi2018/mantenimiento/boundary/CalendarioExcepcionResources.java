@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
-import java.awt.PageAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
