@@ -5,7 +5,6 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,27 +20,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Marca;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.ModeloFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Modelo;
 
 /**
  *
  * @author jcpleitez
  */
-@Path("marca")
-public class MarcaRest implements Serializable {
-
+@Path("modelo")
+public class ModeloRest {
+    
     @EJB
-    private MarcaFacadeLocal mfl;
+    private ModeloFacadeLocal mdfl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Marca> findAll() {
-        if (mfl != null) {
-            List<Marca> list = new ArrayList<>();
+    public List<Modelo> findAll() {
+        if (mdfl != null) {
+            List<Modelo> list = new ArrayList<>();
             try {
-                list = mfl.findAll();
+                list = mdfl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -52,14 +51,14 @@ public class MarcaRest implements Serializable {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Marca> findRange(
+    public List<Modelo> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {        
-        if (mfl != null) {
+        if (mdfl != null) {
             try {
-                List<Marca> list = null;
-                list = mfl.findRange(first, pageSize);
+                List<Modelo> list = null;
+                list = mdfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -69,15 +68,15 @@ public class MarcaRest implements Serializable {
     }
 
     @GET
-    @Path("{idmarca}")
+    @Path("{idmodelo}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Marca findById(
-            @PathParam("idmarca") Integer id
+    public Modelo findById(
+            @PathParam("idmodelo") Integer id
     ) {
-        if (mfl != null) {
-            Marca reg = null;
+        if (mdfl != null) {
+            Modelo reg = null;
             try {
-                reg = mfl.find(id);
+                reg = mdfl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -91,8 +90,8 @@ public class MarcaRest implements Serializable {
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
         try {
-            if (mfl != null) {
-                return mfl.count();
+            if (mdfl != null) {
+                return mdfl.count();
             }
 
         } catch (Exception e) {
@@ -104,15 +103,15 @@ public class MarcaRest implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Marca delete(
+    public Modelo delete(
             @PathParam("id") Integer id
     ) {
         try {
-            Marca reg = null;
-            if (mfl != null) {
-                reg = mfl.find(id);
+            Modelo reg = null;
+            if (mdfl != null) {
+                reg = mdfl.find(id);
                 if(reg != null){
-                    mfl.remove(reg);
+                    mdfl.remove(reg);
                 }
                 return reg;
             }
@@ -124,11 +123,11 @@ public class MarcaRest implements Serializable {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Marca create(Marca registro){
-        if (registro != null && registro.getIdMarca()== null) {
+    public Modelo create(Modelo registro){
+        if (registro != null && registro.getIdModelo()== null) {
             try {
-                if (mfl != null) {
-                    Marca reg = mfl.crear(registro);
+                if (mdfl != null) {
+                    Modelo reg = mdfl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -142,15 +141,15 @@ public class MarcaRest implements Serializable {
 
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Marca edit(Marca reg) {        
-        if (mfl != null) {
-            if (reg.getIdMarca() != null) {
+    public Modelo edit(Modelo reg) {        
+        if (mdfl != null) {
+            if (reg.getIdModelo() != null) {
                 //Verificar que exista ese registro
                 try {
-                    Marca regVerificado = mfl.find(reg.getIdMarca());
+                    Modelo regVerificado = mdfl.find(reg.getIdModelo());
                     if (regVerificado != null) {
-                        if (mfl.edit(reg)) {
-                            return mfl.find(reg.getIdMarca());
+                        if (mdfl.edit(reg)) {
+                            return mdfl.find(reg.getIdModelo());
                         }
                     }
                 } catch (Exception e) {
@@ -160,5 +159,6 @@ public class MarcaRest implements Serializable {
         }
         return null;
     }
-
+    
 }
+
