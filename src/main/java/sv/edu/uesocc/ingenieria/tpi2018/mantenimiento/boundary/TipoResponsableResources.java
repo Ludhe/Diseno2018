@@ -5,6 +5,7 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoResponsable;
  * @author rcarlos
  */
 @Path("tiporesponsable")
-public class TipoResponsableResources {
+public class TipoResponsableResources implements Serializable {
 
     @EJB
     private TipoResponsableFacadeLocal tipoResponsableFacade;

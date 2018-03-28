@@ -5,6 +5,7 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Calendario;
  * @author dmmaga
  */
 @Path("calendario")
-public class CalendarioResources {
+public class CalendarioResources implements Serializable {
 
     @EJB
     private CalendarioFacadeLocal calendarioFacade;

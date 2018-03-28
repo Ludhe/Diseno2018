@@ -5,6 +5,7 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoParte;
  * @author dmmaga
  */
 @Path("tipoparte")
-public class TipoParteResources {
+public class TipoParteResources implements Serializable {
 
     @EJB
     private TipoParteFacadeLocal tipoParteFacade;

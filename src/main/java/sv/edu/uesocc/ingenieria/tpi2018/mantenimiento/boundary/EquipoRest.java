@@ -21,27 +21,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.ModeloFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Modelo;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.EquipoFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Equipo;
 
 /**
  *
  * @author jcpleitez
  */
-@Path("modelo")
-public class ModeloRest  implements Serializable {
+@Path("equipo")
+public class EquipoRest implements Serializable {
     
     @EJB
-    private ModeloFacadeLocal mdfl;
+    private EquipoFacadeLocal efl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Modelo> findAll() {
-        if (mdfl != null) {
-            List<Modelo> list = new ArrayList<>();
+    public List<Equipo> findAll() {
+        if (efl != null) {
+            List<Equipo> list = new ArrayList<>();
             try {
-                list = mdfl.findAll();
+                list = efl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -52,14 +52,14 @@ public class ModeloRest  implements Serializable {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Modelo> findRange(
+    public List<Equipo> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {        
-        if (mdfl != null) {
+        if (efl != null) {
             try {
-                List<Modelo> list = null;
-                list = mdfl.findRange(first, pageSize);
+                List<Equipo> list = null;
+                list = efl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -69,15 +69,15 @@ public class ModeloRest  implements Serializable {
     }
 
     @GET
-    @Path("{idmodelo}")
+    @Path("{idequipo}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo findById(
-            @PathParam("idmodelo") Integer id
+    public Equipo findById(
+            @PathParam("idequipo") Integer id
     ) {
-        if (mdfl != null) {
-            Modelo reg = null;
+        if (efl != null) {
+            Equipo reg = null;
             try {
-                reg = mdfl.find(id);
+                reg = efl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -91,8 +91,8 @@ public class ModeloRest  implements Serializable {
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
         try {
-            if (mdfl != null) {
-                return mdfl.count();
+            if (efl != null) {
+                return efl.count();
             }
 
         } catch (Exception e) {
@@ -104,15 +104,15 @@ public class ModeloRest  implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo delete(
+    public Equipo delete(
             @PathParam("id") Integer id
     ) {
         try {
-            Modelo reg = null;
-            if (mdfl != null) {
-                reg = mdfl.find(id);
+            Equipo reg = null;
+            if (efl != null) {
+                reg = efl.find(id);
                 if(reg != null){
-                    mdfl.remove(reg);
+                    efl.remove(reg);
                 }
                 return reg;
             }
@@ -124,11 +124,11 @@ public class ModeloRest  implements Serializable {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Modelo create(Modelo registro){
-        if (registro != null && registro.getIdModelo()== null) {
+    public Equipo create(Equipo registro){
+        if (registro != null && registro.getIdQuipo()== null) {
             try {
-                if (mdfl != null) {
-                    Modelo reg = mdfl.crear(registro);
+                if (efl != null) {
+                    Equipo reg = efl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -142,15 +142,15 @@ public class ModeloRest  implements Serializable {
 
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo edit(Modelo reg) {        
-        if (mdfl != null) {
-            if (reg.getIdModelo() != null) {
+    public Equipo edit(Equipo reg) {        
+        if (efl != null) {
+            if (reg.getIdQuipo() != null) {
                 //Verificar que exista ese registro
                 try {
-                    Modelo regVerificado = mdfl.find(reg.getIdModelo());
+                    Equipo regVerificado = efl.find(reg.getIdQuipo());
                     if (regVerificado != null) {
-                        if (mdfl.edit(reg)) {
-                            return mdfl.find(reg.getIdModelo());
+                        if (efl.edit(reg)) {
+                            return efl.find(reg.getIdQuipo());
                         }
                     }
                 } catch (Exception e) {
@@ -162,4 +162,3 @@ public class ModeloRest  implements Serializable {
     }
     
 }
-

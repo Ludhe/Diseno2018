@@ -21,27 +21,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.ModeloFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Modelo;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.OrdenTrabajoFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.OrdenTrabajo;
 
 /**
  *
  * @author jcpleitez
  */
-@Path("modelo")
-public class ModeloRest  implements Serializable {
+@Path("ordentrabajo")
+public class OrdenTrabajoRest implements Serializable {
     
     @EJB
-    private ModeloFacadeLocal mdfl;
+    private OrdenTrabajoFacadeLocal otfl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Modelo> findAll() {
-        if (mdfl != null) {
-            List<Modelo> list = new ArrayList<>();
+    public List<OrdenTrabajo> findAll() {
+        if (otfl != null) {
+            List<OrdenTrabajo> list = new ArrayList<>();
             try {
-                list = mdfl.findAll();
+                list = otfl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -52,14 +52,14 @@ public class ModeloRest  implements Serializable {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<Modelo> findRange(
+    public List<OrdenTrabajo> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {        
-        if (mdfl != null) {
+        if (otfl != null) {
             try {
-                List<Modelo> list = null;
-                list = mdfl.findRange(first, pageSize);
+                List<OrdenTrabajo> list = null;
+                list = otfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -69,15 +69,15 @@ public class ModeloRest  implements Serializable {
     }
 
     @GET
-    @Path("{idmodelo}")
+    @Path("{idordentrabajo}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo findById(
-            @PathParam("idmodelo") Integer id
+    public OrdenTrabajo findById(
+            @PathParam("idordentrabajo") Integer id
     ) {
-        if (mdfl != null) {
-            Modelo reg = null;
+        if (otfl != null) {
+            OrdenTrabajo reg = null;
             try {
-                reg = mdfl.find(id);
+                reg = otfl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -91,8 +91,8 @@ public class ModeloRest  implements Serializable {
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
         try {
-            if (mdfl != null) {
-                return mdfl.count();
+            if (otfl != null) {
+                return otfl.count();
             }
 
         } catch (Exception e) {
@@ -104,15 +104,15 @@ public class ModeloRest  implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo delete(
+    public OrdenTrabajo delete(
             @PathParam("id") Integer id
     ) {
         try {
-            Modelo reg = null;
-            if (mdfl != null) {
-                reg = mdfl.find(id);
+            OrdenTrabajo reg = null;
+            if (otfl != null) {
+                reg = otfl.find(id);
                 if(reg != null){
-                    mdfl.remove(reg);
+                    otfl.remove(reg);
                 }
                 return reg;
             }
@@ -124,11 +124,11 @@ public class ModeloRest  implements Serializable {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Modelo create(Modelo registro){
-        if (registro != null && registro.getIdModelo()== null) {
+    public OrdenTrabajo create(OrdenTrabajo registro){
+        if (registro != null && registro.getIdOrdenTrabajo()== null) {
             try {
-                if (mdfl != null) {
-                    Modelo reg = mdfl.crear(registro);
+                if (otfl != null) {
+                    OrdenTrabajo reg = otfl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -142,15 +142,15 @@ public class ModeloRest  implements Serializable {
 
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Modelo edit(Modelo reg) {        
-        if (mdfl != null) {
-            if (reg.getIdModelo() != null) {
+    public OrdenTrabajo edit(OrdenTrabajo reg) {        
+        if (otfl != null) {
+            if (reg.getIdOrdenTrabajo() != null) {
                 //Verificar que exista ese registro
                 try {
-                    Modelo regVerificado = mdfl.find(reg.getIdModelo());
+                    OrdenTrabajo regVerificado = otfl.find(reg.getIdOrdenTrabajo());
                     if (regVerificado != null) {
-                        if (mdfl.edit(reg)) {
-                            return mdfl.find(reg.getIdModelo());
+                        if (otfl.edit(reg)) {
+                            return otfl.find(reg.getIdOrdenTrabajo());
                         }
                     }
                 } catch (Exception e) {
@@ -162,4 +162,3 @@ public class ModeloRest  implements Serializable {
     }
     
 }
-

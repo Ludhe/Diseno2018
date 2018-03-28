@@ -31,9 +31,11 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {        
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioExcepcionResources.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.CalendarioResources.class);
+        resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.EquipoRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.EstadoRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.MarcaRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.ModeloRest.class);
+        resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.OrdenTrabajoRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.PasoResources.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.PrioridadRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.SolicitudResources.class);
