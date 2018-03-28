@@ -90,13 +90,12 @@ public class EstadoRest  implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (efl != null) {
+        if (efl != null) {
+            try {
                 return efl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class EstadoRest  implements Serializable {
     public Estado delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            Estado reg = null;
-            if (efl != null) {
-                reg = efl.find(id);
+        if (efl != null) {
+            try {
+                Estado reg = efl.find(id);
                 if(reg != null){
                     efl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

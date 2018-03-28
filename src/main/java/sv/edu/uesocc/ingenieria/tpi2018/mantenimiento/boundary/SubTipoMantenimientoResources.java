@@ -32,112 +32,40 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.SubTipoMantenimient
 public class SubTipoMantenimientoResources implements Serializable {
 
     @EJB
-    private SubTipoMantenimientoFacadeLocal subTipoMttoFacade;
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public SubTipoMantenimiento create(SubTipoMantenimiento registro) {
-        if (registro != null) {
-            try {
-                if (subTipoMttoFacade != null) {
-                    SubTipoMantenimiento r = subTipoMttoFacade.crear(registro);
-                    if (r != null && r.getIdSubTipoMantenimiento() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new SubTipoMantenimiento();
-    }
-
-    @PUT
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public SubTipoMantenimiento edit(SubTipoMantenimiento registro) {
-        if (registro != null && registro.getIdSubTipoMantenimiento() != null) {
-            try {
-                if (subTipoMttoFacade != null) {
-                    SubTipoMantenimiento r = subTipoMttoFacade.editar(registro);
-                    if (r != null && r.getIdSubTipoMantenimiento() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new SubTipoMantenimiento();
-    }
-
-    @DELETE
-    @Path("delete/{id}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
-            @PathParam("id") Integer id
-    ) {
-        try {
-            if (subTipoMttoFacade != null && id != null && !(id < 0)) {
-                SubTipoMantenimiento r = subTipoMttoFacade.find(id);
-                return subTipoMttoFacade.remove(r);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return false;
-    }
+    private SubTipoMantenimientoFacadeLocal stmfl;
 
     @GET
+    @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<SubTipoMantenimiento> findAll() {
-        List salida = null;
-        try {
-            if (subTipoMttoFacade != null) {
-                salida = subTipoMttoFacade.findAll();
+        if (stmfl != null) {
+            List<SubTipoMantenimiento> list = new ArrayList<>();
+            try {
+                list = stmfl.findAll();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
-            }
+            return list;
         }
-        return salida;
+        return null;
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<SubTipoMantenimiento> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {
-        List salida = null;
-        try {
-            if (subTipoMttoFacade != null) {
-                salida = subTipoMttoFacade.findRange(first, pageSize);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
+    ) {        
+        if (stmfl != null) {
+            try {
+                List<SubTipoMantenimiento> list = null;
+                list = stmfl.findRange(first, pageSize);
+                return list;
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return salida;
-    }
-
-    @GET
-    @Path("count")
-    @Produces({MediaType.TEXT_PLAIN})
-    public Integer count() {
-        try {
-            if (subTipoMttoFacade != null) {
-                return subTipoMttoFacade.count();
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return 0;
+        return null;
     }
 
     @GET
@@ -146,14 +74,87 @@ public class SubTipoMantenimientoResources implements Serializable {
     public SubTipoMantenimiento findById(
             @PathParam("idsubtipomtto") Integer id
     ) {
-        try {
-            if (subTipoMttoFacade != null && id != null && !(id < 0)) {
-                return subTipoMttoFacade.find(id);
+        if (stmfl != null) {
+            SubTipoMantenimiento reg = null;
+            try {
+                reg = stmfl.find(id);
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return reg;
         }
-        return new SubTipoMantenimiento();
+        return null;
     }
 
+    @GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public Integer count() {
+        if (stmfl != null) {
+            try {
+                return stmfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public SubTipoMantenimiento delete(
+            @PathParam("id") Integer id
+    ) {
+        if (stmfl != null) {
+            try {
+                SubTipoMantenimiento reg = stmfl.find(id);
+                if(reg != null){
+                    stmfl.remove(reg);
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+    
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
+    public SubTipoMantenimiento create(SubTipoMantenimiento registro){
+        if (registro != null && registro.getIdSubTipoMantenimiento()== null) {
+            try {
+                if (stmfl != null) {
+                    SubTipoMantenimiento reg = stmfl.crear(registro);
+                    if (reg != null) {
+                        return reg;
+                    }
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    @PUT    
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public SubTipoMantenimiento edit(SubTipoMantenimiento reg) {        
+        if (stmfl != null) {
+            if (reg.getIdSubTipoMantenimiento() != null) {
+                //Verificar que exista ese registro
+                try {
+                    SubTipoMantenimiento regVerificado = stmfl.find(reg.getIdSubTipoMantenimiento());
+                    if (regVerificado != null) {
+                        if (stmfl.edit(reg)) {
+                            return stmfl.find(reg.getIdSubTipoMantenimiento());
+                        }
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }
+        return null;
+    }
 }

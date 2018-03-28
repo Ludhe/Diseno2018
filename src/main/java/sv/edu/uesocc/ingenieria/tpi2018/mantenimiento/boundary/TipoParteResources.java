@@ -32,112 +32,40 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoParte;
 public class TipoParteResources implements Serializable {
 
     @EJB
-    private TipoParteFacadeLocal tipoParteFacade;
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoParte create(TipoParte registro) {
-        if (registro != null) {
-            try {
-                if (tipoParteFacade != null) {
-                    TipoParte r = tipoParteFacade.crear(registro);
-                    if (r != null && r.getIdTipoParte() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new TipoParte();
-    }
-
-    @PUT
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoParte edit(TipoParte registro) {
-        if (registro != null && registro.getIdTipoParte() != null) {
-            try {
-                if (tipoParteFacade != null) {
-                    TipoParte r = tipoParteFacade.editar(registro);
-                    if (r != null && r.getIdTipoParte() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new TipoParte();
-    }
-
-    @DELETE
-    @Path("delete/{id}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
-            @PathParam("id") Integer id
-    ) {
-        try {
-            if (tipoParteFacade != null && id != null && !(id < 0)) {
-                TipoParte r = tipoParteFacade.find(id);
-                return tipoParteFacade.remove(r);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return false;
-    }
+    private TipoParteFacadeLocal tpfl;
 
     @GET
+    @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoParte> findAll() {
-        List salida = null;
-        try {
-            if (tipoParteFacade != null) {
-                salida = tipoParteFacade.findAll();
+        if (tpfl != null) {
+            List<TipoParte> list = new ArrayList<>();
+            try {
+                list = tpfl.findAll();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
-            }
+            return list;
         }
-        return salida;
+        return null;
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoParte> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {
-        List salida = null;
-        try {
-            if (tipoParteFacade != null) {
-                salida = tipoParteFacade.findRange(first, pageSize);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
+    ) {        
+        if (tpfl != null) {
+            try {
+                List<TipoParte> list = null;
+                list = tpfl.findRange(first, pageSize);
+                return list;
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return salida;
-    }
-
-    @GET
-    @Path("count")
-    @Produces({MediaType.TEXT_PLAIN})
-    public Integer count() {
-        try {
-            if (tipoParteFacade != null) {
-                return tipoParteFacade.count();
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return 0;
+        return null;
     }
 
     @GET
@@ -146,14 +74,88 @@ public class TipoParteResources implements Serializable {
     public TipoParte findById(
             @PathParam("idtipoparte") Integer id
     ) {
-        try {
-            if (tipoParteFacade != null && id != null && !(id < 0)) {
-                return tipoParteFacade.find(id);
+        if (tpfl != null) {
+            TipoParte reg = null;
+            try {
+                reg = tpfl.find(id);
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return reg;
         }
-        return new TipoParte();
+        return null;
+    }
+
+    @GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public Integer count() {
+        if (tpfl != null) {
+            try {
+                return tpfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public TipoParte delete(
+            @PathParam("id") Integer id
+    ) {
+        if (tpfl != null) {
+            try {
+                TipoParte reg = tpfl.find(id);
+                if(reg != null){
+                    tpfl.remove(reg);
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+    
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
+    public TipoParte create(TipoParte registro){
+        if (registro != null && registro.getIdTipoParte()== null) {
+            try {
+                if (tpfl != null) {
+                    TipoParte reg = tpfl.crear(registro);
+                    if (reg != null) {
+                        return reg;
+                    }
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    @PUT    
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public TipoParte edit(TipoParte reg) {        
+        if (tpfl != null) {
+            if (reg.getIdTipoParte() != null) {
+                //Verificar que exista ese registro
+                try {
+                    TipoParte regVerificado = tpfl.find(reg.getIdTipoParte());
+                    if (regVerificado != null) {
+                        if (tpfl.edit(reg)) {
+                            return tpfl.find(reg.getIdTipoParte());
+                        }
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }
+        return null;
     }
 
 }

@@ -90,13 +90,12 @@ public class MarcaRest implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (mfl != null) {
+        if (mfl != null) {
+            try {
                 return mfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class MarcaRest implements Serializable {
     public Marca delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            Marca reg = null;
-            if (mfl != null) {
-                reg = mfl.find(id);
+        if (mfl != null) {
+            try {
+                Marca reg = mfl.find(id);
                 if(reg != null){
                     mfl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

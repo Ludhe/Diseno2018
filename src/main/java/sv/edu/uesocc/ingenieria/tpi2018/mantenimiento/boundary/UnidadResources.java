@@ -34,77 +34,22 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Unidad;
 public class UnidadResources  implements Serializable {
     
     @EJB
-    private UnidadFacadeLocal unidadFacade;
-    
-    @POST
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Unidad create(Unidad registro) {
-        if (registro != null) {
-            try {
-                if (unidadFacade != null) {
-                    Unidad r = unidadFacade.crear(registro);
-                    if (r != null && r.getIdUnidad() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new Unidad();
-    }
-    
-    @PUT
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Unidad edit(Unidad registro) {
-        if (registro != null && registro.getIdUnidad() != null) {
-            try {
-                if (unidadFacade != null) {
-                    Unidad r = unidadFacade.editar(registro);
-                    if (r != null && r.getIdUnidad() != null) {
-                        return r;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return new Unidad();
-    }
-    
-    @DELETE
-    @Path("delete/{id}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
-            @PathParam("id") Integer id
-    ) {
-        try {
-            if (unidadFacade != null && id != null && !(id < 0)) {
-                Unidad r = unidadFacade.find(id);
-                return unidadFacade.remove(r);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return false;
-    }
-    
+    private UnidadFacadeLocal ufl;
+
     @GET
+    @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Unidad> findAll() {
-        List salida = null;
-        try {
-            if (unidadFacade != null) {
-                salida = unidadFacade.findAll();
+        if (ufl != null) {
+            List<Unidad> list = new ArrayList<>();
+            try {
+                list = ufl.findAll();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida==null) {
-                salida = new ArrayList();
-            }
+            return list;
         }
-        return salida;
+        return null;
     }
     
     @GET
@@ -112,51 +57,107 @@ public class UnidadResources  implements Serializable {
     public List<Unidad> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {
-        List salida = null;
-        try {
-            if (unidadFacade != null) {
-                salida = unidadFacade.findRange(first, pageSize);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
+    ) {        
+        if (ufl != null) {
+            try {
+                List<Unidad> list = null;
+                list = ufl.findRange(first, pageSize);
+                return list;
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return salida;
+        return null;
     }
-    
+
+    @GET
+    @Path("{idunidad}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Unidad findById(
+            @PathParam("idunidad") Integer id
+    ) {
+        if (ufl != null) {
+            Unidad reg = null;
+            try {
+                reg = ufl.find(id);
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+            return reg;
+        }
+        return null;
+    }
+
     @GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (unidadFacade != null) {
-                return unidadFacade.count();
+        if (ufl != null) {
+            try {
+                return ufl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return 0;
+        return null;
     }
-    
-    @GET
-    @Path("{idUnidad}")
+
+    @DELETE
+    @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Unidad findById(
-            @PathParam("idUnidad") Integer id
+    public Unidad delete(
+            @PathParam("id") Integer id
     ) {
-        try {
-            if (unidadFacade != null && id != null && !(id < 0)) {
-                return unidadFacade.find(id);
+        if (ufl != null) {
+            try {
+                Unidad reg = ufl.find(id);
+                if(reg != null){
+                    ufl.remove(reg);
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return new Unidad();
+        return null;
     }
     
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
+    public Unidad create(Unidad registro){
+        if (registro != null && registro.getIdUnidad()== null) {
+            try {
+                if (ufl != null) {
+                    Unidad reg = ufl.crear(registro);
+                    if (reg != null) {
+                        return reg;
+                    }
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    @PUT    
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Unidad edit(Unidad reg) {        
+        if (ufl != null) {
+            if (reg.getIdUnidad() != null) {
+                //Verificar que exista ese registro
+                try {
+                    Unidad regVerificado = ufl.find(reg.getIdUnidad());
+                    if (regVerificado != null) {
+                        if (ufl.edit(reg)) {
+                            return ufl.find(reg.getIdUnidad());
+                        }
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }
+        return null;
+    }
 
 }

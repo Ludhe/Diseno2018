@@ -90,13 +90,12 @@ public class ModeloRest  implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (mdfl != null) {
+        if (mdfl != null) {
+            try {
                 return mdfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class ModeloRest  implements Serializable {
     public Modelo delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            Modelo reg = null;
-            if (mdfl != null) {
-                reg = mdfl.find(id);
+        if (mdfl != null) {
+            try {
+                Modelo reg = mdfl.find(id);
                 if(reg != null){
                     mdfl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

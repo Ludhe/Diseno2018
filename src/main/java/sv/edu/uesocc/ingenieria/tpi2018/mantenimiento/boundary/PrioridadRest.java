@@ -90,13 +90,12 @@ public class PrioridadRest  implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (pfl != null) {
+        if (pfl != null) {
+            try {
                 return pfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class PrioridadRest  implements Serializable {
     public Prioridad delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            Prioridad reg = null;
-            if (pfl != null) {
-                reg = pfl.find(id);
+        if (pfl != null) {
+            try {
+                Prioridad reg = pfl.find(id);
                 if(reg != null){
                     pfl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

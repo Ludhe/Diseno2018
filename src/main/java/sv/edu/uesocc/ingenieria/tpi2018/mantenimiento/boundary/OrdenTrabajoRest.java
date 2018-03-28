@@ -90,13 +90,12 @@ public class OrdenTrabajoRest implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (otfl != null) {
+        if (otfl != null) {
+            try {
                 return otfl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class OrdenTrabajoRest implements Serializable {
     public OrdenTrabajo delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            OrdenTrabajo reg = null;
-            if (otfl != null) {
-                reg = otfl.find(id);
+        if (otfl != null) {
+            try {
+                OrdenTrabajo reg = otfl.find(id);
                 if(reg != null){
                     otfl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

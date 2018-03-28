@@ -90,13 +90,12 @@ public class EquipoRest implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (efl != null) {
+        if (efl != null) {
+            try {
                 return efl.count();
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
@@ -107,17 +106,15 @@ public class EquipoRest implements Serializable {
     public Equipo delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            Equipo reg = null;
-            if (efl != null) {
-                reg = efl.find(id);
+        if (efl != null) {
+            try {
+                Equipo reg = efl.find(id);
                 if(reg != null){
                     efl.remove(reg);
-                }
-                return reg;
+                }                
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }

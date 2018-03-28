@@ -88,6 +88,7 @@ public class CalendarioResources implements Serializable {
     }
 
     @GET
+    @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Calendario> findAll() {
         List salida = null;
