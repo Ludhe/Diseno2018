@@ -9,6 +9,8 @@ CREATE USER mortal2018 WITH
   NOCREATEROLE
   NOREPLICATION;
 
+ALTER USER mortal2018 WITH PASSWORD 'mortal';
+
   --
   -- PostgreSQL database dump
   --
