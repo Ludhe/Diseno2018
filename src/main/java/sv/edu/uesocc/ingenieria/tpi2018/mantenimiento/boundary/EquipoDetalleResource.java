@@ -21,27 +21,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MantenimientoDetalleFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.MantenimientoDetalle;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.EquipoDetalleFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.EquipoDetalle;
 
 /**
  *
- * @author dmmaga
+ * @author jcpleitez
  */
-@Path("mantenimientodetalle")
-public class MantenimientoDetalleResource implements Serializable {
+@Path("equipodetalle")
+public class EquipoDetalleResource implements Serializable {
 
     @EJB
-    private MantenimientoDetalleFacadeLocal mdfl;
+    private EquipoDetalleFacadeLocal edfl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<MantenimientoDetalle> findAll() {
-        if (mdfl != null) {
-            List<MantenimientoDetalle> list = new ArrayList<>();
+    public List<EquipoDetalle> findAll() {
+        if (edfl != null) {
+            List<EquipoDetalle> list = new ArrayList<>();
             try {
-                list = mdfl.findAll();
+                list = edfl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -49,17 +49,17 @@ public class MantenimientoDetalleResource implements Serializable {
         }
         return null;
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<MantenimientoDetalle> findRange(
+    public List<EquipoDetalle> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {
-        if (mdfl != null) {
+    ) {        
+        if (edfl != null) {
             try {
-                List<MantenimientoDetalle> list = null;
-                list = mdfl.findRange(first, pageSize);
+                List<EquipoDetalle> list = null;
+                list = edfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -69,15 +69,15 @@ public class MantenimientoDetalleResource implements Serializable {
     }
 
     @GET
-    @Path("{idmantenimientodetalle}")
+    @Path("{idequipodetalle}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public MantenimientoDetalle findById(
-            @PathParam("idmantenimientodetalle") Integer id
+    public EquipoDetalle findById(
+            @PathParam("idequipodetalle") Integer id
     ) {
-        if (mdfl != null) {
-            MantenimientoDetalle reg = null;
+        if (edfl != null) {
+            EquipoDetalle reg = null;
             try {
-                reg = mdfl.find(id);
+                reg = edfl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -90,9 +90,9 @@ public class MantenimientoDetalleResource implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        if (mdfl != null) {
+        if (edfl != null) {
             try {
-                return mdfl.count();
+                return edfl.count();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -103,29 +103,29 @@ public class MantenimientoDetalleResource implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public MantenimientoDetalle delete(
+    public EquipoDetalle delete(
             @PathParam("id") Integer id
     ) {
-        if (mdfl != null) {
+        if (edfl != null) {
             try {
-                MantenimientoDetalle reg = mdfl.find(id);
-                if (reg != null) {
-                    mdfl.remove(reg);
-                }
+                EquipoDetalle reg = edfl.find(id);
+                if(reg != null){
+                    edfl.remove(reg);
+                }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
         return null;
     }
-
+    
     @POST
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public MantenimientoDetalle create(MantenimientoDetalle registro) {
-        if (registro != null && registro.getIdMantenimientoDetalle() == null) {
+    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
+    public EquipoDetalle create(EquipoDetalle registro){
+        if (registro != null && registro.getIdEquipoDetalle()== null) {
             try {
-                if (mdfl != null) {
-                    MantenimientoDetalle reg = mdfl.crear(registro);
+                if (edfl != null) {
+                    EquipoDetalle reg = edfl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -137,17 +137,17 @@ public class MantenimientoDetalleResource implements Serializable {
         return null;
     }
 
-    @PUT
+    @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public MantenimientoDetalle edit(MantenimientoDetalle reg) {
-        if (mdfl != null) {
-            if (reg.getIdMantenimientoDetalle() != null) {
+    public EquipoDetalle edit(EquipoDetalle reg) {        
+        if (edfl != null) {
+            if (reg.getIdMarca() != null) {
                 //Verificar que exista ese registro
                 try {
-                    MantenimientoDetalle regVerificado = mdfl.find(reg.getIdMantenimientoDetalle());
+                    EquipoDetalle regVerificado = edfl.find(reg.getIdEquipoDetalle());
                     if (regVerificado != null) {
-                        if (mdfl.edit(reg)) {
-                            return mdfl.find(reg.getIdMantenimientoDetalle());
+                        if (edfl.edit(reg)) {
+                            return edfl.find(reg.getIdEquipoDetalle());
                         }
                     }
                 } catch (Exception e) {
