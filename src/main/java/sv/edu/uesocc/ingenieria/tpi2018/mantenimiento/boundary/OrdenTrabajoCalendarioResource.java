@@ -21,29 +21,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.TipoMantenimientoFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoMantenimiento;
-
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.OrdenTrabajoCalendarioFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.OrdenTrabajoCalendario;
 
 /**
  *
  * @author dmmaga
  */
+@Path("ordentrabajocalendario")
+public class OrdenTrabajoCalendarioResource implements Serializable {
 
-@Path("tipomantenimiento")
-public class TipoMantenimientoResources  implements Serializable {
-    
     @EJB
-    private TipoMantenimientoFacadeLocal tmfl;
+    private OrdenTrabajoCalendarioFacadeLocal otcfl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<TipoMantenimiento> findAll() {
-        if (tmfl != null) {
-            List<TipoMantenimiento> list = new ArrayList<>();
+    public List<OrdenTrabajoCalendario> findAll() {
+        if (otcfl != null) {
+            List<OrdenTrabajoCalendario> list = new ArrayList<>();
             try {
-                list = tmfl.findAll();
+                list = otcfl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -54,14 +52,14 @@ public class TipoMantenimientoResources  implements Serializable {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<TipoMantenimiento> findRange(
+    public List<OrdenTrabajoCalendario> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {        
-        if (tmfl != null) {
+        if (otcfl != null) {
             try {
-                List<TipoMantenimiento> list = null;
-                list = tmfl.findRange(first, pageSize);
+                List<OrdenTrabajoCalendario> list = null;
+                list = otcfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -71,15 +69,15 @@ public class TipoMantenimientoResources  implements Serializable {
     }
 
     @GET
-    @Path("{idtipomantenimiento}")
+    @Path("{idordentrabajocalendario}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoMantenimiento findById(
-            @PathParam("idtipomantenimiento") Integer id
+    public OrdenTrabajoCalendario findById(
+            @PathParam("idordentrabajocalendario") Integer id
     ) {
-        if (tmfl != null) {
-            TipoMantenimiento reg = null;
+        if (otcfl != null) {
+            OrdenTrabajoCalendario reg = null;
             try {
-                reg = tmfl.find(id);
+                reg = otcfl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -92,9 +90,9 @@ public class TipoMantenimientoResources  implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        if (tmfl != null) {
+        if (otcfl != null) {
             try {
-                return tmfl.count();
+                return otcfl.count();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -105,14 +103,14 @@ public class TipoMantenimientoResources  implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoMantenimiento delete(
+    public OrdenTrabajoCalendario delete(
             @PathParam("id") Integer id
     ) {
-        if (tmfl != null) {
+        if (otcfl != null) {
             try {
-                TipoMantenimiento reg = tmfl.find(id);
+                OrdenTrabajoCalendario reg = otcfl.find(id);
                 if(reg != null){
-                    tmfl.remove(reg);
+                    otcfl.remove(reg);
                 }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -123,11 +121,11 @@ public class TipoMantenimientoResources  implements Serializable {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public TipoMantenimiento create(TipoMantenimiento registro){
-        if (registro != null && registro.getIdTipoMantenimiento()== null) {
+    public OrdenTrabajoCalendario create(OrdenTrabajoCalendario registro){
+        if (registro != null && registro.getIdOrdenTrabajoCalendario()== null) {
             try {
-                if (tmfl != null) {
-                    TipoMantenimiento reg = tmfl.crear(registro);
+                if (otcfl != null) {
+                    OrdenTrabajoCalendario reg = otcfl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -141,15 +139,15 @@ public class TipoMantenimientoResources  implements Serializable {
 
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoMantenimiento edit(TipoMantenimiento reg) {        
-        if (tmfl != null) {
-            if (reg.getIdTipoMantenimiento()!= null) {
+    public OrdenTrabajoCalendario edit(OrdenTrabajoCalendario reg) {        
+        if (otcfl != null) {
+            if (reg.getIdOrdenTrabajoCalendario()!= null) {
                 //Verificar que exista ese registro
                 try {
-                    TipoMantenimiento regVerificado = tmfl.find(reg.getIdTipoMantenimiento());
+                    OrdenTrabajoCalendario regVerificado = otcfl.find(reg.getIdOrdenTrabajoCalendario());
                     if (regVerificado != null) {
-                        if (tmfl.edit(reg)) {
-                            return tmfl.find(reg.getIdTipoMantenimiento());
+                        if (otcfl.edit(reg)) {
+                            return otcfl.find(reg.getIdOrdenTrabajoCalendario());
                         }
                     }
                 } catch (Exception e) {
