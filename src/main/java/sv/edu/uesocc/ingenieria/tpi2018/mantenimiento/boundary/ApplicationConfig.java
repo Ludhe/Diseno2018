@@ -42,6 +42,7 @@ public class ApplicationConfig extends Application {
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.OrdenTrabajoRest.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.PasoResources.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.PrioridadRest.class);
+        resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.ResponsableResource.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.SolicitudResources.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.SubTipoMantenimientoResources.class);
         resources.add(sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary.TipoMantenimientoResources.class);
