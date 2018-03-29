@@ -21,27 +21,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.EquipoDetalleFacadeLocal;
-import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.EquipoDetalle;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.EstadoMantenimientoDetalleFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.EstadoMantenimientoDetalle;
 
 /**
  *
  * @author dmmaga
  */
-@Path("equipodetalle")
-public class EquipoDetalleResource implements Serializable {
+@Path("estadomantenimientodetalle")
+public class EstadoMantenimientoDetalleResource implements Serializable {
 
     @EJB
-    private EquipoDetalleFacadeLocal edfl;
+    private EstadoMantenimientoDetalleFacadeLocal emdfl;
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<EquipoDetalle> findAll() {
-        if (edfl != null) {
-            List<EquipoDetalle> list = new ArrayList<>();
+    public List<EstadoMantenimientoDetalle> findAll() {
+        if (emdfl != null) {
+            List<EstadoMantenimientoDetalle> list = new ArrayList<>();
             try {
-                list = edfl.findAll();
+                list = emdfl.findAll();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -52,14 +52,14 @@ public class EquipoDetalleResource implements Serializable {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public List<EquipoDetalle> findRange(
+    public List<EstadoMantenimientoDetalle> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {        
-        if (edfl != null) {
+        if (emdfl != null) {
             try {
-                List<EquipoDetalle> list = null;
-                list = edfl.findRange(first, pageSize);
+                List<EstadoMantenimientoDetalle> list = null;
+                list = emdfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -69,15 +69,15 @@ public class EquipoDetalleResource implements Serializable {
     }
 
     @GET
-    @Path("{idequipodetalle}")
+    @Path("{idestadomantenimientodetalle}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public EquipoDetalle findById(
-            @PathParam("idequipodetalle") Integer id
+    public EstadoMantenimientoDetalle findById(
+            @PathParam("idestadomantenimientodetalle") Integer id
     ) {
-        if (edfl != null) {
-            EquipoDetalle reg = null;
+        if (emdfl != null) {
+            EstadoMantenimientoDetalle reg = null;
             try {
-                reg = edfl.find(id);
+                reg = emdfl.find(id);
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -90,9 +90,9 @@ public class EquipoDetalleResource implements Serializable {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        if (edfl != null) {
+        if (emdfl != null) {
             try {
-                return edfl.count();
+                return emdfl.count();
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
@@ -103,14 +103,14 @@ public class EquipoDetalleResource implements Serializable {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public EquipoDetalle delete(
+    public EstadoMantenimientoDetalle delete(
             @PathParam("id") Integer id
     ) {
-        if (edfl != null) {
+        if (emdfl != null) {
             try {
-                EquipoDetalle reg = edfl.find(id);
+                EstadoMantenimientoDetalle reg = emdfl.find(id);
                 if(reg != null){
-                    edfl.remove(reg);
+                    emdfl.remove(reg);
                 }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -121,11 +121,11 @@ public class EquipoDetalleResource implements Serializable {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public EquipoDetalle create(EquipoDetalle registro){
-        if (registro != null && registro.getIdEquipoDetalle()== null) {
+    public EstadoMantenimientoDetalle create(EstadoMantenimientoDetalle registro){
+        if (registro != null && registro.getIdEstadoMantenimientoDetalle()== null) {
             try {
-                if (edfl != null) {
-                    EquipoDetalle reg = edfl.crear(registro);
+                if (emdfl != null) {
+                    EstadoMantenimientoDetalle reg = emdfl.crear(registro);
                     if (reg != null) {
                         return reg;
                     }
@@ -139,15 +139,15 @@ public class EquipoDetalleResource implements Serializable {
 
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public EquipoDetalle edit(EquipoDetalle reg) {        
-        if (edfl != null) {
-            if (reg.getIdMarca() != null) {
+    public EstadoMantenimientoDetalle edit(EstadoMantenimientoDetalle reg) {        
+        if (emdfl != null) {
+            if (reg.getIdEstadoMantenimientoDetalle()!= null) {
                 //Verificar que exista ese registro
                 try {
-                    EquipoDetalle regVerificado = edfl.find(reg.getIdEquipoDetalle());
+                    EstadoMantenimientoDetalle regVerificado = emdfl.find(reg.getIdEstadoMantenimientoDetalle());
                     if (regVerificado != null) {
-                        if (edfl.edit(reg)) {
-                            return edfl.find(reg.getIdEquipoDetalle());
+                        if (emdfl.edit(reg)) {
+                            return emdfl.find(reg.getIdEstadoMantenimientoDetalle());
                         }
                     }
                 } catch (Exception e) {
