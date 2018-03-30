@@ -24,15 +24,13 @@ import javax.ws.rs.core.MediaType;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.UnidadFacadeLocal;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Unidad;
 
-
 /**
  *
  * @author dmmaga
  */
-
 @Path("unidad")
-public class UnidadResources  implements Serializable {
-    
+public class UnidadResources implements Serializable {
+
     @EJB
     private UnidadFacadeLocal ufl;
 
@@ -41,33 +39,33 @@ public class UnidadResources  implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Unidad> findAll() {
         if (ufl != null) {
-            List<Unidad> list = new ArrayList<>();
             try {
+                List<Unidad> list;
                 list = ufl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Unidad> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
+    ) {
         if (ufl != null) {
             try {
-                List<Unidad> list = null;
+                List<Unidad> list;
                 list = ufl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -77,15 +75,17 @@ public class UnidadResources  implements Serializable {
             @PathParam("idunidad") Integer id
     ) {
         if (ufl != null) {
-            Unidad reg = null;
+            Unidad reg;
             try {
-                reg = ufl.find(id);
+                if (id != null && id > 0) {
+                    reg = ufl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
-        return null;
+        return new Unidad();
     }
 
     @GET
@@ -99,7 +99,7 @@ public class UnidadResources  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,20 +111,21 @@ public class UnidadResources  implements Serializable {
         if (ufl != null) {
             try {
                 Unidad reg = ufl.find(id);
-                if(reg != null){
+                if (reg != null) {
                     ufl.remove(reg);
-                }                
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Unidad();
     }
-    
+
     @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Unidad create(Unidad registro){
-        if (registro != null && registro.getIdUnidad()== null) {
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Unidad create(Unidad registro) {
+        if (registro != null && registro.getIdUnidad() == null) {
             try {
                 if (ufl != null) {
                     Unidad reg = ufl.crear(registro);
@@ -136,12 +137,12 @@ public class UnidadResources  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Unidad();
     }
 
-    @PUT    
+    @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Unidad edit(Unidad reg) {        
+    public Unidad edit(Unidad reg) {
         if (ufl != null) {
             if (reg.getIdUnidad() != null) {
                 //Verificar que exista ese registro
@@ -157,7 +158,7 @@ public class UnidadResources  implements Serializable {
                 }
             }
         }
-        return null;
+        return new Unidad();
     }
 
 }

@@ -24,15 +24,13 @@ import javax.ws.rs.core.MediaType;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.TipoMantenimientoFacadeLocal;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.TipoMantenimiento;
 
-
 /**
  *
  * @author dmmaga
  */
-
 @Path("tipomantenimiento")
-public class TipoMantenimientoResources  implements Serializable {
-    
+public class TipoMantenimientoResources implements Serializable {
+
     @EJB
     private TipoMantenimientoFacadeLocal tmfl;
 
@@ -41,33 +39,34 @@ public class TipoMantenimientoResources  implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoMantenimiento> findAll() {
         if (tmfl != null) {
-            List<TipoMantenimiento> list = new ArrayList<>();
+
             try {
+                List<TipoMantenimiento> list;
                 list = tmfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoMantenimiento> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
+    ) {
         if (tmfl != null) {
             try {
-                List<TipoMantenimiento> list = null;
+                List<TipoMantenimiento> list;
                 list = tmfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -79,11 +78,13 @@ public class TipoMantenimientoResources  implements Serializable {
         if (tmfl != null) {
             TipoMantenimiento reg = null;
             try {
-                reg = tmfl.find(id);
+                if (id != null && id > 0) {
+                    reg = tmfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
         return null;
     }
@@ -99,7 +100,7 @@ public class TipoMantenimientoResources  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,20 +112,21 @@ public class TipoMantenimientoResources  implements Serializable {
         if (tmfl != null) {
             try {
                 TipoMantenimiento reg = tmfl.find(id);
-                if(reg != null){
+                if (reg != null) {
                     tmfl.remove(reg);
-                }                
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new TipoMantenimiento();
     }
-    
+
     @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public TipoMantenimiento create(TipoMantenimiento registro){
-        if (registro != null && registro.getIdTipoMantenimiento()== null) {
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public TipoMantenimiento create(TipoMantenimiento registro) {
+        if (registro != null && registro.getIdTipoMantenimiento() == null) {
             try {
                 if (tmfl != null) {
                     TipoMantenimiento reg = tmfl.crear(registro);
@@ -136,14 +138,14 @@ public class TipoMantenimientoResources  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new TipoMantenimiento();
     }
 
-    @PUT    
+    @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoMantenimiento edit(TipoMantenimiento reg) {        
+    public TipoMantenimiento edit(TipoMantenimiento reg) {
         if (tmfl != null) {
-            if (reg.getIdTipoMantenimiento()!= null) {
+            if (reg.getIdTipoMantenimiento() != null) {
                 //Verificar que exista ese registro
                 try {
                     TipoMantenimiento regVerificado = tmfl.find(reg.getIdTipoMantenimiento());
@@ -157,7 +159,7 @@ public class TipoMantenimientoResources  implements Serializable {
                 }
             }
         }
-        return null;
+        return new TipoMantenimiento();
     }
 
 }

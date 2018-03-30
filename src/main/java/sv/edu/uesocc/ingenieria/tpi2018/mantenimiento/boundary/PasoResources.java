@@ -35,6 +35,22 @@ public class PasoResources implements Serializable {
     private PasoFacadeLocal pasoFacade;
 
     @GET
+    @Path("all")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public List<Paso> findAll() {
+        List salida;
+        try {
+            if (pasoFacade != null) {
+                salida = pasoFacade.findAll();
+                return salida;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return new ArrayList();
+    }
+
+    @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Paso> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
@@ -44,15 +60,12 @@ public class PasoResources implements Serializable {
         try {
             if (pasoFacade != null) {
                 salida = pasoFacade.findRange(first, pageSize);
+                return salida;
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
-            }
         }
-        return salida;
+        return new ArrayList();
     }
 
     @GET
@@ -76,7 +89,7 @@ public class PasoResources implements Serializable {
             @PathParam("idpaso") Integer id
     ) {
         try {
-            if (pasoFacade != null && id != null) {
+            if (pasoFacade != null && id != null && id > 0) {
                 return pasoFacade.find(id);
             }
         } catch (Exception ex) {
@@ -92,7 +105,7 @@ public class PasoResources implements Serializable {
             try {
                 if (pasoFacade != null) {
                     Paso r = pasoFacade.crear(registro);
-                    if (r != null && r.getIdPaso() != null) {
+                    if (r != null) {
                         return r;
                     }
                 }
@@ -122,19 +135,21 @@ public class PasoResources implements Serializable {
     }
 
     @DELETE
-    @Path("delete/{idpaso}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean remove(
+    @Path("{idpaso}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Paso remove(
             @PathParam("idpaso") Integer id
     ) {
         try {
             if (pasoFacade != null && id != null) {
                 Paso r = pasoFacade.find(id);
-                return pasoFacade.remove(r);
+                if (pasoFacade.remove(r)) {
+                    return r;
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return false;
+        return new Paso();
     }
 }

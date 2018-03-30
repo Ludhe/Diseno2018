@@ -39,15 +39,15 @@ public class ParteResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Parte> findAll() {
         if (pfl != null) {
-            List<Parte> list = new ArrayList<>();
             try {
+                List<Parte> list = new ArrayList<>();
                 list = pfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
     
     @GET
@@ -58,14 +58,14 @@ public class ParteResource implements Serializable {
     ) {        
         if (pfl != null) {
             try {
-                List<Parte> list = null;
+                List<Parte> list;
                 list = pfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -97,7 +97,7 @@ public class ParteResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,12 +111,13 @@ public class ParteResource implements Serializable {
                 Parte reg = pfl.find(id);
                 if(reg != null){
                     pfl.remove(reg);
+                    return reg;
                 }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Parte();
     }
     
     @POST
@@ -134,7 +135,7 @@ public class ParteResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Parte();
     }
 
     @PUT    
@@ -155,7 +156,7 @@ public class ParteResource implements Serializable {
                 }
             }
         }
-        return null;
+        return new Parte();
     }
 
 }

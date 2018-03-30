@@ -39,15 +39,15 @@ public class ResponsableResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Responsable> findAll() {
         if (rfl != null) {
-            List<Responsable> list = new ArrayList<>();
             try {
+                List<Responsable> list;
                 list = rfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -58,14 +58,14 @@ public class ResponsableResource implements Serializable {
     ) {
         if (rfl != null) {
             try {
-                List<Responsable> list = null;
+                List<Responsable> list;
                 list = rfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -75,15 +75,17 @@ public class ResponsableResource implements Serializable {
             @PathParam("idresponsable") Integer id
     ) {
         if (rfl != null) {
-            Responsable reg = null;
+            Responsable reg;
             try {
-                reg = rfl.find(id);
+                if (id != null && id > 0) {
+                    reg = rfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
-        return null;
+        return new Responsable();
     }
 
     @GET
@@ -97,7 +99,7 @@ public class ResponsableResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,12 +113,13 @@ public class ResponsableResource implements Serializable {
                 Responsable reg = rfl.find(id);
                 if (reg != null) {
                     rfl.remove(reg);
+                    return reg;
                 }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Responsable();
     }
 
     @POST
@@ -134,7 +137,7 @@ public class ResponsableResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Responsable();
     }
 
     @PUT
@@ -155,7 +158,7 @@ public class ResponsableResource implements Serializable {
                 }
             }
         }
-        return null;
+        return new Responsable();
     }
 
 }

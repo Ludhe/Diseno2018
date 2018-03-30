@@ -30,7 +30,7 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.OrdenTrabajo;
  */
 @Path("ordentrabajo")
 public class OrdenTrabajoRest implements Serializable {
-    
+
     @EJB
     private OrdenTrabajoFacadeLocal otfl;
 
@@ -39,33 +39,33 @@ public class OrdenTrabajoRest implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<OrdenTrabajo> findAll() {
         if (otfl != null) {
-            List<OrdenTrabajo> list = new ArrayList<>();
             try {
+                List<OrdenTrabajo> list = new ArrayList<>();
                 list = otfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<OrdenTrabajo> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
+    ) {
         if (otfl != null) {
             try {
-                List<OrdenTrabajo> list = null;
+                List<OrdenTrabajo> list;
                 list = otfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -75,13 +75,15 @@ public class OrdenTrabajoRest implements Serializable {
             @PathParam("idordentrabajo") Integer id
     ) {
         if (otfl != null) {
-            OrdenTrabajo reg = null;
+            OrdenTrabajo reg;
             try {
-                reg = otfl.find(id);
+                if (id!=null && id>0) {
+                    reg = otfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
         return null;
     }
@@ -97,7 +99,7 @@ public class OrdenTrabajoRest implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -109,20 +111,21 @@ public class OrdenTrabajoRest implements Serializable {
         if (otfl != null) {
             try {
                 OrdenTrabajo reg = otfl.find(id);
-                if(reg != null){
+                if (reg != null) {
                     otfl.remove(reg);
-                }                
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new OrdenTrabajo();
     }
-    
+
     @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public OrdenTrabajo create(OrdenTrabajo registro){
-        if (registro != null && registro.getIdOrdenTrabajo()== null) {
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public OrdenTrabajo create(OrdenTrabajo registro) {
+        if (registro != null && registro.getIdOrdenTrabajo() == null) {
             try {
                 if (otfl != null) {
                     OrdenTrabajo reg = otfl.crear(registro);
@@ -134,12 +137,12 @@ public class OrdenTrabajoRest implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new OrdenTrabajo();
     }
 
-    @PUT    
+    @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public OrdenTrabajo edit(OrdenTrabajo reg) {        
+    public OrdenTrabajo edit(OrdenTrabajo reg) {
         if (otfl != null) {
             if (reg.getIdOrdenTrabajo() != null) {
                 //Verificar que exista ese registro
@@ -155,7 +158,7 @@ public class OrdenTrabajoRest implements Serializable {
                 }
             }
         }
-        return null;
+        return new OrdenTrabajo();
     }
-    
+
 }

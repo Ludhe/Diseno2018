@@ -39,15 +39,15 @@ public class ProcedimientoResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Procedimiento> findAll() {
         if (pfl != null) {
-            List<Procedimiento> list = new ArrayList<>();
             try {
+                List<Procedimiento> list;
                 list = pfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -58,14 +58,14 @@ public class ProcedimientoResource implements Serializable {
     ) {
         if (pfl != null) {
             try {
-                List<Procedimiento> list = null;
+                List<Procedimiento> list;
                 list = pfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -75,13 +75,15 @@ public class ProcedimientoResource implements Serializable {
             @PathParam("idprocedimiento") Integer id
     ) {
         if (pfl != null) {
-            Procedimiento reg = null;
+            Procedimiento reg;
             try {
-                reg = pfl.find(id);
+                if (id != null) {
+                    reg = pfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
         return null;
     }
@@ -97,7 +99,7 @@ public class ProcedimientoResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,12 +113,13 @@ public class ProcedimientoResource implements Serializable {
                 Procedimiento reg = pfl.find(id);
                 if (reg != null) {
                     pfl.remove(reg);
+                    return reg;
                 }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Procedimiento();
     }
 
     @POST
@@ -134,7 +137,7 @@ public class ProcedimientoResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Procedimiento();
     }
 
     @PUT
@@ -155,7 +158,7 @@ public class ProcedimientoResource implements Serializable {
                 }
             }
         }
-        return null;
+        return new Procedimiento();
     }
 
 }

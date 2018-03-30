@@ -39,15 +39,17 @@ public class DiagnosticoParteResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<DiagnosticoParte> findAll() {
         if (dpfl != null) {
-            List<DiagnosticoParte> list = new ArrayList<>();
             try {
+                List<DiagnosticoParte> list = null;                
                 list = dpfl.findAll();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return list;
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return null;
+        return new ArrayList<>();
     }
     
     @GET
@@ -55,35 +57,19 @@ public class DiagnosticoParteResource implements Serializable {
     public List<DiagnosticoParte> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
-        if (dpfl != null) {
-            try {
-                List<DiagnosticoParte> list = null;
-                list = dpfl.findRange(first, pageSize);
-                return list;
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    @GET
-    @Path("{iddiagnosticoparte}")
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public DiagnosticoParte findById(
-            @PathParam("iddiagnosticoparte") Integer id
     ) {
-        if (dpfl != null) {
-            DiagnosticoParte reg = null;
+        if (dpfl != null && first >= 0 && pageSize >= 0) {
             try {
-                reg = dpfl.find(id);
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                List salida = null;
+                salida = dpfl.findRange(first, pageSize);
+                if (salida != null) {
+                    return salida;                    
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-            return reg;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @GET
@@ -92,12 +78,65 @@ public class DiagnosticoParteResource implements Serializable {
     public Integer count() {
         if (dpfl != null) {
             try {
-                return dpfl.count();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                return dpfl.count();                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
+        return 0;
+    }
+
+    @GET
+    @Path("{idcalendarioexcepcion}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public DiagnosticoParte findById(
+            @PathParam("idcalendarioexcepcion") Integer id
+    ) {
+        if (dpfl != null && id != null && id > 0) {
+            try {
+                DiagnosticoParte reg = dpfl.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
+        return new DiagnosticoParte();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public DiagnosticoParte create(DiagnosticoParte registro) {
+        if (dpfl != null && registro != null) {
+            try {
+                DiagnosticoParte r = dpfl.crear(registro);
+                if (r != null) {
+                    return r;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
+        }
+        return new DiagnosticoParte();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public DiagnosticoParte edit(DiagnosticoParte registro) {
+        if (dpfl != null) {
+            if (registro != null && registro.getIdDiagnosticoParte()!= null) {
+                try {
+                    DiagnosticoParte r = dpfl.editar(registro);
+                    if (r != null && r.getIdDiagnosticoParte() != null) {
+                        return r;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
+        }
+        return new DiagnosticoParte();
     }
 
     @DELETE
@@ -106,27 +145,11 @@ public class DiagnosticoParteResource implements Serializable {
     public DiagnosticoParte delete(
             @PathParam("id") Integer id
     ) {
-        if (dpfl != null) {
+        if (dpfl != null && id != null && id > 0) {
             try {
                 DiagnosticoParte reg = dpfl.find(id);
                 if(reg != null){
-                    dpfl.remove(reg);
-                }                
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-    
-    @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public DiagnosticoParte create(DiagnosticoParte registro){
-        if (registro != null && registro.getIdDiagnosticoParte()== null) {
-            try {
-                if (dpfl != null) {
-                    DiagnosticoParte reg = dpfl.crear(registro);
-                    if (reg != null) {
+                    if (dpfl.remove(reg)) {
                         return reg;
                     }
                 }
@@ -134,28 +157,7 @@ public class DiagnosticoParteResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
-    }
-
-    @PUT    
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public DiagnosticoParte edit(DiagnosticoParte reg) {        
-        if (dpfl != null) {
-            if (reg.getIdDiagnosticoParte()!= null) {
-                //Verificar que exista ese registro
-                try {
-                    DiagnosticoParte regVerificado = dpfl.find(reg.getIdDiagnosticoParte());
-                    if (regVerificado != null) {
-                        if (dpfl.edit(reg)) {
-                            return dpfl.find(reg.getIdDiagnosticoParte());
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        }
-        return null;
+        return new DiagnosticoParte();
     }
 
 }

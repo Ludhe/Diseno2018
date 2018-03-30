@@ -39,33 +39,33 @@ public class TipoParteResources implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoParte> findAll() {
         if (tpfl != null) {
-            List<TipoParte> list = new ArrayList<>();
             try {
+                List<TipoParte> list;
                 list = tpfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoParte> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
+    ) {
         if (tpfl != null) {
             try {
-                List<TipoParte> list = null;
+                List<TipoParte> list;
                 list = tpfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -75,15 +75,17 @@ public class TipoParteResources implements Serializable {
             @PathParam("idtipoparte") Integer id
     ) {
         if (tpfl != null) {
-            TipoParte reg = null;
+            TipoParte reg;
             try {
-                reg = tpfl.find(id);
+                if (id != null && id > 0) {
+                    reg = tpfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
-        return null;
+        return new TipoParte();
     }
 
     @GET
@@ -97,7 +99,7 @@ public class TipoParteResources implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -109,20 +111,21 @@ public class TipoParteResources implements Serializable {
         if (tpfl != null) {
             try {
                 TipoParte reg = tpfl.find(id);
-                if(reg != null){
+                if (reg != null) {
                     tpfl.remove(reg);
-                }                
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new TipoParte();
     }
-    
+
     @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public TipoParte create(TipoParte registro){
-        if (registro != null && registro.getIdTipoParte()== null) {
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public TipoParte create(TipoParte registro) {
+        if (registro != null && registro.getIdTipoParte() == null) {
             try {
                 if (tpfl != null) {
                     TipoParte reg = tpfl.crear(registro);
@@ -134,12 +137,12 @@ public class TipoParteResources implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new TipoParte();
     }
 
-    @PUT    
+    @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public TipoParte edit(TipoParte reg) {        
+    public TipoParte edit(TipoParte reg) {
         if (tpfl != null) {
             if (reg.getIdTipoParte() != null) {
                 //Verificar que exista ese registro
@@ -155,7 +158,7 @@ public class TipoParteResources implements Serializable {
                 }
             }
         }
-        return null;
+        return new TipoParte();
     }
 
 }

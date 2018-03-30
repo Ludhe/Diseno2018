@@ -39,15 +39,17 @@ public class OrdenTrabajoCalendarioResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<OrdenTrabajoCalendario> findAll() {
         if (otcfl != null) {
-            List<OrdenTrabajoCalendario> list = new ArrayList<>();
             try {
+                List<OrdenTrabajoCalendario> list = null;                
                 list = otcfl.findAll();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return list;
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return null;
+        return new ArrayList<>();
     }
     
     @GET
@@ -55,35 +57,19 @@ public class OrdenTrabajoCalendarioResource implements Serializable {
     public List<OrdenTrabajoCalendario> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
-        if (otcfl != null) {
-            try {
-                List<OrdenTrabajoCalendario> list = null;
-                list = otcfl.findRange(first, pageSize);
-                return list;
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    @GET
-    @Path("{idordentrabajocalendario}")
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public OrdenTrabajoCalendario findById(
-            @PathParam("idordentrabajocalendario") Integer id
     ) {
-        if (otcfl != null) {
-            OrdenTrabajoCalendario reg = null;
+        if (otcfl != null && first >= 0 && pageSize >= 0) {
             try {
-                reg = otcfl.find(id);
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                List salida = null;
+                salida = otcfl.findRange(first, pageSize);
+                if (salida != null) {
+                    return salida;                    
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-            return reg;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @GET
@@ -92,12 +78,65 @@ public class OrdenTrabajoCalendarioResource implements Serializable {
     public Integer count() {
         if (otcfl != null) {
             try {
-                return otcfl.count();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                return otcfl.count();                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
+        return 0;
+    }
+
+    @GET
+    @Path("{idcalendarioexcepcion}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public OrdenTrabajoCalendario findById(
+            @PathParam("idcalendarioexcepcion") Integer id
+    ) {
+        if (otcfl != null && id != null && id > 0) {
+            try {
+                OrdenTrabajoCalendario reg = otcfl.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
+        return new OrdenTrabajoCalendario();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public OrdenTrabajoCalendario create(OrdenTrabajoCalendario registro) {
+        if (otcfl != null && registro != null) {
+            try {
+                OrdenTrabajoCalendario r = otcfl.crear(registro);
+                if (r != null) {
+                    return r;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
+        }
+        return new OrdenTrabajoCalendario();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public OrdenTrabajoCalendario edit(OrdenTrabajoCalendario registro) {
+        if (otcfl != null) {
+            if (registro != null && registro.getIdOrdenTrabajoCalendario()!= null) {
+                try {
+                    OrdenTrabajoCalendario r = otcfl.editar(registro);
+                    if (r != null && r.getIdOrdenTrabajoCalendario() != null) {
+                        return r;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
+        }
+        return new OrdenTrabajoCalendario();
     }
 
     @DELETE
@@ -106,27 +145,11 @@ public class OrdenTrabajoCalendarioResource implements Serializable {
     public OrdenTrabajoCalendario delete(
             @PathParam("id") Integer id
     ) {
-        if (otcfl != null) {
+        if (otcfl != null && id != null && id > 0) {
             try {
                 OrdenTrabajoCalendario reg = otcfl.find(id);
                 if(reg != null){
-                    otcfl.remove(reg);
-                }                
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-    
-    @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public OrdenTrabajoCalendario create(OrdenTrabajoCalendario registro){
-        if (registro != null && registro.getIdOrdenTrabajoCalendario()== null) {
-            try {
-                if (otcfl != null) {
-                    OrdenTrabajoCalendario reg = otcfl.crear(registro);
-                    if (reg != null) {
+                    if (otcfl.remove(reg)) {
                         return reg;
                     }
                 }
@@ -134,28 +157,7 @@ public class OrdenTrabajoCalendarioResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
-    }
-
-    @PUT    
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public OrdenTrabajoCalendario edit(OrdenTrabajoCalendario reg) {        
-        if (otcfl != null) {
-            if (reg.getIdOrdenTrabajoCalendario()!= null) {
-                //Verificar que exista ese registro
-                try {
-                    OrdenTrabajoCalendario regVerificado = otcfl.find(reg.getIdOrdenTrabajoCalendario());
-                    if (regVerificado != null) {
-                        if (otcfl.edit(reg)) {
-                            return otcfl.find(reg.getIdOrdenTrabajoCalendario());
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        }
-        return null;
+        return new OrdenTrabajoCalendario();
     }
 
 }

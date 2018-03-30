@@ -35,24 +35,37 @@ public class SolicitudResources implements Serializable {
     private SolicitudFacadeLocal solicitudFacade;
 
     @GET
+    @Path("all")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public List<Solicitud> findAll() {
+        List salida;
+        try {
+            if (solicitudFacade != null) {
+                salida = solicitudFacade.findAll();
+                return salida;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return new ArrayList();
+    }
+
+    @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Solicitud> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {
-        List salida = null;
+        List salida;
         try {
             if (solicitudFacade != null) {
                 salida = solicitudFacade.findRange(first, pageSize);
+                return salida;
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
-            }
         }
-        return salida;
+        return new ArrayList();
     }
 
     @Path("count")
@@ -76,7 +89,7 @@ public class SolicitudResources implements Serializable {
             @PathParam("idsolicitud") Integer id
     ) {
         try {
-            if (solicitudFacade != null && id != null && !(id < 0)) {
+            if (solicitudFacade != null && id != null && id > 0) {
                 return solicitudFacade.find(id);
             }
         } catch (Exception ex) {
@@ -92,7 +105,7 @@ public class SolicitudResources implements Serializable {
             try {
                 if (solicitudFacade != null) {
                     Solicitud r = solicitudFacade.crear(registro);
-                    if (r != null && r.getIdSolicitud() != null) {
+                    if (r != null) {
                         return r;
                     }
                 }
@@ -122,20 +135,22 @@ public class SolicitudResources implements Serializable {
     }
 
     @DELETE
-    @Path("delete/{id}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Solicitud delete(
             @PathParam("id") Integer id
     ) {
         try {
             if (solicitudFacade != null && id != null && !(id < 0)) {
                 Solicitud r = solicitudFacade.find(id);
-                return solicitudFacade.remove(r);
+                if (solicitudFacade.remove(r)) {
+                    return r;
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return false;
+        return new Solicitud();
     }
 
 }
