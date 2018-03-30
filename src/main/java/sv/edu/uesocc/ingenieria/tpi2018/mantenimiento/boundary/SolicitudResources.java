@@ -122,7 +122,7 @@ public class SolicitudResources implements Serializable {
     }
 
     @DELETE
-    @Path("delete/{id}")
+    @Path("{id}")
     @Produces({MediaType.TEXT_PLAIN})
     public boolean delete(
             @PathParam("id") Integer id

@@ -122,7 +122,7 @@ public class TipoResponsableResources implements Serializable {
     }
     
     @DELETE
-    @Path("delete/{idtiporesponsable}")
+    @Path("{idtiporesponsable}")
     @Produces({MediaType.TEXT_PLAIN})
     public boolean delete(
             @PathParam("idtiporesponsable") Integer id

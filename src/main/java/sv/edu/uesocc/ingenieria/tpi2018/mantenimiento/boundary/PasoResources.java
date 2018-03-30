@@ -122,7 +122,7 @@ public class PasoResources implements Serializable {
     }
 
     @DELETE
-    @Path("delete/{idpaso}")
+    @Path("{idpaso}")
     @Produces({MediaType.TEXT_PLAIN})
     public boolean remove(
             @PathParam("idpaso") Integer id
