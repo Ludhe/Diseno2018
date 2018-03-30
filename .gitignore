@@ -2,3 +2,4 @@
 /src/main/resources/docker/PostgresAlpine/data/
 /target/
 /src/main/resources/docker/data/
+/nbproject/
