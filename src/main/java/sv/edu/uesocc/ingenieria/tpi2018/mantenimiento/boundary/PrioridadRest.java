@@ -39,15 +39,15 @@ public class PrioridadRest  implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Prioridad> findAll() {
         if (pfl != null) {
-            List<Prioridad> list = new ArrayList<>();
             try {
+                List<Prioridad> list;
                 list = pfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
     
     @GET
@@ -58,14 +58,14 @@ public class PrioridadRest  implements Serializable {
     ) {        
         if (pfl != null) {
             try {
-                List<Prioridad> list = null;
+                List<Prioridad> list;
                 list = pfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
 
     @GET
@@ -77,13 +77,15 @@ public class PrioridadRest  implements Serializable {
         if (pfl != null) {
             Prioridad reg = null;
             try {
-                reg = pfl.find(id);
+                if (id!= null && id > 0) {
+                    reg = pfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
-        return null;
+        return new Prioridad();
     }
 
     @GET
@@ -97,7 +99,7 @@ public class PrioridadRest  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
 
     @DELETE
@@ -111,12 +113,13 @@ public class PrioridadRest  implements Serializable {
                 Prioridad reg = pfl.find(id);
                 if(reg != null){
                     pfl.remove(reg);
+                    return reg;
                 }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Prioridad();
     }
     
     @POST
@@ -134,7 +137,7 @@ public class PrioridadRest  implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Prioridad();
     }
 
     @PUT    
@@ -155,7 +158,7 @@ public class PrioridadRest  implements Serializable {
                 }
             }
         }
-        return null;
+        return new Prioridad();
     }
     
 }

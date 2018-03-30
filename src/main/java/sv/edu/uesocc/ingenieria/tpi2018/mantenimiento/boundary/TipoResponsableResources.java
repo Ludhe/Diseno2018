@@ -35,24 +35,37 @@ public class TipoResponsableResources implements Serializable {
     private TipoResponsableFacadeLocal tipoResponsableFacade;
 
     @GET
+    @Path("all")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public List<TipoResponsable> findAll() {
+        if (tipoResponsableFacade != null) {
+            try {
+                List<TipoResponsable> list;
+                list = tipoResponsableFacade.findAll();
+                return list;
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return new ArrayList();
+    }
+
+    @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<TipoResponsable> findRange(
             @DefaultValue("0") @QueryParam("first") int firs,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {
-        List salida = null;
+        List salida;
         try {
             if (tipoResponsableFacade != null) {
                 salida = tipoResponsableFacade.findRange(firs, pageSize);
+                return salida;
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida != null) {
-                salida = new ArrayList();
-            }
         }
-        return salida;
+        return new ArrayList();
     }
 
     @GET
@@ -76,7 +89,7 @@ public class TipoResponsableResources implements Serializable {
             @PathParam("idtiporesponsable") Integer id
     ) {
         try {
-            if (tipoResponsableFacade != null && id != null && !(id < 0)) {
+            if (tipoResponsableFacade != null && id != null && id > 0) {
                 return tipoResponsableFacade.find(id);
             }
         } catch (Exception ex) {
@@ -92,7 +105,7 @@ public class TipoResponsableResources implements Serializable {
             try {
                 if (tipoResponsableFacade != null) {
                     TipoResponsable r = tipoResponsableFacade.crear(registro);
-                    if (r != null && r.getIdTipoResponsable() != null) {
+                    if (r != null) {
                         return r;
                     }
                 }
@@ -120,22 +133,24 @@ public class TipoResponsableResources implements Serializable {
         }
         return new TipoResponsable();
     }
-    
+
     @DELETE
     @Path("{idtiporesponsable}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public TipoResponsable delete(
             @PathParam("idtiporesponsable") Integer id
-    ){
+    ) {
         try {
-            if (tipoResponsableFacade!=null && id!=null) {
+            if (tipoResponsableFacade != null && id != null) {
                 TipoResponsable r = tipoResponsableFacade.find(id);
-                return tipoResponsableFacade.remove(r);
+                if (tipoResponsableFacade.remove(r)) {
+                    return r;
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return false;
+        return new TipoResponsable();
     }
 
 }

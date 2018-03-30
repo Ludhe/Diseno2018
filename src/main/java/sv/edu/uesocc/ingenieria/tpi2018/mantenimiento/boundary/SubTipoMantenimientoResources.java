@@ -30,24 +30,24 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.SubTipoMantenimient
  */
 @Path("subtipomtto")
 public class SubTipoMantenimientoResources implements Serializable {
-
+    
     @EJB
     private SubTipoMantenimientoFacadeLocal stmfl;
-
+    
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<SubTipoMantenimiento> findAll() {
         if (stmfl != null) {
-            List<SubTipoMantenimiento> list = new ArrayList<>();
             try {
+                List<SubTipoMantenimiento> list;
                 list = stmfl.findAll();
+                return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return list;
         }
-        return null;
+        return new ArrayList();
     }
     
     @GET
@@ -58,16 +58,16 @@ public class SubTipoMantenimientoResources implements Serializable {
     ) {        
         if (stmfl != null) {
             try {
-                List<SubTipoMantenimiento> list = null;
+                List<SubTipoMantenimiento> list;
                 list = stmfl.findRange(first, pageSize);
                 return list;
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new ArrayList();
     }
-
+    
     @GET
     @Path("{idsubtipomtto}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
@@ -75,17 +75,19 @@ public class SubTipoMantenimientoResources implements Serializable {
             @PathParam("idsubtipomtto") Integer id
     ) {
         if (stmfl != null) {
-            SubTipoMantenimiento reg = null;
+            SubTipoMantenimiento reg;
             try {
-                reg = stmfl.find(id);
+                if (id != null) {
+                    reg = stmfl.find(id);
+                    return reg;
+                }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-            return reg;
         }
         return null;
     }
-
+    
     @GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
@@ -97,9 +99,9 @@ public class SubTipoMantenimientoResources implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return 0;
     }
-
+    
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
@@ -109,20 +111,21 @@ public class SubTipoMantenimientoResources implements Serializable {
         if (stmfl != null) {
             try {
                 SubTipoMantenimiento reg = stmfl.find(id);
-                if(reg != null){
+                if (reg != null) {
                     stmfl.remove(reg);
+                    return reg;
                 }                
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new SubTipoMantenimiento();
     }
     
     @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public SubTipoMantenimiento create(SubTipoMantenimiento registro){
-        if (registro != null && registro.getIdSubTipoMantenimiento()== null) {
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public SubTipoMantenimiento create(SubTipoMantenimiento registro) {
+        if (registro != null && registro.getIdSubTipoMantenimiento() == null) {
             try {
                 if (stmfl != null) {
                     SubTipoMantenimiento reg = stmfl.crear(registro);
@@ -134,9 +137,9 @@ public class SubTipoMantenimientoResources implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new SubTipoMantenimiento();
     }
-
+    
     @PUT    
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public SubTipoMantenimiento edit(SubTipoMantenimiento reg) {        
@@ -155,6 +158,6 @@ public class SubTipoMantenimientoResources implements Serializable {
                 }
             }
         }
-        return null;
+        return new SubTipoMantenimiento();
     }
 }
