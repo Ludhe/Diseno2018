@@ -39,15 +39,17 @@ public class EquipoRest implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Equipo> findAll() {
         if (efl != null) {
-            List<Equipo> list = new ArrayList<>();
             try {
+                List<Equipo> list = null;                
                 list = efl.findAll();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return list;
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return null;
+        return new ArrayList<>();
     }
     
     @GET
@@ -55,35 +57,19 @@ public class EquipoRest implements Serializable {
     public List<Equipo> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
-        if (efl != null) {
-            try {
-                List<Equipo> list = null;
-                list = efl.findRange(first, pageSize);
-                return list;
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    @GET
-    @Path("{idequipo}")
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Equipo findById(
-            @PathParam("idequipo") Integer id
     ) {
-        if (efl != null) {
-            Equipo reg = null;
+        if (efl != null && first >= 0 && pageSize >= 0) {
             try {
-                reg = efl.find(id);
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                List salida = null;
+                salida = efl.findRange(first, pageSize);
+                if (salida != null) {
+                    return salida;                    
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-            return reg;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @GET
@@ -92,12 +78,65 @@ public class EquipoRest implements Serializable {
     public Integer count() {
         if (efl != null) {
             try {
-                return efl.count();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                return efl.count();                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
+        return 0;
+    }
+
+    @GET
+    @Path("{idcalendarioexcepcion}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Equipo findById(
+            @PathParam("idcalendarioexcepcion") Integer id
+    ) {
+        if (efl != null && id != null && id > 0) {
+            try {
+                Equipo reg = efl.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
+        return new Equipo();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Equipo create(Equipo registro) {
+        if (efl != null && registro != null) {
+            try {
+                Equipo r = efl.crear(registro);
+                if (r != null) {
+                    return r;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
+        }
+        return new Equipo();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Equipo edit(Equipo registro) {
+        if (efl != null) {
+            if (registro != null && registro.getIdQuipo()!= null) {
+                try {
+                    Equipo r = efl.editar(registro);
+                    if (r != null && r.getIdQuipo() != null) {
+                        return r;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
+        }
+        return new Equipo();
     }
 
     @DELETE
@@ -106,27 +145,11 @@ public class EquipoRest implements Serializable {
     public Equipo delete(
             @PathParam("id") Integer id
     ) {
-        if (efl != null) {
+        if (efl != null && id != null && id > 0) {
             try {
                 Equipo reg = efl.find(id);
                 if(reg != null){
-                    efl.remove(reg);
-                }                
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-    
-    @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Equipo create(Equipo registro){
-        if (registro != null && registro.getIdQuipo()== null) {
-            try {
-                if (efl != null) {
-                    Equipo reg = efl.crear(registro);
-                    if (reg != null) {
+                    if (efl.remove(reg)) {
                         return reg;
                     }
                 }
@@ -134,28 +157,7 @@ public class EquipoRest implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
-    }
-
-    @PUT    
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Equipo edit(Equipo reg) {        
-        if (efl != null) {
-            if (reg.getIdQuipo() != null) {
-                //Verificar que exista ese registro
-                try {
-                    Equipo regVerificado = efl.find(reg.getIdQuipo());
-                    if (regVerificado != null) {
-                        if (efl.edit(reg)) {
-                            return efl.find(reg.getIdQuipo());
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        }
-        return null;
+        return new Equipo();
     }
     
 }

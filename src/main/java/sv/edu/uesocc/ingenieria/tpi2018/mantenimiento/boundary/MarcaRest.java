@@ -39,15 +39,17 @@ public class MarcaRest implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Marca> findAll() {
         if (mfl != null) {
-            List<Marca> list = new ArrayList<>();
             try {
+                List<Marca> list = null;                
                 list = mfl.findAll();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return list;
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return null;
+        return new ArrayList<>();
     }
     
     @GET
@@ -55,35 +57,19 @@ public class MarcaRest implements Serializable {
     public List<Marca> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
-    ) {        
-        if (mfl != null) {
-            try {
-                List<Marca> list = null;
-                list = mfl.findRange(first, pageSize);
-                return list;
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    @GET
-    @Path("{idmarca}")
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Marca findById(
-            @PathParam("idmarca") Integer id
     ) {
-        if (mfl != null) {
-            Marca reg = null;
+        if (mfl != null && first >= 0 && pageSize >= 0) {
             try {
-                reg = mfl.find(id);
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                List salida = null;
+                salida = mfl.findRange(first, pageSize);
+                if (salida != null) {
+                    return salida;                    
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-            return reg;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @GET
@@ -92,12 +78,65 @@ public class MarcaRest implements Serializable {
     public Integer count() {
         if (mfl != null) {
             try {
-                return mfl.count();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                return mfl.count();                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
+        return 0;
+    }
+
+    @GET
+    @Path("{idcalendarioexcepcion}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Marca findById(
+            @PathParam("idcalendarioexcepcion") Integer id
+    ) {
+        if (mfl != null && id != null && id > 0) {
+            try {
+                Marca reg = mfl.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
+        return new Marca();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Marca create(Marca registro) {
+        if (mfl != null && registro != null) {
+            try {
+                Marca r = mfl.crear(registro);
+                if (r != null) {
+                    return r;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
+        }
+        return new Marca();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Marca edit(Marca registro) {
+        if (mfl != null) {
+            if (registro != null && registro.getIdMarca()!= null) {
+                try {
+                    Marca r = mfl.editar(registro);
+                    if (r != null && r.getIdMarca() != null) {
+                        return r;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
+        }
+        return new Marca();
     }
 
     @DELETE
@@ -106,27 +145,11 @@ public class MarcaRest implements Serializable {
     public Marca delete(
             @PathParam("id") Integer id
     ) {
-        if (mfl != null) {
+        if (mfl != null && id != null && id > 0) {
             try {
                 Marca reg = mfl.find(id);
                 if(reg != null){
-                    mfl.remove(reg);
-                }                
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-    
-    @POST
-    @Produces({MediaType.APPLICATION_JSON+"; charset=utf-8"})
-    public Marca create(Marca registro){
-        if (registro != null && registro.getIdMarca()== null) {
-            try {
-                if (mfl != null) {
-                    Marca reg = mfl.crear(registro);
-                    if (reg != null) {
+                    if (mfl.remove(reg)) {
                         return reg;
                     }
                 }
@@ -134,28 +157,7 @@ public class MarcaRest implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
-    }
-
-    @PUT    
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Marca edit(Marca reg) {        
-        if (mfl != null) {
-            if (reg.getIdMarca() != null) {
-                //Verificar que exista ese registro
-                try {
-                    Marca regVerificado = mfl.find(reg.getIdMarca());
-                    if (regVerificado != null) {
-                        if (mfl.edit(reg)) {
-                            return mfl.find(reg.getIdMarca());
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        }
-        return null;
+        return new Marca();
     }
 
 }
