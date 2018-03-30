@@ -39,51 +39,37 @@ public class DiagnosticoResource implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Diagnostico> findAll() {
         if (dfl != null) {
-            List<Diagnostico> list = new ArrayList<>();
             try {
+                List<Diagnostico> list = null;                
                 list = dfl.findAll();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return list;
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return null;
+        return new ArrayList<>();
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Diagnostico> findRange(
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {
-        if (dfl != null) {
+        if (dfl != null && first >= 0 && pageSize >= 0) {
             try {
-                List<Diagnostico> list = null;
-                list = dfl.findRange(first, pageSize);
-                return list;
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                List salida = null;
+                salida = dfl.findRange(first, pageSize);
+                if (salida != null) {
+                    return salida;                    
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
-    }
-
-    @GET
-    @Path("{iddiagnostico}")
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Diagnostico findById(
-            @PathParam("iddiagnostico") Integer id
-    ) {
-        if (dfl != null) {
-            Diagnostico reg = null;
-            try {
-                reg = dfl.find(id);
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-            return reg;
-        }
-        return null;
+        return new ArrayList<>();
     }
 
     @GET
@@ -92,12 +78,65 @@ public class DiagnosticoResource implements Serializable {
     public Integer count() {
         if (dfl != null) {
             try {
-                return dfl.count();
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+                return dfl.count();                
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return null;
+        return 0;
+    }
+
+    @GET
+    @Path("{idcalendarioexcepcion}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Diagnostico findById(
+            @PathParam("idcalendarioexcepcion") Integer id
+    ) {
+        if (dfl != null && id != null && id > 0) {
+            try {
+                Diagnostico reg = dfl.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
+        return new Diagnostico();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Diagnostico create(Diagnostico registro) {
+        if (dfl != null && registro != null) {
+            try {
+                Diagnostico r = dfl.crear(registro);
+                if (r != null) {
+                    return r;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
+        }
+        return new Diagnostico();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Diagnostico edit(Diagnostico registro) {
+        if (dfl != null) {
+            if (registro != null && registro.getIdDiagnostico()!= null) {
+                try {
+                    Diagnostico r = dfl.editar(registro);
+                    if (r != null && r.getIdDiagnostico() != null) {
+                        return r;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
+        }
+        return new Diagnostico();
     }
 
     @DELETE
@@ -106,27 +145,11 @@ public class DiagnosticoResource implements Serializable {
     public Diagnostico delete(
             @PathParam("id") Integer id
     ) {
-        if (dfl != null) {
+        if (dfl != null && id != null && id > 0) {
             try {
                 Diagnostico reg = dfl.find(id);
-                if (reg != null) {
-                    dfl.remove(reg);
-                }
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return null;
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Diagnostico create(Diagnostico registro) {
-        if (registro != null && registro.getIdDiagnostico() == null) {
-            try {
-                if (dfl != null) {
-                    Diagnostico reg = dfl.crear(registro);
-                    if (reg != null) {
+                if(reg != null){
+                    if (dfl.remove(reg)) {
                         return reg;
                     }
                 }
@@ -134,28 +157,6 @@ public class DiagnosticoResource implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
         }
-        return null;
+        return new Diagnostico();
     }
-
-    @PUT
-    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
-    public Diagnostico edit(Diagnostico reg) {
-        if (dfl != null) {
-            if (reg.getIdDiagnostico() != null) {
-                //Verificar que exista ese registro
-                try {
-                    Diagnostico regVerificado = dfl.find(reg.getIdDiagnostico());
-                    if (regVerificado != null) {
-                        if (dfl.edit(reg)) {
-                            return dfl.find(reg.getIdDiagnostico());
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        }
-        return null;
-    }
-
 }

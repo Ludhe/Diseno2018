@@ -37,17 +37,15 @@ public class CalendarioResources implements Serializable {
     @POST
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public Calendario create(Calendario registro) {
-        if (registro != null) {
+        if (calendarioFacade != null && registro != null) {
             try {
-                if (calendarioFacade != null) {
-                    Calendario r = calendarioFacade.crear(registro);
-                    if (r != null && r.getIdFecha() != null) {
-                        return r;
-                    }
+                Calendario r = calendarioFacade.crear(registro);
+                if (r != null) {
+                    return r;
                 }
             } catch (Exception ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            }
+            }            
         }
         return new Calendario();
     }
@@ -55,55 +53,58 @@ public class CalendarioResources implements Serializable {
     @PUT
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public Calendario edit(Calendario registro) {
-        if (registro != null && registro.getIdFecha() != null) {
-            try {
-                if (calendarioFacade != null) {
+        if (calendarioFacade != null) {
+            if (registro != null && registro.getIdFecha() != null) {
+                try {
                     Calendario r = calendarioFacade.editar(registro);
-                    if (r != null && r.getIdFecha() != null) {
+                    if (r != null) {
                         return r;
                     }
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
                 }
-            } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         return new Calendario();
     }
 
     @DELETE
-    @Path("delete/{id}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public boolean delete(
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
+    public Calendario delete(
             @PathParam("id") Integer id
     ) {
-        try {
-            if (calendarioFacade != null && id != null && !(id < 0)) {
-                Calendario r = calendarioFacade.find(id);
-                return calendarioFacade.remove(r);
+        if (calendarioFacade != null && id != null && id > 0) {
+            try {
+                Calendario reg = calendarioFacade.find(id);
+                if(reg != null){
+                    if (calendarioFacade.remove(reg)) {
+                        return reg;
+                    }
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return false;
+        return new Calendario();
     }
 
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON + "; charset=utf-8"})
     public List<Calendario> findAll() {
-        List salida = null;
-        try {
-            if (calendarioFacade != null) {
-                salida = calendarioFacade.findAll();
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
-            }
+        if (calendarioFacade != null) {
+            try {
+                List<Calendario> list = null;                
+                list = calendarioFacade.findAll();
+                if (list != null) {
+                    return list;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }            
         }
-        return salida;
+        return new ArrayList<>();
     }
 
     @GET
@@ -112,31 +113,30 @@ public class CalendarioResources implements Serializable {
             @DefaultValue("0") @QueryParam("first") int first,
             @DefaultValue("5") @QueryParam("pagesize") int pageSize
     ) {
-        List salida = null;
-        try {
-            if (calendarioFacade != null) {
+        if (calendarioFacade != null && first >= 0 && pageSize >= 0) {
+            try {
+                List salida = null;
                 salida = calendarioFacade.findRange(first, pageSize);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            if (salida == null) {
-                salida = new ArrayList();
+                if (salida != null) {
+                    return salida;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
-        return salida;
+        return new ArrayList<>();
     }
-
+    
     @GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public Integer count() {
-        try {
-            if (calendarioFacade != null) {
+        if (calendarioFacade != null) {
+            try {
                 return calendarioFacade.count();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
         return 0;
     }
@@ -147,12 +147,15 @@ public class CalendarioResources implements Serializable {
     public Calendario findById(
             @PathParam("idfecha") Integer id
     ) {
-        try {
-            if (calendarioFacade != null && id != null && !(id < 0)) {
-                return calendarioFacade.find(id);
+        if (calendarioFacade != null && id != null && id > 0) {
+            try {
+                Calendario reg = calendarioFacade.find(id);
+                if (reg != null) {
+                    return reg;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
         return new Calendario();
     }
