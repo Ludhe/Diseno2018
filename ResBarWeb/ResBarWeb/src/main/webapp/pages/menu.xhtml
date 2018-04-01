@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Menú</title>
         <link rel="stylesheet" href="css/simple-grid.css"></link>  
@@ -25,18 +26,51 @@
                 </div>
             </div>
         </div>
-
         <h:form>
             <div class="buscador">
                 <div class="row" align="center">
                     <div class="col-2"></div>
                     <div class="col-8">
-                        <p:outputLabel value="Buscar:" for="themePojo"/>
-                      <p:autoComplete id="themePojo" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
-                        var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
+                        <p:outputLabel value="Buscar:  " for="themePojo"/>
+                        <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
+                                        var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
                     </div>
                     <div class="col-2"></div>
                 </div> 
+            </div>
+            <div>
+                <div class="row" align="center">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                       
+                        <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}">
+                            <f:facet name="header">
+                                Menú de productos
+                            </f:facet>
+                            <p:column headerText="Id">
+                                <h:outputText value="#{car.id}" />
+                            </p:column>
+                            <p:column headerText="Year">
+                                <h:outputText value="#{car.year}" />
+                            </p:column>
+                            <p:column headerText="Brand">
+                                <h:outputText value="#{car.brand}" />
+                            </p:column>
+                            <p:column headerText="Color">
+                                <h:outputText value="#{car.color}" />
+                            </p:column>
+                            <p:column style="width:32px;text-align: center">
+                                 <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
+                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
+                                </p:commandButton>
+                                 <p:commandButton update=":form:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
+                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
             </div>
         </h:form>
     </h:body>
