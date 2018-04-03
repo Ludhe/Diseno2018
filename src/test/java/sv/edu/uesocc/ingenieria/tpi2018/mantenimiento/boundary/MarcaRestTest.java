@@ -5,17 +5,25 @@
  */
 package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import java.net.URISyntaxException;
 import java.net.URL;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacadeLocal;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Marca;
 
@@ -24,7 +32,9 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Marca;
  * @author dmmaga
  */
 @RunWith(Arquillian.class)
-public class MarcaTestREST {
+public class MarcaRestTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MarcaRestTest.class);
 
     @ArquillianResource
     private URL deploymentURL;
@@ -38,23 +48,25 @@ public class MarcaTestREST {
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
-
+    
     @Test
-    public void testCreateMarca (@ArquillianResteasyResource("ws/marca") MarcaRest marca) {
-       // Given
-        final String name = "DELL";
-        final int idmarca = 1;
-        Marca test = new Marca();
-        test.setIdMarca(idmarca);
-        test.setNombre(name);
-         
+    public void createTest() throws URISyntaxException{
+        Client client = createClient(); //creamos el cliente
+        WebTarget target = client.target(deploymentURL.toURI()) //registramos el servidor...
+                .path("ws/marca/count"); //.. el path del servicio...
+        LOGGER.info("--- test count marca:{}", target.getUri());
+        int n=target.request(MediaType.TEXT_PLAIN).get(Integer.class);
+        System.out.println("cantidad "+n);
         
-        // When
-        Marca result = marca.create(test);
-        System.out.println("**********"+result.getNombre());
-
-        // Then
-
-        assertEquals(result.getNombre(), name);
+        Assert.assertTrue(true);
+       
     }
+
+    private static Client createClient() {
+        return ClientBuilder
+                .newBuilder()
+                .register(JacksonJaxbJsonProvider.class) //para procesar las peticiones como JSON
+                .build();
+    }
+
 }
