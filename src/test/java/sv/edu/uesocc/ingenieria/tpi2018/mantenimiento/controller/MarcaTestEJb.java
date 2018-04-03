@@ -10,7 +10,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class MarcaTestEJb {
         Marca creado = mfl.crear(m1);
         System.out.println("Creado: "+creado);
         LOGGER.info("creado:{}", creado);
-        assertTrue(true);
+        Assert.assertEquals(m1.getNombre(), creado.getNombre());
     }
     
     
