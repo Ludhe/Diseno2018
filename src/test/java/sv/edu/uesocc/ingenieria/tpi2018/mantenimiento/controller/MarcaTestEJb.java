@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity;
+package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller;
 
+import javax.ejb.EJB;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -17,6 +18,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacade;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacadeLocal;
+import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity.Marca;
 
 /**
  *
@@ -26,8 +29,8 @@ import sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.controller.MarcaFacade;
 @RunWith(Arquillian.class)
 public class MarcaTestEJb {
 
-    @Inject
-    private MarcaFacade mf;
+    @EJB
+    private MarcaFacadeLocal mf;
 
  
 
@@ -44,9 +47,11 @@ public class MarcaTestEJb {
  
 
     @Test
-
     public void testCanPersistUserObject() {
-
+        Marca m1 = new Marca();
+        m1.setNombre("Marca 1");
+        Boolean creado = mf.create(m1);
+        System.out.println("CREADO "+creado);
         Assert.assertTrue(true);    
 
     }
