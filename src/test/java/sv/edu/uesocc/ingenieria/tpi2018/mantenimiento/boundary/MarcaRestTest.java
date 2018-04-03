@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,16 +50,36 @@ public class MarcaRestTest {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
     
+//    @Test
+//    public void countTest() throws URISyntaxException{
+//        Client client = createClient(); //creamos el cliente
+//        WebTarget target = client.target(deploymentURL.toURI()) //registramos el servidor...
+//                .path("ws/marca/count"); //.. el path del servicio...
+//        LOGGER.info("--- test count marca:{}", target.getUri());
+//        int n=target.request(MediaType.TEXT_PLAIN).get(Integer.class);
+//        System.out.println("cantidad "+n);
+//        
+//        Assert.assertEquals(n, 0);
+//       
+//    }
+    
     @Test
     public void createTest() throws URISyntaxException{
         Client client = createClient(); //creamos el cliente
         WebTarget target = client.target(deploymentURL.toURI()) //registramos el servidor...
-                .path("ws/marca/count"); //.. el path del servicio...
-        LOGGER.info("--- test count marca:{}", target.getUri());
-        int n=target.request(MediaType.TEXT_PLAIN).get(Integer.class);
-        System.out.println("cantidad "+n);
+                .path("ws/marca"); //.. el path del servicio...
+        LOGGER.info("--- test create marca:{}", target.getUri());
+        Marca prueba = new Marca();
+        prueba.setNombre("acer");
+        prueba.setIdMarca(1);
+        prueba.setDescripcion("hola");
+        Response creada = target.request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(prueba, MediaType.APPLICATION_JSON));
+//                .post(Entity.entity(prueba, MediaType.APPLICATION_JSON), Marca.class);
+       
+        System.out.println("creada "+creada);
         
-        Assert.assertTrue(true);
+        Assert.assertEquals(creada.getStatus(), 200);
        
     }
 
