@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.entity;
+package sv.edu.uesocc.ingenieria.tpi2018.mantenimiento.boundary;
+
 
 /**
  *
- * @author rcarlos
+ * @author dmmaga
  */
-public class MarcaTestEJb {
-    
+
+public class MarcaTestREST {
+
+
 }
