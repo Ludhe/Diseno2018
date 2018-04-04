@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Ordenes Activas</title>
+        <link rel="stylesheet" href="css/simple-grid.css"></link>        
+    </h:head>
+    <h:body>
+        <!--Accesos Rapidos-->
+        <div class="div-accesos-rapidos" style="background-color: #363030;">
+            <div class="row" align="center">
+                <div class="col-2">
+                    <a href="dashboard.jsf">
+                        <img src="img/dashboard.png" alt="Ordenes de Trabajo"/>
+                        <br/><label style="color: white; font-size: 2vw;">Dashboard</label>
+                    </a>
+                </div>
+                <div class="col-2">
+                    <a href="menu.jsf">
+                        <img src="img/ordenes.png"/>
+                        <br/><label style="color: white; font-size: 2vw;">Menu</label>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <h:form id="form">
+            <!--Buscador-->
+            <div class="div-buscador">
+                <div class="row" align="center">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <p:outputLabel value="Buscar Orden: " for="acSimple" />
+                        <p:autoComplete id="acSimple" size="50" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </div>
+            
+            <!--Tabla-->
+            <div class="div-tabla">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <p:dataTable var="orden" value="#{dtLazyView.lazyModel}" paginator="true" rows="10" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">
+                            <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
+                            <p:column headerText="Id" sortBy="#{car.id}" filterBy="#{car.id}">
+                                <h:outputText value="#{car.id}" />
+                            </p:column>
+                            <p:column headerText="Mesa" sortBy="#{car.year}" filterBy="#{car.year}">
+                                <h:outputText value="#{car.year}" />
+                            </p:column>
+                            <p:column headerText="Mesero" sortBy="#{car.brand}" filterBy="#{car.brand}">
+                                <h:outputText value="#{car.brand}" />
+                            </p:column>
+                            <p:column headerText="Cliente" sortBy="#{car.color}" filterBy="#{car.color}">
+                                <h:outputText value="#{car.color}" />
+                            </p:column>
+                            <p:column headerText="Total" sortBy="#{car.color}" filterBy="#{car.color}">
+                                <h:outputText value="#{car.color}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="col-1"></div>
+                </div>            
+            </div>
+            
+        </h:form>
+        
+        <!--Botones-->
+        <div class="div-botones">
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col-1">
+                    <button style="font-size: 4vw; width: 100%;">-</button>
+                </div>
+                <div class="col-1">
+                    <button style="font-size: 4vw; width: 100%;">+</button>
+                </div>
+                <div class="col-2"></div>
+            </div>            
+        </div>
+        
+        
+        
+        
+    </h:body>
+</html>
+
