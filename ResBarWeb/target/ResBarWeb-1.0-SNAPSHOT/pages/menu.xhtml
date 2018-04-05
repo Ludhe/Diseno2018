@@ -5,86 +5,106 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>AGREGAR PRODUCTOS</title>
-        <title>NUEVA ORDEN</title>
+        <title>PRODUCTOS</title>
         <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
         <link rel="stylesheet" href="css/reset.css"></link>
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     </h:head>
     <h:body>
-        <!--Accesos Rapidos-->
-        <p:layoutUnit position="north" size="150" >
-            <div class="div-accesos-rapidos" style="background-color: #363030;">
-                <div class="row" align="center">
-                    <div class="col-2">
-                        <a href="dashboard.jsf">
-                            <img src="img/home.png" alt="Ordenes de Trabajo"/>
-                            <br/><label style="color: white; font-size: 1vw;">Inicio</label>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <a href="estadisticas.jsf">
-                            <img src="img/dashboard.png"/>
-                            <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
-                        </a>
-                    </div>
-                    <div class="col-2">
-                        <a href="nuevaOrden.jsf">
-                            <img src="img/nuevaOrden.png"/>
-                            <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
-                        </a>
+        <p:layout fullPage="true">
+            <!--Accesos Rapidos-->
+            <p:layoutUnit position="north" size="150" >
+                <div class="div-accesos-rapidos" style="background-color: #363030;">
+                    <div class="row" align="center">
+                        <div class="col-2">
+                            <a href="dashboard.jsf">
+                                <img src="img/home.png" alt="Ordenes de Trabajo"/>
+                                <br/><label style="color: white; font-size: 1vw;">Inicio</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="estadisticas.jsf">
+                                <img src="img/dashboard.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="nuevaOrden.jsf">
+                                <img src="img/nuevaOrden.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </p:layoutUnit>
-        <h:form>
-            <div class="buscador">
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-8">
-                        <p:outputLabel value="Buscar:  " for="themePojo"/>
-                        <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
-                                        var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
-                    </div>
-                    <div class="col-2"></div>
-                </div> 
-            </div>
-            <div>
-                <div class="row" align="center">
-                    <div class="col-1"></div>
-                    <div class="col-10">
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
 
-                        <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}">
-                            <f:facet name="header">
-                                Menú de productos
-                            </f:facet>
-                            <p:column headerText="Id">
-                                <h:outputText value="#{car.id}" />
-                            </p:column>
-                            <p:column headerText="Year">
-                                <h:outputText value="#{car.year}" />
-                            </p:column>
-                            <p:column headerText="Brand">
-                                <h:outputText value="#{car.brand}" />
-                            </p:column>
-                            <p:column headerText="Color">
-                                <h:outputText value="#{car.color}" />
-                            </p:column>
-                            <p:column style="width:32px;text-align: center">
-                                <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
-                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                </p:commandButton>
-                                <p:commandButton update=":form:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
-                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </div>
-                    <div class="col-1"></div>
+                <h:form>  
+                    <p:menu>
+                        <p:submenu label="CATEGORÍAS">
+                            <p:menuitem value="Entradas"   icon="ui-icon-arrowthick-1-e" />
+                            <p:menuitem value="Desayunos"  icon=" ui-icon-arrowthick-1-e"/>
+                            <p:menuitem value="Sopas"  icon=" ui-icon-arrowthick-1-e"/>
+                            <p:menuitem value="Ensaladas"  icon=" ui-icon-arrowthick-1-e"/>
+                            <p:menuitem value="Bebidas"  icon=" ui-icon-arrowthick-1-e"/>
+                            <p:menuitem value="Postres"  icon=" ui-icon-arrowthick-1-e"/>
+                        </p:submenu>               
+                    </p:menu>
+                    <p:separator />
+                    <p:separator />
+                    <p:button outcome="nuevaOrden.xhtml" value="Agregar Productos Seleccionados" icon="ui-icon-circle-check"></p:button>          
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="east" size="1115">
+                <div class="buscador">
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-8">
+                            <p:outputLabel value="Buscar:  " for="themePojo"/>
+                            <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
+                                            var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div> 
                 </div>
-            </div>
-        </h:form>
+                <p:separator />
+                <!--tabla-->
+                <div>
+                    <div class="row" align="center">
+                        <div class="col-1"></div>
+                        <div class="col-10">
+                            <h:form id="form">
+                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="9" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+                                             selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">  
+                                    <f:facet name="header">
+                                        Productos disponibles
+                                    </f:facet>
+                                    <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                    <p:column headerText="Producto">
+                                        <h:outputText value="#{car.id}" />
+                                    </p:column>
+                                    <p:column headerText="Cantidad">
+                                        <h:outputText value="#{car.brand}" />
+                                    </p:column>
+                                    <p:column headerText="Precio Unitario">
+                                        <h:outputText value="#{car.color}" />
+                                    </p:column>
+                                    <p:column headerText="Sub Total">
+                                        <h:outputText value="#{car.year}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </p:layoutUnit>
+
+        </p:layout>
     </h:body>
 </html>
 

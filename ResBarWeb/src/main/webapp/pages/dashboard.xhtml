@@ -71,7 +71,7 @@
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <h2 style="margin: 0">Ordenes Activas:</h2>
-                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="10" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                              rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">
                                     <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
                                     <p:column headerText="Id" sortBy="#{car.id}" filterBy="#{car.id}">
@@ -99,7 +99,7 @@
                 </p:layoutUnit>
                 <p:dialog header="Opciones" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:outputPanel id="carDetail" style="text-align:center;">
-                        <p:button value="Modificar Orden">
+                        <p:button value="Modificar Orden" outcome="nuevaOrden.xhtml">
                             <f:param name="modificarOrden" value="10" />
                         </p:button>                                
                         <p:button value="Imprimir Cuenta">

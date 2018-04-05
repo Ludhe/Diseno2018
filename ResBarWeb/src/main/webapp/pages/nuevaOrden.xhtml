@@ -41,79 +41,80 @@
             </p:layoutUnit>
 
             <p:layoutUnit position="east" size="300">
-                <p:button outcome="menu.xhtml" value="Agregar Productos" icon="fa-arrow-circle-up"></p:button>
+                <p:button outcome="menu.xhtml" value="Agregar Productos" icon="ui-icon-circle-plus"></p:button>
                 <p:separator />
-                <p:button outcome="dashboard.xhtml" value="Finalizar la Orden" icon="fa-arrow-circle-up"></p:button>
+                <p:button outcome="dashboard.xhtml" value="Finalizar la Orden" icon="ui-icon-circle-check"></p:button>
             </p:layoutUnit>
             <p:layoutUnit position="center">
-                <h:form id="form">
 
-                    <!--Datos-->
-                    <div class="div-datos">
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-2">
-                                <p:outputLabel value="Nueva orden #: " for="idOrden" />
-                            </div>
-                            <div class="col-6">                        
-                                <p:inputText readonly="true" id="idOrden" value="ID autogenerado" />
-                            </div>
-                            <div class="col-2"></div>
+
+                <!--Datos-->
+                <div class="div-datos">
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <p:outputLabel value="Nueva orden #: " for="idOrden" />
                         </div>
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-2">
-                                <p:outputLabel value="Mesa: " for="noMesa" />
-                            </div>
-                            <div class="col-6">                        
-                                <p:inputText id="noMesa" />
-                            </div>
-                            <div class="col-2"></div>
+                        <div class="col-6">                        
+                            <p:inputText readonly="true" id="idOrden" value="ID autogenerado" />
                         </div>
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-2">
-                                <p:outputLabel value="Mesero: " for="mesero" />
-                            </div>
-                            <div class="col-6">                        
-                                <p:inputText id="mesero" />
-                            </div>
-                            <div class="col-2"></div>
-                        </div>
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-2">
-                                <p:outputLabel value="Cliente: " for="cliente" />
-                            </div>
-                            <div class="col-6">                        
-                                <p:inputText id="cliente" />
-                            </div>
-                            <div class="col-2"></div>
-                        </div>
+                        <div class="col-2"></div>
                     </div>
-                </h:form>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <p:outputLabel value="Mesa: " for="noMesa" />
+                        </div>
+                        <div class="col-6">                        
+                            <p:inputText id="noMesa" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <p:outputLabel value="Mesero: " for="mesero" />
+                        </div>
+                        <div class="col-6">                        
+                            <p:inputText id="mesero" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <p:outputLabel value="Cliente: " for="cliente" />
+                        </div>
+                        <div class="col-6">                        
+                            <p:inputText id="cliente" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
             </p:layoutUnit>
             <!--Tabla-->
-            <p:layoutUnit position="south" size="250">
-                <p:dataTable id="basicDT" var="car" value="#{dtSelectionView.cars1}">
-                    <f:facet name="header">
-                        Productos seleccionados
-                    </f:facet>
-                    <p:column headerText="Producto">
-                        <h:outputText value="Coca-cola" />
-                    </p:column>
-                    <p:column headerText="Cantidad" style="text-align: center">
-                        <p:commandButton update="" oncomplete="" icon="ui-icon-search" title="Quitar"></p:commandButton>
-                        <h:outputText value="1" />
-                        <p:commandButton update="" oncomplete="" icon="ui-icon-search" title="Agregar"></p:commandButton>
-                    </p:column>
-                    <p:column headerText="Precio Unitario">
-                        <h:outputText value="$0.50" />
-                    </p:column>
-                    <p:column headerText="SubTotal">
-                        <h:outputText value="$0.50" />
-                    </p:column>
-                </p:dataTable>
+            <p:layoutUnit position="south" size="260">
+                <h:form id="form">
+                    <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+                                 selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">  
+                        <f:facet name="header">
+                            Productos seleccionados
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{car.id}" />
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{car.brand}" />
+                        </p:column>
+                        <p:column headerText="Precio Unitario">
+                            <h:outputText value="#{car.color}" />
+                        </p:column>
+                        <p:column headerText="Sub Total">
+                            <h:outputText value="#{car.year}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
             </p:layoutUnit>
         </p:layout>
     </h:body>
