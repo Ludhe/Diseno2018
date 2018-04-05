@@ -8,12 +8,13 @@
         <title>NUEVA ORDEN</title>
         <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
+        <link rel="stylesheet" href="css/reset.css"></link>
     </h:head>
 
     <h:body>
         <p:layout fullPage="true">
             <!--Accesos Rapidos-->
-            <p:layoutUnit position="north" size="165" >
+            <p:layoutUnit position="north" size="150" >
                 <div class="div-accesos-rapidos" style="background-color: #363030;">
                     <div class="row" align="center">
                         <div class="col-2">
@@ -38,8 +39,9 @@
                 </div>
             </p:layoutUnit>
 
-            <p:layoutUnit position="east" size="200">
+            <p:layoutUnit position="east" size="300">
                 <p:button outcome="menu.xhtml" value="Agregar Productos" icon="fa-arrow-circle-up"></p:button>
+                <p:separator />
                 <p:button outcome="dashboard.xhtml" value="Finalizar la Orden" icon="fa-arrow-circle-up"></p:button>
             </p:layoutUnit>
             <p:layoutUnit position="center">
@@ -91,7 +93,7 @@
                 </h:form>
             </p:layoutUnit>
             <!--Tabla-->
-            <p:layoutUnit position="south" size="200">
+            <p:layoutUnit position="south" size="250">
                 <p:dataTable id="basicDT" var="car" value="#{dtSelectionView.cars1}">
                     <f:facet name="header">
                         Productos seleccionados
