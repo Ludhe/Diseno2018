@@ -5,80 +5,113 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Agregar Nueva Orden</title>
-        <link rel="icon" href="IMG/favicon.png" type="image/png"></link>
+        <title>NUEVA ORDEN</title>
+        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
     </h:head>
 
     <h:body>
+        <p:layout fullPage="true">
+            <!--Accesos Rapidos-->
+            <p:layoutUnit position="north" size="165" >
+                <div class="div-accesos-rapidos" style="background-color: #363030;">
+                    <div class="row" align="center">
+                        <div class="col-2">
+                            <a href="dashboard.jsf">
+                                <img src="img/home.png" alt="Ordenes de Trabajo"/>
+                                <br/><label style="color: white; font-size: 1vw;">Inicio</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="menu.jsf">
+                                <img src="img/dashboard.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="nuevaOrden.jsf">
+                                <img src="img/nuevaOrden.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </p:layoutUnit>
 
-        <!--Accesos Rapidos-->
-        <div class="div-accesos-rapidos" style="background-color: #363030;">
-            <div class="row" align="center">
-                <div class="col-2">
-                    <a href="dashboard.jsf">
-                        <img src="img/home.png" alt="Ordenes de Trabajo"/>
-                        <br/><label style="color: white; font-size: 2vw;">Inicio</label>
-                    </a>
-                </div>
-                <div class="col-2">
-                    <a href="menu.jsf">
-                        <img src="img/dashboard.png"/>
-                        <br/><label style="color: white; font-size: 2vw;">Estadísticas</label>
-                    </a>
-                </div>
-            </div>
-        </div>
+            <p:layoutUnit position="east" size="200">
+                <p:button outcome="menu.xhtml" value="Agregar Productos" icon="fa-arrow-circle-up"></p:button>
+                <p:button outcome="dashboard.xhtml" value="Finalizar la Orden" icon="fa-arrow-circle-up"></p:button>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <h:form id="form">
 
-        <h:form id="form">
-
-            <!--Datos-->
-            <div class="div-datos">
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <p:outputLabel value="Nueva orden #: " for="idOrden" />
+                    <!--Datos-->
+                    <div class="div-datos">
+                        <div class="row" align="center">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <p:outputLabel value="Nueva orden #: " for="idOrden" />
+                            </div>
+                            <div class="col-6">                        
+                                <p:inputText readonly="true" id="idOrden" value="ID autogenerado" />
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                        <div class="row" align="center">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <p:outputLabel value="Mesa: " for="noMesa" />
+                            </div>
+                            <div class="col-6">                        
+                                <p:inputText id="noMesa" />
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                        <div class="row" align="center">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <p:outputLabel value="Mesero: " for="mesero" />
+                            </div>
+                            <div class="col-6">                        
+                                <p:inputText id="mesero" />
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                        <div class="row" align="center">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <p:outputLabel value="Cliente: " for="cliente" />
+                            </div>
+                            <div class="col-6">                        
+                                <p:inputText id="cliente" />
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
                     </div>
-                    <div class="col-6">                        
-                        <p:inputText readonly="true" id="idOrden" value="ID autogenerado" />
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <p:outputLabel value="Mesa: " for="noMesa" />
-                    </div>
-                    <div class="col-6">                        
-                        <p:inputText id="noMesa" />
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <p:outputLabel value="Mesero: " for="mesero" />
-                    </div>
-                    <div class="col-6">                        
-                        <p:inputText id="mesero" />
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <p:outputLabel value="Cliente: " for="cliente" />
-                    </div>
-                    <div class="col-6">                        
-                        <p:inputText id="cliente" />
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            </div>
-
+                </h:form>
+            </p:layoutUnit>
             <!--Tabla-->
-
-        </h:form>
-
+            <p:layoutUnit position="south" size="200">
+                <p:dataTable id="basicDT" var="car" value="#{dtSelectionView.cars1}">
+                    <f:facet name="header">
+                        Productos seleccionados
+                    </f:facet>
+                    <p:column headerText="Producto">
+                        <h:outputText value="Coca-cola" />
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center">
+                        <p:commandButton update="" oncomplete="" icon="ui-icon-search" title="Quitar"></p:commandButton>
+                        <h:outputText value="1" />
+                        <p:commandButton update="" oncomplete="" icon="ui-icon-search" title="Agregar"></p:commandButton>
+                    </p:column>
+                    <p:column headerText="Precio Unitario">
+                        <h:outputText value="$0.50" />
+                    </p:column>
+                    <p:column headerText="SubTotal">
+                        <h:outputText value="$0.50" />
+                    </p:column>
+                </p:dataTable>
+            </p:layoutUnit>
+        </p:layout>
     </h:body>
 </html>
