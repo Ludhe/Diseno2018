@@ -1,0 +1,44 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 4, 2018, 7:40:01 PM
+    Author     : jcpleitez
+*/
+.div-accesos-rapidos{
+    background-color: #363030;
+}
+.img-accesos-rapidos{
+    width: 8vw;
+    height: auto;
+}
+.label-accesos-rapidos{
+    color: white;
+    font-size: 2vw;
+}
+.input-autocomplete{
+    width: 100%;
+}
+.img-plus-minus{    
+    display: inline-block;
+    width: 50%;
+    height: auto;
+}
+
+@media only screen and (max-width: 45em) {  /* 720px */
+    .img-accesos-rapidos{
+        width: 24vw;
+        height: auto;
+    }
+    .label-accesos-rapidos{
+        color: white;
+        font-size: 8vw;
+    }
+    .img-plus-minus{    
+        display: inline-block;
+        width: 20%;
+        height: auto;
+    }
+}

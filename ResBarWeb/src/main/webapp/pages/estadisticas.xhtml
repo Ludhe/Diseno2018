@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Menú</title>
+        <link rel="stylesheet" href="css/simple-grid.css"></link>  
+    </h:head>
+    <h:body>
+
+        <div class="div-accesos-rapidos" style="background-color: #363030;">
+            <div class="row" align="center">
+                <div class="col-2">
+                    <a href="dashboard.jsf">
+                        <img src="img/dashboard.png" alt="Ordenes de Trabajo"/>
+                        <br/><label style="color: white; font-size: 2vw;">Dashboard</label>
+                    </a>
+                </div>
+                <div class="col-2">
+                    <a href="Ordenes.jsf">
+                        <img src="img/ordenes.png"/>
+                        <br/><label style="color: white; font-size: 2vw;">Ordenes</label>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <h:form>
+            <div class="buscador">
+                <div class="row" align="center">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <p:outputLabel value="Buscar:  " for="themePojo"/>
+                        <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
+                                        var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
+                    </div>
+                    <div class="col-2"></div>
+                </div> 
+            </div>
+        </h:form>
+
+        <h:form>
+            <p:messages>
+            </p:messages>
+            <h:panelGrid columns="2" style="margin:10px 10px 10px 10px" cellpadding="5">
+                <p:outputLabel for="console" value="Período" />
+                <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:125px">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItem itemLabel="mensual" itemValue="Xbox One" />
+                    <f:selectItem itemLabel="trimestral" itemValue="PS4" />
+                    <f:selectItem itemLabel="Anual" itemValue="Wii U" />
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:commandButton value="Aceptar" style="margin:10px 10px 10px 10px" icon="ui-icon-check" />
+            <p:dialog header="Values" modal="true" showEffect="bounce" widgetVar="dlg" resizable="false">
+                <p:panelGrid columns="2" id="display" columnClasses="label,value">
+                    <h:outputText value="Basic:" />
+                    <h:outputText value="#{selectOneMenuView.console}" />
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+        <h:form>
+            <p:growl id="growl" showDetail="true" />
+
+            <h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
+                <p:chart type="pie" model="#{chartView.pieModel1}" style="width:400px;height:300px">
+                    <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
+                </p:chart>
+
+                <p:chart type="bar" model="#{chartView.barModel}" style="width:400px;height:300px">
+                    <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
+                </p:chart>  
+            </h:panelGrid>
+
+        </h:form>
+
+    </h:body>
+</html>
+
