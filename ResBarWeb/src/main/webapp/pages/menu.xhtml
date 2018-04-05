@@ -17,19 +17,19 @@
             <p:layoutUnit position="north" size="150" >
                 <div class="div-accesos-rapidos" style="background-color: #363030;">
                     <div class="row" align="center">
-                        <div class="col-2">
+                        <div class="col-4">
                             <a href="dashboard.jsf">
                                 <img src="img/home.png" alt="Ordenes de Trabajo"/>
                                 <br/><label style="color: white; font-size: 1vw;">Inicio</label>
                             </a>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <a href="estadisticas.jsf">
                                 <img src="img/dashboard.png"/>
                                 <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
                             </a>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <a href="nuevaOrden.jsf">
                                 <img src="img/nuevaOrden.png"/>
                                 <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
@@ -76,24 +76,28 @@
                         <div class="col-1"></div>
                         <div class="col-10">
                             <h:form id="form">
-                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="9" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
-                                             selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">  
+                                <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
                                     <f:facet name="header">
-                                        Productos disponibles
+                                        Menú de productos
                                     </f:facet>
-                                    <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
-                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                                    <p:column headerText="Producto">
-                                        <h:outputText value="#{car.id}" />
-                                    </p:column>
-                                    <p:column headerText="Cantidad">
-                                        <h:outputText value="#{car.brand}" />
-                                    </p:column>
-                                    <p:column headerText="Precio Unitario">
+                                     <p:column headerText="Nombres">
                                         <h:outputText value="#{car.color}" />
                                     </p:column>
-                                    <p:column headerText="Sub Total">
-                                        <h:outputText value="#{car.year}" />
+                                    <p:column headerText="Precio">
+                                        <h:outputText value="#{car.brand}" />
+                                    </p:column>
+                                    <p:column headerText="-" style="width:45px;text-align: center">
+                                        <p:commandButton value="-" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
+                                            <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="Cantidad" style="width:75px;text-align: center">
+                                        <p:outputLabel value="0"></p:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="+" style="width:45px;text-align: center">
+                                        <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="align-items:  center">
+                                            <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                             </h:form>

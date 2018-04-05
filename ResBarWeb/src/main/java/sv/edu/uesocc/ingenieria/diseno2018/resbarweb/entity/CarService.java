@@ -22,7 +22,7 @@ public class CarService {
      
     static {
         colors = new String[10];
-        colors[0] = "Black";
+        colors[0] = "Hamburguesa";
         colors[1] = "White";
         colors[2] = "Green";
         colors[3] = "Red";
