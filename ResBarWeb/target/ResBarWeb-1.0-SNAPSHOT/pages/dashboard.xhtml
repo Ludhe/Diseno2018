@@ -5,92 +5,112 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Ordenes Activas</title>        
-        <link rel="stylesheet" href="css/simple-grid.css"></link>
+        <title>DASHBOARD</title>        
+        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
+        <link rel="stylesheet" href="css/simple-grid.css"></link>        
         <link rel="stylesheet" href="css/dashboard.css"></link>
+        <link rel="stylesheet" href="css/reset.css"></link>
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     </h:head>
     <h:body>
-        <!--Accesos Rapidos-->
-        <div class="div-accesos-rapidos">
-            <div class="row" align="center">
-                <div class="col-2">
-                    <a href="dashboard.jsf">
-                        <img src="img/dashboard.png" alt="Ordenes de Trabajo" class="img-accesos-rapidos"/>
-                        <br/><label class="label-accesos-rapidos">Dashboard</label>
-                    </a>
-                </div>
-                <div class="col-2">
-                    <a href="menu.jsf">
-                        <img src="img/ordenes.png" class="img-accesos-rapidos"/>
-                        <br/><label class="label-accesos-rapidos">Menu</label>
-                    </a>
-                </div>
-            </div>
-        </div>
 
-        <h:form id="form">
-            <!--Buscador-->
-            <div class="div-buscador">
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-7">
-                        <p:outputLabel value="Buscar Orden: " for="acSimple" />
-                        <p:autoComplete id="acSimple" class="input-autocomplete" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+        <p:layout fullPage="true">
+            <!--Accesos Rapidos-->
+            <p:layoutUnit position="north" size="150" >
+                <div class="div-accesos-rapidos" style="background-color: #363030;">
+                    <div class="row" align="center">
+                        <div class="col-2">
+                            <a href="dashboard.jsf">
+                                <img src="img/home.png" alt="Ordenes de Trabajo"/>
+                                <br/><label style="color: white; font-size: 1vw;">Inicio</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="estadisticas.jsf">
+                                <img src="img/dashboard.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="nuevaOrden.jsf">
+                                <img src="img/nuevaOrden.png"/>
+                                <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-2">             
-                        <a href="nuevaOrden.jsf">
-                            <p:graphicImage url="img/plus.png" class="img-plus-minus" onclick=""/>
-                        </a>
-                    </div>
-                    <div class="col-1"></div>
                 </div>
-            </div>            
-            <!--Tabla-->
-            <div class="div-tabla">
-                <div class="row">                    
-                    <div class="col-1"></div>
-                    <div class="col-10">
-                        <h2 style="margin: 0">Ordenes Activas:</h2>
-                        <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="10" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                                     rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">
-                            <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
-                            <p:column headerText="Id" sortBy="#{car.id}" filterBy="#{car.id}">
-                                <h:outputText value="#{car.id}" />
-                            </p:column>
-                            <p:column headerText="Mesa" sortBy="#{car.brand}" filterBy="#{car.brand}">
-                                <h:outputText value="#{car.brand}" />
-                            </p:column>
-                            <p:column headerText="Mesero" sortBy="#{car.color}" filterBy="#{car.color}">
-                                <h:outputText value="#{car.color}" />
-                            </p:column>
-                            <p:column headerText="Cliente" sortBy="#{car.year}" filterBy="#{car.year}">
-                                <h:outputText value="#{car.year}" />
-                            </p:column>
-                            <p:column headerText="Total" sortBy="#{car.price}" filterBy="#{car.price}">
-                                <h:outputText value="#{car.price}" />
-                            </p:column>
-                        </p:dataTable>
-                        <p:dialog header="Opciones" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel id="carDetail" style="text-align:center;">
-                                <p:button value="Modificar Orden">
-                                    <f:param name="modificarOrden" value="10" />
-                                </p:button>                                
-                                <p:button value="Imprimir Cuenta">
-                                    <f:param name="productId" value="10" />
-                                </p:button>
-                                <p:button value="Tramitar Pago">
-                                    <f:param name="productId" value="10" />
-                                </p:button>
-                            </p:outputPanel>
-                        </p:dialog>
+            </p:layoutUnit>
+            <p:layoutUnit position="east" size="300">
+                <!--Buscador-->
+
+                <div class="div-buscador">
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-10">
+                            <p:outputLabel value="Buscar Orden: " for="acSimple" />
+                            <p:autoComplete id="acSimple" class="input-autocomplete" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+                        </div>
+                        <p:separator />
+                        <div class="col-2"></div>
+                        <div class="col-10">
+                            <p:outputLabel value="Agregar Nueva Orden: " for="nueva" />
+                            <a href="nuevaOrden.jsf">
+                                <p:graphicImage id="nueva" url="img/plus.png" class="img-plus-minus" onclick=""/>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-1"></div>
-                </div>            
-            </div>
+                </div> 
+            </p:layoutUnit>
+            <h:form id="form">
+                <p:layoutUnit position="center">
 
-        </h:form>
+                    <!--Tabla-->
 
+                    <div class="div-tabla">
+                        <div class="row">                    
+                            <div class="col-1"></div>
+                            <div class="col-10">
+                                <h2 style="margin: 0">Ordenes Activas:</h2>
+                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">
+                                    <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
+                                    <p:column headerText="Id" sortBy="#{car.id}" filterBy="#{car.id}">
+                                        <h:outputText value="#{car.id}" />
+                                    </p:column>
+                                    <p:column headerText="Mesa" sortBy="#{car.brand}" filterBy="#{car.brand}">
+                                        <h:outputText value="#{car.brand}" />
+                                    </p:column>
+                                    <p:column headerText="Mesero" sortBy="#{car.color}" filterBy="#{car.color}">
+                                        <h:outputText value="#{car.color}" />
+                                    </p:column>
+                                    <p:column headerText="Cliente" sortBy="#{car.year}" filterBy="#{car.year}">
+                                        <h:outputText value="#{car.year}" />
+                                    </p:column>
+                                    <p:column headerText="Total" sortBy="#{car.price}" filterBy="#{car.price}">
+                                        <h:outputText value="#{car.price}" />
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog header="Opciones" widgetVar="carDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="carDetail" style="text-align:center;">
+                                        <p:button value="Modificar Orden">
+                                            <f:param name="modificarOrden" value="10" />
+                                        </p:button>                                
+                                        <p:button value="Imprimir Cuenta">
+                                            <f:param name="productId" value="10" />
+                                        </p:button>
+                                        <p:button value="Tramitar Pago">
+                                            <f:param name="productId" value="10" />
+                                        </p:button>
+                                    </p:outputPanel>
+                                </p:dialog>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>            
+                    </div>
+
+                </p:layoutUnit>
+            </h:form>
+        </p:layout>
     </h:body>
 </html>
 

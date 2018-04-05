@@ -5,27 +5,39 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Menú</title>
-        <link rel="stylesheet" href="css/simple-grid.css"></link>  
+        <title>AGREGAR PRODUCTOS</title>
+        <title>NUEVA ORDEN</title>
+        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
+        <link rel="stylesheet" href="css/simple-grid.css"></link>        
+        <link rel="stylesheet" href="css/reset.css"></link>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     </h:head>
     <h:body>
-
-        <div class="div-accesos-rapidos" style="background-color: #363030;">
-            <div class="row" align="center">
-                <div class="col-2">
-                    <a href="dashboard.jsf">
-                        <img src="img/dashboard.png" alt="Ordenes de Trabajo"/>
-                        <br/><label style="color: white; font-size: 2vw;">Dashboard</label>
-                    </a>
-                </div>
-                <div class="col-2">
-                    <a href="Ordenes.jsf">
-                        <img src="img/ordenes.png"/>
-                        <br/><label style="color: white; font-size: 2vw;">Ordenes</label>
-                    </a>
+        <!--Accesos Rapidos-->
+        <p:layoutUnit position="north" size="150" >
+            <div class="div-accesos-rapidos" style="background-color: #363030;">
+                <div class="row" align="center">
+                    <div class="col-2">
+                        <a href="dashboard.jsf">
+                            <img src="img/home.png" alt="Ordenes de Trabajo"/>
+                            <br/><label style="color: white; font-size: 1vw;">Inicio</label>
+                        </a>
+                    </div>
+                    <div class="col-2">
+                        <a href="estadisticas.jsf">
+                            <img src="img/dashboard.png"/>
+                            <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
+                        </a>
+                    </div>
+                    <div class="col-2">
+                        <a href="nuevaOrden.jsf">
+                            <img src="img/nuevaOrden.png"/>
+                            <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </p:layoutUnit>
         <h:form>
             <div class="buscador">
                 <div class="row" align="center">
@@ -42,7 +54,7 @@
                 <div class="row" align="center">
                     <div class="col-1"></div>
                     <div class="col-10">
-                       
+
                         <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}">
                             <f:facet name="header">
                                 Menú de productos
@@ -60,10 +72,10 @@
                                 <h:outputText value="#{car.color}" />
                             </p:column>
                             <p:column style="width:32px;text-align: center">
-                                 <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
+                                <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
                                     <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
                                 </p:commandButton>
-                                 <p:commandButton update=":form:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
+                                <p:commandButton update=":form:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
                                     <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
                                 </p:commandButton>
                             </p:column>
