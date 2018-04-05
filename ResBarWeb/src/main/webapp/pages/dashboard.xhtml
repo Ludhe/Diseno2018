@@ -90,25 +90,26 @@
                                         <h:outputText value="#{car.price}" />
                                     </p:column>
                                 </p:dataTable>
-                                <p:dialog header="Opciones" widgetVar="carDialog" modal="false" showEffect="fade" hideEffect="fade" resizable="false">
-                                    <p:outputPanel id="carDetail" style="text-align:center;">
-                                        <p:button value="Modificar Orden">
-                                            <f:param name="modificarOrden" value="10" />
-                                        </p:button>                                
-                                        <p:button value="Imprimir Cuenta">
-                                            <f:param name="productId" value="10" />
-                                        </p:button>
-                                        <p:button value="Tramitar Pago">
-                                            <f:param name="productId" value="10" />
-                                        </p:button>
-                                    </p:outputPanel>
-                                </p:dialog>
+
                             </div>
                             <div class="col-1"></div>
                         </div>            
                     </div>
 
                 </p:layoutUnit>
+                <p:dialog header="Opciones" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="carDetail" style="text-align:center;">
+                        <p:button value="Modificar Orden">
+                            <f:param name="modificarOrden" value="10" />
+                        </p:button>                                
+                        <p:button value="Imprimir Cuenta">
+                            <f:param name="productId" value="10" />
+                        </p:button>
+                        <p:button value="Tramitar Pago">
+                            <f:param name="productId" value="10" />
+                        </p:button>
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
         </p:layout>
     </h:body>
