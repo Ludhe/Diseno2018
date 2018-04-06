@@ -3,14 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>DASHBOARD</title>        
         <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
         <link rel="stylesheet" href="css/dashboard.css"></link>
         <link rel="stylesheet" href="css/reset.css"></link>
-        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>        
     </h:head>
     <h:body>
 
@@ -74,47 +75,141 @@
                     <div class="div-tabla">
                         <div class="row">                    
                             <div class="col-1"></div>
-                            <div class="col-10">
-                                <h2 style="margin: 0">Ordenes Activas:</h2>
-                                <p:dataTable var="car" value="#{dtLazyView.lazyModel}" paginator="true" rows="8" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                                             rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{dtLazyView.selectedCar}" id="carTable" lazy="true">
-                                    <p:ajax event="rowSelect" listener="#{dtLazyView.onRowSelect}"  oncomplete="PF('carDialog').show()" />
-                                    <p:column headerText="Id" sortBy="#{car.id}" filterBy="#{car.id}">
+                            <div class="col-10">                                
+                                <p:dataTable id="eventsDT" var="car" value="#{dtSelectionView.cars3}" selectionMode="single" selection="#{dtSelectionView.selectedCar}" rowKey="#{car.id}">
+                                    <f:facet name="header">
+                                        <h2 style="margin: 0">Ordenes Activas:</h2>
+                                    </f:facet>
+                                    <p:ajax event="rowSelect" listener="#{dtSelectionView.onRowSelect}" update=":form:carDetail" oncomplete="PF('carDialog').show()"/>                                    
+                                    <p:column headerText="Id" sortBy="#{car.id}">
                                         <h:outputText value="#{car.id}" />
                                     </p:column>
-                                    <p:column headerText="Mesa" sortBy="#{car.brand}" filterBy="#{car.brand}">
-                                        <h:outputText value="#{car.brand}" />
-                                    </p:column>
-                                    <p:column headerText="Mesero" sortBy="#{car.color}" filterBy="#{car.color}">
-                                        <h:outputText value="#{car.color}" />
-                                    </p:column>
-                                    <p:column headerText="Cliente" sortBy="#{car.year}" filterBy="#{car.year}">
+                                    <p:column headerText="Year" sortBy="#{car.year}">
                                         <h:outputText value="#{car.year}" />
                                     </p:column>
-                                    <p:column headerText="Total" sortBy="#{car.price}" filterBy="#{car.price}">
-                                        <h:outputText value="#{car.price}" />
+                                    <p:column headerText="Brand" sortBy="#{car.brand}">
+                                        <h:outputText value="#{car.brand}" />
+                                    </p:column>
+                                    <p:column headerText="Color" sortBy="#{car.color}">
+                                        <h:outputText value="#{car.color}" />
                                     </p:column>
                                 </p:dataTable>
-
                             </div>
                             <div class="col-1"></div>
                         </div>            
                     </div>
 
-                </p:layoutUnit>
+
+                </p:layoutUnit>                
                 <p:dialog header="Opciones" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:outputPanel id="carDetail" style="text-align:center;">
                         <p:button value="Modificar Orden" outcome="nuevaOrden.xhtml">
                             <f:param name="modificarOrden" value="10" />
-                        </p:button>                                
+                        </p:button>  
+                        <p:commandButton value="Agregar Producto" type="button" onclick="PF('dlg3').show()"/>   
                         <p:button value="Imprimir Cuenta">
                             <f:param name="productId" value="10" />
-                        </p:button>
-                        <p:button value="Tramitar Pago">
-                            <f:param name="productId" value="10" />
-                        </p:button>
+                        </p:button>                        
+                        <p:commandButton value="Tramitar Pago" type="button" onclick="PF('dlg2').show()"/>                        
                     </p:outputPanel>
                 </p:dialog>
+                <p:dialog header="Tramitar Pago" widgetVar="dlg2" modal="true" height="256">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <div style="text-align: center">
+                            <label>Cliente:</label>
+                            <label>Juan Pleitez</label>
+                            <br/><br/>                    
+                            <label>Orden:</label>
+                            <label>104</label>
+                            <br/><br/>
+                            <table style="width:100%">
+                                <tr>
+                                    <th>Productos:</th>
+                                    <th>Cantidad:</th> 
+                                    <th>Precios Unitario:</th>
+                                    <th>SubTotal:</th>
+                                </tr>
+                                <tr>
+                                    <td>Cafe</td>
+                                    <td>2</td> 
+                                    <td>0.50</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Desayuno</td>
+                                    <td>1</td> 
+                                    <td>5.50</td>
+                                    <td>5.50</td>
+                                </tr>
+                                <tr>
+                                    <td>Postre</td>
+                                    <td>1</td> 
+                                    <td>5.00</td>
+                                    <td>5.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Dulce</td>
+                                    <td>1</td> 
+                                    <td>5.00</td>
+                                    <td>5.00</td>
+                                </tr>
+
+                            </table>
+                            <label>Total:</label>
+                            <label>16.0</label>
+                            <p:commandButton type="button" value="OK"/>
+                        </div>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:dialog header="Agregar Producto" widgetVar="dlg3" modal="true" height="256">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <div style="text-align: center">
+                            <label>Cliente:</label>
+                            <label>Juan Pleitez</label>
+                            <br/><br/>                    
+                            <label>Orden:</label>
+                            <label>104</label>
+                            <br/><br/>
+                            <table style="width:100%">
+                                <tr>
+                                    <th>Productos:</th>
+                                    <th>Cantidad:</th> 
+                                    <th>Precios Unitario:</th>
+                                    <th>SubTotal:</th>
+                                </tr>
+                                <tr>
+                                    <td>Cafe</td>
+                                    <td>2</td> 
+                                    <td>0.50</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Desayuno</td>
+                                    <td>1</td> 
+                                    <td>5.50</td>
+                                    <td>5.50</td>
+                                </tr>
+                                <tr>
+                                    <td>Postre</td>
+                                    <td>1</td> 
+                                    <td>5.00</td>
+                                    <td>5.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Dulce</td>
+                                    <td>1</td> 
+                                    <td>5.00</td>
+                                    <td>5.00</td>
+                                </tr>
+
+                            </table>
+                            <label>Total:</label>
+                            <label>16.0</label>
+                            <p:commandButton type="button" value="OK"/>
+                        </div>
+                    </h:panelGrid>
+                </p:dialog>
+
             </h:form>
         </p:layout>
     </h:body>

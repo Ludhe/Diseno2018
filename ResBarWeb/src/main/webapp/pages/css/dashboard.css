@@ -27,6 +27,22 @@ and open the template in the editor.
     height: auto;
 }
 
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 @media only screen and (max-width: 45em) {  /* 720px */
     .img-accesos-rapidos{
         width: 24vw;
@@ -41,4 +57,5 @@ and open the template in the editor.
         width: 20%;
         height: auto;
     }
+
 }
