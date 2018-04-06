@@ -14,7 +14,7 @@
 
     <h:body>
         <p:layout fullPage="true">
-            
+
             <!--Accesos Rapidos-->
             <p:layoutUnit position="north" size="150" >
                 <div class="div-accesos-rapidos" style="background-color: #363030;">
@@ -40,9 +40,9 @@
                     </div>
                 </div>
             </p:layoutUnit>
-            
-            <p:layoutUnit position="east" size="900">
-                 <h:form id="form">
+
+            <p:layoutUnit position="center">
+                <h:form id="form">
                     <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="6" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
                         <f:facet name="header">
                             Menú de productos
@@ -68,15 +68,26 @@
                         </p:column>
                     </p:dataTable>
                 </h:form>
-                 </p:layoutUnit>
-            
-            <p:layoutUnit position="center">
+                
+                <div class="row" align="center">
+                    <div class="col-9"></div>
+                    <div class="col-2">
+
+                        <p:button outcome="dashboard.xhtml" value="Confirmar" icon="ui-icon-circle-check"></p:button>
+                    </div>
+
+                    <div class="col-1"></div>
+                </div>
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west"  size="450">
                 <!--Datos-->
                 <div class="div-datos">
                     <div class="row" align="center">
                         <div class="col-2"></div>
                         <div class="col-2">
-                            <p:outputLabel value="Nueva orden #: " for="idOrden" />
+                            <p:outputLabel value="Orden: " for="idOrden" />
                         </div>
                         <div class="col-6">                        
                             <p:inputText readonly="true" id="idOrden" value="ID autogenerado" />
@@ -114,14 +125,26 @@
                         <div class="col-2"></div>
                     </div>
                 </div>
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <label>Observaciones: </label>
+                    </div>
+                    <div class="col-4">
+                        <p:inputTextarea></p:inputTextarea>
+                    </div>
+                </div>
+                <p:separator />
+                <div class="row" align="center">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <p:button outcome="menu.xhtml" value="Agregar Productos" icon="ui-icon-circle-plus"></p:button>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
             </p:layoutUnit>
-            
 
-            <p:layoutUnit position="south" size="60">
-               <p:button outcome="menu.xhtml" value="Agregar Productos" icon="ui-icon-circle-plus"></p:button>
-                <p:button outcome="dashboard.xhtml" value="Finalizar la Orden" icon="ui-icon-circle-check"></p:button>
-           
-            </p:layoutUnit>
+
+
         </p:layout>
     </h:body>
 </html>

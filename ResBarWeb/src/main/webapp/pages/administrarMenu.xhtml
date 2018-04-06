@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>PRODUCTOS</title>
+        <title>Administrar menú</title>
         <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
         <link rel="stylesheet" href="css/reset.css"></link>
@@ -30,16 +30,15 @@
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="nuevaOrden.jsf">
+                            <a href="administrarMenu.jsf">
                                 <img src="img/nuevaOrden.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                                <br/><label style="color: white; font-size: 1vw;">Administrar Menú</label>
                             </a>
                         </div>
                     </div>
                 </div>
             </p:layoutUnit>
             <p:layoutUnit position="center">
-
                 <h:form>  
                     <p:menu>
                         <p:submenu label="CATEGORÍAS">
@@ -53,10 +52,10 @@
                     </p:menu>
                     <p:separator />
                     <p:separator />
-                    <p:button outcome="nuevaOrden.xhtml" value="Agregar Productos Seleccionados" icon="ui-icon-circle-check"></p:button>          
+                    <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
+                    <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
                 </h:form>
             </p:layoutUnit>
-
             <p:layoutUnit position="east" size="1115">
                 <div class="buscador">
                     <div class="row" align="center">
@@ -76,28 +75,22 @@
                         <div class="col-1"></div>
                         <div class="col-10">
                             <h:form id="form">
-                                <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
+                                <p:dataTable id="productos" editMode="cell" editable="true" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
                                     <f:facet name="header">
                                         Menú de productos
                                     </f:facet>
-                                     <p:column headerText="Nombres">
-                                        <h:outputText value="#{car.color}" />
+
+                                    <p:column headerText="Nombres">
+                                        <p:cellEditor>  
+                                            <f:facet name="output"><h:outputText value="#{car.color}" /></f:facet>
+                                            <f:facet name="input"><h:inputText  value="#{car.color}" label="year"/></f:facet>
+                                        </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="Precio">
-                                        <h:outputText value="#{car.brand}" />
-                                    </p:column>
-                                    <p:column headerText="-" style="width:45px;text-align: center">
-                                        <p:commandButton value="-" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
-                                            <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                        </p:commandButton>
-                                    </p:column>
-                                    <p:column headerText="Cantidad" style="width:75px;text-align: center">
-                                        <p:outputLabel value="0"></p:outputLabel>
-                                    </p:column>
-                                    <p:column headerText="+" style="width:45px;text-align: center">
-                                        <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="align-items:  center">
-                                            <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                        </p:commandButton>
+                                        <p:cellEditor>  
+                                            <f:facet name="output"><h:outputText value="#{car.brand}" /></f:facet>
+                                            <f:facet name="input"><h:inputText  value="#{car.brand}" label="year"/></f:facet>
+                                        </p:cellEditor>
                                     </p:column>
                                 </p:dataTable>
                             </h:form>
@@ -107,8 +100,74 @@
                     </div>
                 </div>
             </p:layoutUnit>
-
         </p:layout>
+        <p:dialog header="Agregar nuevo producto" widgetVar="addProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:outputPanel id="carDetail" style="text-align:center;">
+                <div class="row" align="center">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
+                            <f:selectItem itemLabel="Seleccione Categoría" itemValue="" />
+                            <f:selectItem itemLabel="Entradas" itemValue="Xbox One" />
+                            <f:selectItem itemLabel="Desayunos" itemValue="Xbox One" />
+                            <f:selectItem itemLabel="Sopas" itemValue="PS4" />
+                            <f:selectItem itemLabel="Bebidas" itemValue="Wii U" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <br></br>
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <label>Nombre del producto: </label>
+                    </div>
+                    <div class="col-8">
+                    <p:inputText></p:inputText>
+                    </div>
+                </div>
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <label>Precio del producto: </label>
+                    </div>
+                    <div class="col-8">
+                    <p:inputText></p:inputText>
+                    </div>
+                </div>
+                <div class="row" align="center">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <p:commandButton value="Agregar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                    </div>
+                    <div class="col-4">
+                        <p:commandButton value="Cancelar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </p:outputPanel>
+        </p:dialog>
+        <p:dialog header="Agregar nueva categoría" widgetVar="addCategoria" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:outputPanel id="carDetail2" style="text-align:center;">
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <label>Nombre de la categoría: </label>
+                    </div>
+                    <div class="col-8">
+                    <p:inputText></p:inputText>
+                    </div>
+                </div>
+                <div class="row" align="center">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <p:button value="Hola"></p:button>
+                        <p:commandButton value="Agregar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                    </div>
+                    <div class="col-4">
+                        <p:commandButton value="Cancelar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </p:outputPanel>
+        </p:dialog>
     </h:body>
 </html>
 
