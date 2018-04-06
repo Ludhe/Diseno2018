@@ -33,9 +33,9 @@
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="nuevaOrden.jsf">
+                            <a href="administrarMenu.jsf">
                                 <img src="img/nuevaOrden.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Nueva Orden</label>
+                                <br/><label style="color: white; font-size: 1vw;">Administrar Menu</label>
                             </a>
                         </div>
                     </div>
@@ -163,59 +163,77 @@
                             </table>
                             <label>Total:</label>
                             <label>16.0</label>
-                            <p:commandButton type="button" value="OK"/>
+                            <p:commandButton type="button" value="OK" onclick="PF('dlg4').show()"/>
                         </div>
                     </h:panelGrid>
                 </p:dialog>
                 <p:dialog header="Agregar Producto" widgetVar="dlg3" modal="true" height="300">
-                        <div style="text-align: center">
+                    <div style="text-align: center">
 
-                            <div class="row" align="center">
-                                <div class="col-4"><label>Categoría:</label></div>
-                                <div class="col-4">
-                                    <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
-                                        <f:selectItem itemLabel="Seleccione Categoría" itemValue="" />
-                                        <f:selectItem itemLabel="Entradas" itemValue="Xbox One" />
-                                        <f:selectItem itemLabel="Desayunos" itemValue="Xbox One" />
-                                        <f:selectItem itemLabel="Sopas" itemValue="PS4" />
-                                        <f:selectItem itemLabel="Bebidas" itemValue="Wii U" />
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="col-2"></div>
+                        <div class="row" align="center">
+                            <div class="col-4"><label>Categoría:</label></div>
+                            <div class="col-4">
+                                <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
+                                    <f:selectItem itemLabel="Seleccione Categoría" itemValue="" />
+                                    <f:selectItem itemLabel="Entradas" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="Desayunos" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="Sopas" itemValue="PS4" />
+                                    <f:selectItem itemLabel="Bebidas" itemValue="Wii U" />
+                                </p:selectOneMenu>
                             </div>
-                            <div class="row" align="center">
-                                <div class="col-4"><label>Producto:</label></div>
-                                <div class="col-4">
-                                    <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
-                                        <f:selectItem itemLabel="Seleccione Producto" itemValue="" />
-                                        <f:selectItem itemLabel="Hamburguesa" itemValue="Xbox One" />
-                                        <f:selectItem itemLabel="Sandwich" itemValue="Xbox One" />
-                                        <f:selectItem itemLabel="Panini" itemValue="PS4" />
-                                        <f:selectItem itemLabel="Pizza" itemValue="Wii U" />
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                            <div class="row" align="center">
-                                <div class="col-2"></div>
-                                <div class="8"><label>Precio:</label> <label>   $16.0</label></div>
-                                <div class="2"></div>
-                            </div>
-                            <br></br>
-                            <div class="row" align="center">
-                                <div class="col-4"><label>Enviar a:</label></div>
-                                
-                                <div class="4">
-                                    <label>Cocina</label>
-                                    <input type="radio" name="opciones" value="Cocina" />
-                                    <label>Bebidas</label>
-                            <input type="radio" name="opciones" value="Bebida" /></div>
-                                <div class="2"></div>
-                            </div>
-                            <p:separator/>
-                            <p:commandButton value="Confirmar"/>
-                            <p:commandButton value="Cancelar"/>
+                            <div class="col-2"></div>
                         </div>
+                        <div class="row" align="center">
+                            <div class="col-4"><label>Producto:</label></div>
+                            <div class="col-4">
+                                <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
+                                    <f:selectItem itemLabel="Seleccione Producto" itemValue="" />
+                                    <f:selectItem itemLabel="Hamburguesa" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="Sandwich" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="Panini" itemValue="PS4" />
+                                    <f:selectItem itemLabel="Pizza" itemValue="Wii U" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                        <div class="row" align="center">
+                            <div class="col-2"></div>
+                            <div class="8"><label>Precio:</label> <label>   $16.0</label></div>
+                            <div class="2"></div>
+                        </div>
+                        <br></br>
+                        <div class="row" align="center">
+                            <div class="col-4"><label>Enviar a:</label></div>
+
+                            <div class="4">
+                                <label>Cocina</label>
+                                <input type="radio" name="opciones" value="Cocina" />
+                                <label>Bebidas</label>
+                                <input type="radio" name="opciones" value="Bebida" /></div>
+                            <div class="2"></div>
+                        </div>
+                        <p:separator/>
+                        <p:commandButton value="Confirmar"/>
+                        <p:commandButton value="Cancelar"/>
+                    </div>
+                </p:dialog>
+
+                <p:dialog header="Cobro" widgetVar="dlg4" modal="true" width="256" height="320">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <div style="text-align: center;">
+                            <br/>
+                            <label>Efectivo:</label>
+                            <p:inputText/>
+                            <br/><br/>
+                            <label>Total Cuenta:</label>
+                            <label>$20</label>
+                            <br/><br/>                            
+                            <label>Cambio:</label>
+                            <label>$10</label>
+                            <br/><br/><br/>
+                            <p:commandButton type="button" value="OK"/>
+                        </div>                        
+                    </h:panelGrid>
                 </p:dialog>
 
             </h:form>
