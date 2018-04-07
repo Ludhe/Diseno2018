@@ -93,6 +93,7 @@ public class MarcaTest {
     public void commitTransaction() throws Exception {
         utx.commit();
     }
+    
 
     @Test
     public void shouldFindAllGamesUsingJpqlQuery() throws Exception {
@@ -106,6 +107,8 @@ public class MarcaTest {
         // entonces (then)
         System.out.println("Encontrado(s) " + marcas.size() + " marcas (usando JPQL):");
         assertContainsAllMarcas(marcas);
+        
+         System.out.println("HACE EL TEST JPA WUJUUUU**************");
     }
 
     private static void assertContainsAllMarcas(Collection<Marca> retrievedGames) {

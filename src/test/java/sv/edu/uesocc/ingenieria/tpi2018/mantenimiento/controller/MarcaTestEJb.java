@@ -39,10 +39,10 @@ public class MarcaTestEJb {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
-    @Test
-    public void test01() {
-        LOGGER.info("Test 01");
-    }
+//    @Test
+//    public void test01() {
+//        LOGGER.info("Test 01");
+//    }
 
     @Test
     public void testInsertProducts() {
@@ -53,6 +53,7 @@ public class MarcaTestEJb {
         System.out.println("Creado: " + creado);
         LOGGER.info("creado:{}", creado);
         Assert.assertEquals(m1.getNombre(), creado.getNombre());
+        System.out.println("HACE EL TEST EJB WUJUUUU**************");
     }
 
 }

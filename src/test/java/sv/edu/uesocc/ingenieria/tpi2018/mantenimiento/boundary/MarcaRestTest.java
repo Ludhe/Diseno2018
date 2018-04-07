@@ -80,6 +80,8 @@ public class MarcaRestTest {
         System.out.println("creada "+creada);
         
         Assert.assertEquals(creada.getStatus(), 200);
+        
+         System.out.println("HACE EL TEST REST WUJUUUU**************");
        
     }
 
