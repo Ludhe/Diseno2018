@@ -21,7 +21,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
  
-@ManagedBean(name="dtSelectionView")
+@ManagedBean(name="dtSelectionViewssss")
 @ViewScoped
 public class SelectionView implements Serializable {
      
