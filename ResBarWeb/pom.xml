@@ -33,6 +33,14 @@
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
         </dependency>
+        <!-- Libreria del proyecto -->
+        <dependency>
+            <groupId>sv.edu.diseno</groupId>
+            <artifactId>ResBarLib</artifactId>
+            <version>1.0</version>
+            <systemPath>${project.basedir}/libs/ResBarLib.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
     </dependencies>
 
     <build>
