@@ -7,10 +7,9 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import sv.edu.diseno.acceso.ManejadorOrden;
 import sv.edu.diseno.definiciones.Orden;
 
  
@@ -18,21 +17,15 @@ import sv.edu.diseno.definiciones.Orden;
 @ViewScoped
 public class frmOrden implements Serializable {
      
-    private List<Orden> cars;
-     
-    @ManagedProperty("#{ordenService}")
-    private OrdenService service;
- 
-    @PostConstruct
-    public void init() {
-        cars = service.createOrdens(10);
+    ManejadorOrden manejadorOrden;
+    private List<Orden> ordenes;
+
+    public void setOrdenes(List<Orden> ordenes) {
+        this.ordenes = ordenes;
     }
-     
-    public List<Orden> getOrdens() {
-        return cars;
+    
+    public List<Orden> getOrdenes() {
+        return manejadorOrden.ObtenerActivas();
     }
- 
-    public void setService(OrdenService service) {
-        this.service = service;
-    }
+    
 }
