@@ -38,23 +38,15 @@
                     </div>
                 </div>
             </p:layoutUnit>
-            <p:layoutUnit position="center">
-                <h:form>  
-                    <p:menu>
-                        <p:submenu label="CATEGORÍAS">
-                            <p:menuitem value="Entradas"   icon="ui-icon-arrowthick-1-e" />
-                            <p:menuitem value="Desayunos"  icon=" ui-icon-arrowthick-1-e"/>
-                            <p:menuitem value="Sopas"  icon=" ui-icon-arrowthick-1-e"/>
-                            <p:menuitem value="Ensaladas"  icon=" ui-icon-arrowthick-1-e"/>
-                            <p:menuitem value="Bebidas"  icon=" ui-icon-arrowthick-1-e"/>
-                            <p:menuitem value="Postres"  icon=" ui-icon-arrowthick-1-e"/>
-                        </p:submenu>               
-                    </p:menu>
-                    <p:separator />
-                    <p:separator />
-                    <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
-                    <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
+            <p:layoutUnit position="center"> 
+                <!--Todas las categorias-->
+                <h:form>
+                    <p:menu model="#{administrar.model}"/>
                 </h:form>
+                <p:separator />
+                <p:separator />
+                <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
+                <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
             </p:layoutUnit>
             <p:layoutUnit position="east" size="1115">
                 <div class="buscador">
@@ -109,13 +101,7 @@
                 <div class="row" align="center">
                     <div class="col-4"></div>
                     <div class="col-4">
-                        <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
-                            <f:selectItem itemLabel="Seleccione Categoría" itemValue="" />
-                            <f:selectItem itemLabel="Entradas" itemValue="Xbox One" />
-                            <f:selectItem itemLabel="Desayunos" itemValue="Xbox One" />
-                            <f:selectItem itemLabel="Sopas" itemValue="PS4" />
-                            <f:selectItem itemLabel="Bebidas" itemValue="Wii U" />
-                        </p:selectOneMenu>
+                       
                     </div>
                     <div class="col-4"></div>
                 </div>
@@ -125,7 +111,7 @@
                         <label>Nombre del producto: </label>
                     </div>
                     <div class="col-8">
-                    <p:inputText></p:inputText>
+                        <p:inputText></p:inputText>
                     </div>
                 </div>
                 <div class="row" align="center">
@@ -133,16 +119,16 @@
                         <label>Precio del producto: </label>
                     </div>
                     <div class="col-8">
-                    <p:inputText></p:inputText>
+                        <p:inputText></p:inputText>
                     </div>
                 </div>
                 <div class="row" align="center">
                     <div class="col-2"></div>
                     <div class="col-4">
-                        <p:commandButton value="Agregar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                        <p:commandButton value="Agregar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
                     </div>
                     <div class="col-4">
-                        <p:commandButton value="Cancelar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                        <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
                     </div>
                     <div class="col-2"></div>
                 </div>
@@ -155,16 +141,16 @@
                         <label>Nombre de la categoría: </label>
                     </div>
                     <div class="col-8">
-                    <p:inputText></p:inputText>
+                        <p:inputText></p:inputText>
                     </div>
                 </div>
                 <div class="row" align="center">
                     <div class="col-2"></div>
                     <div class="col-4">
-                        <p:commandButton value="Agregar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                        <p:commandButton value="Agregar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
                     </div>
                     <div class="col-4">
-                        <p:commandButton value="Cancelar" onclick="location.href='administrarMenu.jsf'"></p:commandButton>
+                        <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
                     </div>
                     <div class="col-2"></div>
                 </div>

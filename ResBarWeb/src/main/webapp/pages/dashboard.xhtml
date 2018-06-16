@@ -76,21 +76,30 @@
                         <div class="row">                    
                             <div class="col-1"></div>
                             <div class="col-10">                                
-                                <p:dataTable var="orden" value="#{dtBasicView.ordenes}">
+                                <p:dataTable var="orden" value="#{frmDashboard.ordenes}"  selectionMode="single" selection="#{frmDashboard.selectedOrden}" rowKey="#{orden.idOrden}">
                                     <f:facet name="header">
                                         Ordenes Activas
                                     </f:facet>
+                                    <p:ajax event="rowSelect" oncomplete="PF('ordenOptions').show()" update=":form:ordenOpcionesPanel"/>
                                     <p:column headerText="ID">
                                         <h:outputText value="#{orden.idOrden}" />
-                                    </p:column>
-
-                                    <p:column headerText="Cliente">
-                                        <h:outputText value="#{orden.cliente}" />
                                     </p:column>
 
                                     <p:column headerText="Mesero">
                                         <h:outputText value="#{orden.mesero}" />
                                     </p:column>
+
+                                    <p:column headerText="Mesa">
+                                        <h:outputText value="#{orden.mesa}" />
+                                    </p:column>
+
+                                    <p:column headerText="Cliente">
+                                        <h:outputText value="#{orden.cliente}" />
+                                    </p:column>                                    
+
+                                    <p:column headerText="Fecha">
+                                        <h:outputText value="#{orden.fecha}" />
+                                    </p:column>                                    
 
                                     <p:column headerText="Comentario">
                                         <h:outputText value="#{orden.comentario}" />
@@ -102,19 +111,8 @@
                     </div>
 
 
-                </p:layoutUnit>                
-                <p:dialog header="Opciones" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="carDetail" style="text-align:center;">
-                        <p:button value="Modificar Orden" outcome="nuevaOrden.xhtml">
-                            <f:param name="modificarOrden" value="10" />
-                        </p:button>  
-                        <p:commandButton value="Agregar Producto" type="button" onclick="PF('dlg3').show()"/>   
-                        <p:button value="Imprimir Cuenta">
-                            <f:param name="productId" value="10" />
-                        </p:button>                        
-                        <p:commandButton value="Tramitar Pago" type="button" onclick="PF('dlg2').show()"/>                        
-                    </p:outputPanel>
-                </p:dialog>
+                </p:layoutUnit>
+
                 <p:dialog header="Tramitar Pago" widgetVar="dlg2" modal="true" height="256">
                     <h:panelGrid columns="1" cellpadding="5">
                         <div style="text-align: center">
@@ -213,7 +211,6 @@
                         <p:commandButton value="Cancelar"/>
                     </div>
                 </p:dialog>
-
                 <p:dialog header="Cobro" widgetVar="dlg4" modal="true" width="256" height="320">
                     <h:panelGrid columns="1" cellpadding="5">
                         <div style="text-align: center;">
@@ -230,6 +227,40 @@
                             <p:commandButton type="button" value="OK"/>
                         </div>                        
                     </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="Opciones de Orden" widgetVar="ordenOptions" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="ordenOpcionesPanel" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty frmDashboard.selectedOrden}" columnClasses="label,value">
+
+                            <h:outputText value="Id:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.idOrden}" />
+
+                            <h:outputText value="Mesero:" />                            
+                            <h:outputText value="#{frmDashboard.selectedOrden.mesero}" />                            
+
+                            <h:outputText value="Mesa:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.mesa}" />
+
+                            <h:outputText value="Cliente:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.cliente}" />
+
+                            <h:outputText value="Fecha:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.fecha}" />
+
+                            <h:outputText value="Comentario:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.comentario}" />                            
+
+                            <h:outputText value="Total:" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.total}" />
+
+                        </p:panelGrid>                        
+                        <p:commandButton value="Modificar Orden" type="button" action="/nuevaOrden.xhtml"/>
+                        <p:commandButton value="Agregar Producto" type="button" onclick="PF('dlg3').show()"/>
+                        <p:commandButton value="Imprimir Cuenta" type="button"/>
+                        <p:commandButton value="Tramitar Pago" type="button" onclick="PF('dlg2').show()"/>
+                    </p:outputPanel>
+
                 </p:dialog>
 
             </h:form>
