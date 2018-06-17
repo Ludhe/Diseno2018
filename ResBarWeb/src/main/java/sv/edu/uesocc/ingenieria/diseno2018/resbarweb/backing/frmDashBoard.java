@@ -38,4 +38,8 @@ public class frmDashBoard implements Serializable {
         return manejadorOrden.ObtenerActivas();
     }
     
+    public void saveOrden(){
+        manejadorOrden.Actualizar(selectedOrden);        
+    }
+    
 }
