@@ -45,13 +45,37 @@
                 <p:layoutUnit position="center">
                     ESTADISTICAS
                     <p:separator />
-                    <p:outputLabel for="inline" value="Inline:" />
-                    <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
-                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs" />
-                    </p:calendar>
-                    <h:outputText id="msgs" value="#{frmEstadisticas.date1}">
-                        <f:convertDateTime pattern="yyyy/MM/dd" />
-                    </h:outputText>
+                    <p:selectOneMenu id="console" value="#{frmEstadisticas.seleccionado}" style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="1" />
+                        <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+                        <f:selectItem itemLabel="PS4" itemValue="PS4" />
+                        <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Imprimir" onclick="#{frmEstadisticas.imprimir()}"></p:commandButton>
+
+                    <div id="calendario1fecha">
+                        <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
+                            <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs" />
+                        </p:calendar>
+                        <h:outputText id="msgs" value="#{frmEstadisticas.date1}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" />
+                        </h:outputText>
+                    </div>
+                    <div id="calendarioDosFechas">
+                        <p:outputLabel for="popup" value="Seleccione fecha 1:" />
+                        <p:calendar id="popup" value="#{frmEstadisticas.date2}" />
+                        <h:outputText value="#{frmEstadisticas.date2}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+
+                        <p:outputLabel for="popup" value="Seleccione fecha 2:" />
+                        <p:calendar id="popup2" value="#{frmEstadisticas.date3}" />
+                        <h:outputText value="#{frmEstadisticas.date3}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </div>
+
                     <p:separator />
                     <div class="div-tabla">
                         <div class="row">                    
