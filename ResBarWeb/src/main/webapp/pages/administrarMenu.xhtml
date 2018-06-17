@@ -98,42 +98,44 @@
             </p:layoutUnit>
         </p:layout>
         <p:dialog header="Agregar nuevo producto" widgetVar="addProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:outputPanel id="carDetail" style="text-align:center;">
-                <div class="row" align="center">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                       
+
+                <p:outputPanel id="carDetail" style="text-align:center;">
+                    <div class="row" align="center">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+
+                        </div>
+                        <div class="col-4"></div>
                     </div>
-                    <div class="col-4"></div>
-                </div>
-                <br></br>
-                <div class="row" align="center">
-                    <div class="col-4">
-                        <label>Nombre del producto: </label>
+                    <br></br>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Nombre del producto: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.nombre}"></p:inputText>
+                        </div>
                     </div>
-                    <div class="col-8">
-                        <p:inputText></p:inputText>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Precio del producto: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.precio}"></p:inputText>
+                        </div>
                     </div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-4">
-                        <label>Precio del producto: </label>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <p:commandButton value="Agregar" actionListener="#{administrar.saludarDiana()}" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                        </div>
+                        <div class="col-4">
+                            <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
                     </div>
-                    <div class="col-8">
-                        <p:inputText></p:inputText>
-                    </div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-4">
-                        <p:commandButton value="Agregar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
-                    </div>
-                    <div class="col-4">
-                        <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            </p:outputPanel>
+                </p:outputPanel>
+            
         </p:dialog>
         <p:dialog header="Agregar nueva categoría" widgetVar="addCategoria" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <p:outputPanel id="carDetail2" style="text-align:center;">

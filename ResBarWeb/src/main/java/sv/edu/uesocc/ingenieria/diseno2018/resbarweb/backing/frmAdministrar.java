@@ -31,8 +31,17 @@ public class frmAdministrar implements Serializable {
     ManejadorProductos manejadorProductos;
     private List<Categoria> categorias;
     private List<Producto> productos;
+    private Producto producto;
       //Para generar el menu con categorías
     private MenuModel model;
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
   
     public List<Producto> getProductos() {
         return productos;
@@ -56,14 +65,15 @@ public class frmAdministrar implements Serializable {
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
-
+        producto=new Producto();
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
         List<Categoria> cat = getCategorias();
+        setProductos(manejadorProductos.ObtenerxCategoria(cat.get(0).idCategoria));
         for (int i = 0; i < cat.size(); i++) {
             DefaultMenuItem item = new DefaultMenuItem(cat.get(i).nombre);
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setCommand("#{administrar.imprimir("+i+")}");
+            item.setCommand("#{administrar.recargarProductos("+i+")}");
             item.setUpdate("form");
             item.setAjax(false);
             firstSubmenu.addElement(item);
@@ -77,16 +87,23 @@ public class frmAdministrar implements Serializable {
     }
     
 
-    public void imprimir(String id){
+    public void recargarProductos(String id){
         List<Categoria> cat = getCategorias();
         Categoria seleccionada = cat.get(Integer.parseInt(id));
         int idSeleccionada = seleccionada.idCategoria;
         setProductos(manejadorProductos.ObtenerxCategoria(idSeleccionada));
-        System.out.println(getProductos());
     }
     
     public void saludarDiana(){
-        System.out.println("Hola Diana :D si te dormis te mato:3");
+        Categoria cat;
+        cat = manejadorCategorias.Obtener(false).get(0);
+        ManejadorProductos mp = new ManejadorProductos();
+        System.out.println(mp.ObtenerId());
+        producto.setIdCategoria(cat);
+        producto.idProducto=mp.ObtenerId();
+       manejadorProductos.Insertar(producto);
+      //  System.out.println("Hola "+getProducto().getNombre());
+        System.out.println("HOLAAA");
     }
     
 }
