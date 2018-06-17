@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
  *
  * @author dmmaga
  */
-@ManagedBean
+@ManagedBean(name = "frmNuevaOrden")
 @ViewScoped
 public class frmNuevaOrden implements Serializable {
     
