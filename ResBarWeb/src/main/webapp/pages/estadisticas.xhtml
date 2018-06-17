@@ -3,16 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>ESTADÍSTICAS</title>
-        <link rel="stylesheet" href="css/simple-grid.css"></link>  
+        <title>ESTADÍSTICAS</title>        
         <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>        
+        <link rel="stylesheet" href="css/dashboard.css"></link>
         <link rel="stylesheet" href="css/reset.css"></link>
-        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>        
     </h:head>
     <h:body>
+
         <p:layout fullPage="true">
             <!--Accesos Rapidos-->
             <p:layoutUnit position="north" size="150" >
@@ -33,55 +35,50 @@
                         <div class="col-4">
                             <a href="administrarMenu.jsf">
                                 <img src="img/nuevaOrden.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Administrar menú</label>
+                                <br/><label style="color: white; font-size: 1vw;">Administrar Menu</label>
                             </a>
                         </div>
                     </div>
                 </div>
             </p:layoutUnit>
+            <h:form id="form">
+                <p:layoutUnit position="center">
+                    ESTADISTICAS
+                    <p:separator />
+                    <p:outputLabel for="inline" value="Inline:" />
+                    <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs" />
+                    </p:calendar>
+                    <h:outputText id="msgs" value="#{frmEstadisticas.date1}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" />
+                    </h:outputText>
+                    <p:separator />
+                    <div class="div-tabla">
+                        <div class="row">                    
+                            <div class="col-1"></div>
+                            <div class="col-10">                                
+                                <p:dataTable var="orden" value="#{frmEstadisticas.historico}">
+                                    <f:facet name="header">
+                                        Ordenes
+                                    </f:facet>
+                                    <p:column headerText="ID">
+                                        <h:outputText value="#{orden.idOrden}" />
+                                    </p:column>
 
-            <p:layoutUnit position="center">
-                <h:form>
-                    <div class="row" align="center">
-                        <div class="col-2"></div>
-                        <div class="col-2">
-                            <p:outputLabel for="console" value="Período:" > </p:outputLabel>
-                        </div>
-                        <div class="col-4">
-                            <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:125px">
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="Diario" itemValue="Xbox One" />
-                                <f:selectItem itemLabel="Mensual" itemValue="Xbox One" />
-                                <f:selectItem itemLabel="Trimestral" itemValue="PS4" />
-                                <f:selectItem itemLabel="Anual" itemValue="Wii U" />
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="col-4">
+                                    <p:column headerText="Cliente">
+                                        <h:outputText value="#{orden.cliente}" />
+                                    </p:column>
+
+                                    <p:column headerText="Total">
+                                        <h:outputText value="#{orden.total}" />
+                                    </p:column>
+                                </p:dataTable>
                             </div>
+                            <div class="col-1"></div>
+                        </div>            
                     </div>
-                    <p:dialog header="Values" modal="true" showEffect="bounce" widgetVar="dlg" resizable="false">
-                        <p:panelGrid columns="2" id="display" columnClasses="label,value">
-                            <h:outputText value="Basic:" />
-                            <h:outputText value="#{selectOneMenuView.console}" />
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form>
-            </p:layoutUnit>
-            <p:layoutUnit position="south" size="350">
-                <h:form>
-                    <p:growl id="growl" showDetail="true" />
-                    <h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
-                        <p:chart type="pie" model="#{chartView.pieModel1}" style="width:400px;height:300px">
-                            <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
-                        </p:chart>
-
-                        <p:chart type="bar" model="#{chartView.barModel}" style="width:400px;height:300px">
-                            <p:ajax event="itemSelect" listener="#{chartView.itemSelect}" update="growl" />
-                        </p:chart>  
-                    </h:panelGrid>
-
-                </h:form>
-            </p:layoutUnit>
+                </p:layoutUnit>                
+            </h:form>
         </p:layout>
     </h:body>
 </html>

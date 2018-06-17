@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.swing.JOptionPane;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -60,7 +61,7 @@ public class frmAdministrar implements Serializable {
             DefaultMenuItem item = new DefaultMenuItem(cat.get(i).nombre);
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setOnclick("#{administrar.imprimir}");
+            item.setCommand("#{administrar.imprimir("+i+")}");
             firstSubmenu.addElement(item);
         }
 
@@ -72,8 +73,9 @@ public class frmAdministrar implements Serializable {
     }
     
 
-    public void imprimir(){
-        System.out.println("holaaaaaa");
+    public void imprimir(String id){
+        List<Categoria> cat = getCategorias();
+        System.out.println(cat.get(Integer.parseInt(id)).idCategoria+cat.get(Integer.parseInt(id)).nombre);
     }
     
 }
