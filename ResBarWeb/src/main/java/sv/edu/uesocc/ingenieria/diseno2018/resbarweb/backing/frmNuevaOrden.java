@@ -63,9 +63,7 @@ public class frmNuevaOrden {
     }
     
     public void save() {
-        FacesContext.getCurrentInstance().addMessage(null,
-                
-                new FacesMessage("Datos traidos: " + idOrden + " " + noMesa+ " " + mesero+ " " + cliente+ " " + comentario));
+        System.out.println("holi");
     }
     
 }

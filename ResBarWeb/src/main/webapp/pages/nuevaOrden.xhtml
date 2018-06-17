@@ -14,144 +14,81 @@
 
     <h:body>
         <h:form>
-            <p:panel id="panel" header="New User">
-                <p:messages id="msgs" />
-                <p:layout fullPage="true">
-                    <!--Accesos Rapidos-->
-                    <p:layoutUnit position="north" size="150" >
-                        <div class="div-accesos-rapidos" style="background-color: #363030;">
-                            <div class="row" align="center">
-                                <div class="col-4">
-                                    <a href="dashboard.jsf">
-                                        <img src="img/home.png" alt="Ordenes de Trabajo"/>
-                                        <br/><label style="color: white; font-size: 1vw;">Inicio</label>
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <a href="estadisticas.jsf">
-                                        <img src="img/dashboard.png"/>
-                                        <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <a href="administrarMenu.jsf">
-                                        <img src="img/nuevaOrden.png"/>
-                                        <br/><label style="color: white; font-size: 1vw;">Administrar Menú</label>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </p:layoutUnit>
-                    <!--Tabla con productos ya seleccionados-->
-                    <p:layoutUnit position="center">
-                        <p:dataTable id="productos" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="6" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
-                            <f:facet name="header">
-                                Menú de productos
-                            </f:facet>
-                            <p:column headerText="Nombres">
-                                <h:outputText value="#{car.color}" />
-                            </p:column>
-                            <p:column headerText="Precio">
-                                <h:outputText value="#{car.brand}" />
-                            </p:column>
-                            <p:column headerText="-" style="width:45px;text-align: center">
-                                <p:commandButton value="-" oncomplete="PF('carDialog').show()" style="background-color: cadetblue">
-                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                </p:commandButton>
-                            </p:column>
-                            <p:column headerText="Cantidad" style="width:75px;text-align: center">
-                                <p:outputLabel value="0"></p:outputLabel>
-                            </p:column>
-                            <p:column headerText="+" style="width:45px;text-align: center">
-                                <p:commandButton   value="+" oncomplete="PF('carDialog').show()" style="align-items:  center">
-                                    <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                        <div class="row" align="center">
-                            <div class="col-9"></div>
-                            <div class="col-2">
-                                <p:commandButton value="Confirmar" update="panel" actionListener="#{NuevaOrden.save}" icon="ui-icon-check" />                                
-                            </div>
-                            <div class="col-1"></div>
-                        </div>
-                    </p:layoutUnit>
-                    <!--Datos para la orden-->
-                    <p:layoutUnit position="west"  size="450">                        
-                        <div class="div-datos">
-                            <div class="row" align="center">
-                                <div class="col-2"></div>
-                                <div class="col-2">
-                                    <p:outputLabel value="Orden: " for="idOrden" />
-                                </div>
-                                <div class="col-6">                        
-                                    <p:inputText readonly="true" id="idOrden" value="#{frmNuevaOrden.idOrden}" />
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                            <div class="row" align="center">
-                                <div class="col-2"></div>
-                                <div class="col-2">
-                                    <p:outputLabel value="Mesa: " for="noMesa" />
-                                </div>
-                                <div class="col-6">                        
-                                    <p:inputText id="noMesa" required="true" value="#{frmNuevaOrden.noMesa}" />
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                            <div class="row" align="center">
-                                <div class="col-2"></div>
-                                <div class="col-2">
-                                    <p:outputLabel value="Mesero: " for="mesero" />
-                                </div>
-                                <div class="col-6">                        
-                                    <p:inputText id="mesero" required="true" value="#{frmNuevaOrden.mesero}" />
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                            <div class="row" align="center">
-                                <div class="col-2"></div>
-                                <div class="col-2">
-                                    <p:outputLabel value="Cliente: " for="cliente" />
-                                </div>
-                                <div class="col-6">                        
-                                    <p:inputText id="cliente" required="true" value="#{frmNuevaOrden.cliente}" />
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                        </div>
+            <p:layout fullPage="true">
+                <!--Accesos Rapidos-->
+                <p:layoutUnit position="north" size="150" >
+                    <div class="div-accesos-rapidos" style="background-color: #363030;">
                         <div class="row" align="center">
                             <div class="col-4">
-                                <label>Comentario: </label>
+                                <a href="dashboard.jsf">
+                                    <img src="img/home.png" alt="Ordenes de Trabajo"/>
+                                    <br/><label style="color: white; font-size: 1vw;">Inicio</label>
+                                </a>
                             </div>
                             <div class="col-4">
-                                <p:inputTextarea id="comentario" value="#{frmNuevaOrden.comentario}" ></p:inputTextarea>
+                                <a href="estadisticas.jsf">
+                                    <img src="img/dashboard.png"/>
+                                    <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a href="administrarMenu.jsf">
+                                    <img src="img/nuevaOrden.png"/>
+                                    <br/><label style="color: white; font-size: 1vw;">Administrar Menú</label>
+                                </a>
                             </div>
                         </div>
-                        <p:separator />
+                    </div>
+                </p:layoutUnit>
+                <!--Datos para la orden-->
+                <p:layoutUnit position="center">                        
+                    <div class="div-datos" align="center">
+                        <h1>Nueva Orden</h1>
+                        <br/>
                         <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-8">
-                                <h:form>            
-                                    <p:commandButton  value="Agregar Productos" onclick="PF('dlg').show();" icon="ui-icon-circle-plus"></p:commandButton>s
-                                    <p:dialog header="Agregar Productos" widgetVar="dlg" resizable="false">
-                                        <h:panelGrid columns="2" cellpadding="5">
-                                            <h:outputLabel for="username" value="Username:" />
-
-                                            <h:outputLabel for="password" value="Password:" />
-
-                                            <f:facet name="footer">
-                                                <p:commandButton value="Aceptar" onclick="PF('dlg').hide();" />
-                                            </f:facet>  
-                                        </h:panelGrid>
-                                    </p:dialog>
-                                </h:form>
-                            </div>
-                            <div class="col-2"></div>
+                            <p:outputLabel value="Orden: " for="idOrden" />
+                            <p:inputText readonly="true"  id="idOrden" value="#{frmNuevaOrden.idOrden}" />
                         </div>
-                    </p:layoutUnit>
-                </p:layout>
-            </p:panel>
+                        <br/>
+                        <div class="row" align="center">
+                            <p:outputLabel value="Mesa: " for="noMesa" />
+                            <p:inputText id="noMesa" required="true" value="#{frmNuevaOrden.noMesa}" />
+                        </div>
+                        <br/>
+                        <div class="row" align="center">
+                            <p:outputLabel value="Mesero: " for="mesero" />                        
+                            <p:inputText id="mesero" required="true" value="#{frmNuevaOrden.mesero}" />
+                        </div>
+                        <br/>
+                        <div class="row" align="center">
+                            <p:outputLabel value="Cliente: " for="cliente" />                     
+                            <p:inputText id="cliente" required="true" value="#{frmNuevaOrden.cliente}" />
+                        </div>
+                        <br/>
+                        <div class="row" align="center">
+                            <p:outputLabel value="Comentario: " for="comentario" /> 
+                            <p:inputTextarea id="comentario" value="#{frmNuevaOrden.comentario}" ></p:inputTextarea>
+                        </div>
+                        <br/>
+                    </div>
+                    <p:separator />
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-8">           
+                            <p:commandButton actionListener="#{frmNuevaOrden.save}" value="Agregar Productos" onclick="PF('dlg').show();" icon="ui-icon-circle-plus"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </p:layoutUnit>
+            </p:layout>
         </h:form>
+        <p:dialog header="Agregar Productos" widgetVar="dlg" resizable="false">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel value="AQUI IRÁN LOS PRODUCTOS JEJE" />
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" onclick="PF('dlg').hide();" />
+                </f:facet>  
+            </h:panelGrid>
+        </p:dialog>
     </h:body>
 </html>
