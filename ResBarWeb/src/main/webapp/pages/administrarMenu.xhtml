@@ -47,7 +47,7 @@
                 <p:separator />
                 <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
                 <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
-                <p:commandButton actionListener="#{administrar.imprimir('')}" value="Hola" icon="ui-icon-plus"></p:commandButton>          
+                <p:commandButton actionListener="#{administrar.saludarDiana()}" value="Hola" icon="ui-icon-plus"></p:commandButton>          
             </p:layoutUnit>
             <p:layoutUnit position="east" size="1115">
                 <div class="buscador">
@@ -68,7 +68,7 @@
                         <div class="col-1"></div>
                         <div class="col-10">
                             <h:form id="form">
-                                <p:dataTable id="productos" editMode="cell" editable="true" var="car" value="#{dtSelectionView.cars1}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
+                                <p:dataTable id="productos" editMode="cell" editable="true" var="car" value="#{administrar.productos}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
                                     <f:facet name="header">
                                         Menú de productos
                                     </f:facet>

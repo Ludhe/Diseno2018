@@ -10,13 +10,14 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.swing.JOptionPane;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import sv.edu.diseno.acceso.ManejadorCategorias;
+import sv.edu.diseno.acceso.ManejadorProductos;
 import sv.edu.diseno.definiciones.Categoria;
+import sv.edu.diseno.definiciones.Producto;
 
 /**
  *
@@ -25,31 +26,32 @@ import sv.edu.diseno.definiciones.Categoria;
 @ManagedBean(name = "administrar")
 @ViewScoped
 public class frmAdministrar implements Serializable {
-    
-    int idCategoria;
-
-    public int getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
-    //Manejador Categorías
+     //Manejador Categorías
     ManejadorCategorias manejadorCategorias;
+    ManejadorProductos manejadorProductos;
     private List<Categoria> categorias;
+    private List<Producto> productos;
+      //Para generar el menu con categorías
+    private MenuModel model;
+  
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
 
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
     }
 
     public List<Categoria> getCategorias() {
-        return manejadorCategorias.Obtener(false);
+        boolean sub = false;
+        return manejadorCategorias.Obtener(sub);
     }
     
-    //Para generar el menu con categorías
-    private MenuModel model;
+    
 
     @PostConstruct
     public void init() {
@@ -62,6 +64,8 @@ public class frmAdministrar implements Serializable {
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
             item.setCommand("#{administrar.imprimir("+i+")}");
+            item.setUpdate("form");
+            item.setAjax(false);
             firstSubmenu.addElement(item);
         }
 
@@ -75,7 +79,14 @@ public class frmAdministrar implements Serializable {
 
     public void imprimir(String id){
         List<Categoria> cat = getCategorias();
-        System.out.println(cat.get(Integer.parseInt(id)).idCategoria+cat.get(Integer.parseInt(id)).nombre);
+        Categoria seleccionada = cat.get(Integer.parseInt(id));
+        int idSeleccionada = seleccionada.idCategoria;
+        setProductos(manejadorProductos.ObtenerxCategoria(idSeleccionada));
+        System.out.println(getProductos());
+    }
+    
+    public void saludarDiana(){
+        System.out.println("Hola Diana :D si te dormis te mato:3");
     }
     
 }
