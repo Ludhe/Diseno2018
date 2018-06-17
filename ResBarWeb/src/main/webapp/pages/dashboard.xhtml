@@ -57,6 +57,7 @@
                 </div> 
             </p:layoutUnit>
             <h:form id="form">
+                <p:growl id="growl" showDetail="true" sticky="true" />
                 <p:layoutUnit position="center">
 
                     <!--Tabla-->
@@ -64,9 +65,8 @@
                         <div class="row" align="center">
                             <div class="col-2"></div>
                             <div class="col-8">
-                                <p:outputLabel value="Buscar:  " for="themePojo"/>
-                                <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
-                                                var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
+                                <p:outputLabel value="Buscar:  " for="autocomplete"/>
+                                <p:inputText id="autocomplete" value="Convertirlo a AUTOCOMPLETE"/>
                             </div>
                             <div class="col-2"></div>
                         </div> 
@@ -76,14 +76,14 @@
                         <div class="row">                    
                             <div class="col-1"></div>
                             <div class="col-10">                                
-                                <p:dataTable var="orden" value="#{frmDashboard.ordenes}"  selectionMode="single" selection="#{frmDashboard.selectedOrden}" rowKey="#{orden.idOrden}">
+                                <p:dataTable id="ordenesTabla" var="orden" value="#{frmDashboard.ordenes}"  selectionMode="single" selection="#{frmDashboard.selectedOrden}" rowKey="#{orden.idOrden}">
                                     <f:facet name="header">
                                         Ordenes Activas
                                     </f:facet>
-                                    <p:ajax event="rowSelect" oncomplete="PF('ordenOptions').show()" update=":form:ordenOpcionesPanel"/>
-                                    <p:column headerText="ID">
+                                    <p:ajax event="rowSelect" oncomplete="PF('ordenOptions').show()" update=":form:ordenOpcionesPanel :form:modificarPanel :form:detalleOrdenTabla"/>
+                                    <!--p:column headerText="ID">
                                         <h:outputText value="#{orden.idOrden}" />
-                                    </p:column>
+                                    </p:column-->
 
                                     <p:column headerText="Mesero">
                                         <h:outputText value="#{orden.mesero}" />
@@ -97,13 +97,15 @@
                                         <h:outputText value="#{orden.cliente}" />
                                     </p:column>                                    
 
-                                    <p:column headerText="Fecha">
-                                        <h:outputText value="#{orden.fecha}" />
-                                    </p:column>                                    
+                                    <!--p:column headerText="Fecha">
+                                        <h:outputText value="#{orden.fecha}">
+                                            <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
+                                        </h:outputText>
+                                    </p:column-->
 
-                                    <p:column headerText="Comentario">
+                                    <!--p:column headerText="Comentario">
                                         <h:outputText value="#{orden.comentario}" />
-                                    </p:column>
+                                    </p:column-->
                                 </p:dataTable>
                             </div>
                             <div class="col-1"></div>
@@ -113,127 +115,11 @@
 
                 </p:layoutUnit>
 
-                <p:dialog header="Tramitar Pago" widgetVar="dlg2" modal="true" height="256">
-                    <h:panelGrid columns="1" cellpadding="5">
-                        <div style="text-align: center">
-                            <label>Cliente:</label>
-                            <label>Juan Pleitez</label>
-                            <br/><br/>                    
-                            <label>Orden:</label>
-                            <label>104</label>
-                            <br/><br/>
-                            <table style="width:100%">
-                                <tr>
-                                    <th>Productos:</th>
-                                    <th>Cantidad:</th> 
-                                    <th>Precios Unitario:</th>
-                                    <th>SubTotal:</th>
-                                </tr>
-                                <tr>
-                                    <td>Cafe</td>
-                                    <td>2</td> 
-                                    <td>0.50</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Desayuno</td>
-                                    <td>1</td> 
-                                    <td>5.50</td>
-                                    <td>5.50</td>
-                                </tr>
-                                <tr>
-                                    <td>Postre</td>
-                                    <td>1</td> 
-                                    <td>5.00</td>
-                                    <td>5.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Dulce</td>
-                                    <td>1</td> 
-                                    <td>5.00</td>
-                                    <td>5.00</td>
-                                </tr>
-
-                            </table>
-                            <label>Total:</label>
-                            <label>16.0</label>
-                            <p:commandButton type="button" value="OK" onclick="PF('dlg4').show()"/>
-                        </div>
-                    </h:panelGrid>
-                </p:dialog>
-                <p:dialog header="Agregar Producto" widgetVar="dlg3" modal="true" height="300">
-                    <div style="text-align: center">
-
-                        <div class="row" align="center">
-                            <div class="col-4"><label>Categoría:</label></div>
-                            <div class="col-4">
-                                <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:210px">
-                                    <f:selectItem itemLabel="Seleccione Categoría" itemValue="" />
-                                    <f:selectItem itemLabel="Entradas" itemValue="Xbox One" />
-                                    <f:selectItem itemLabel="Desayunos" itemValue="Xbox One" />
-                                    <f:selectItem itemLabel="Sopas" itemValue="PS4" />
-                                    <f:selectItem itemLabel="Bebidas" itemValue="Wii U" />
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="col-2"></div>
-                        </div>
-                        <div class="row" align="center">
-                            <div class="col-4"><label>Producto:</label></div>
-                            <div class="col-4">
-                                <p:selectOneMenu id="console1" value="#{selectOneMenuView.console}" style="width:210px">
-                                    <f:selectItem itemLabel="Seleccione Producto" itemValue="" />
-                                    <f:selectItem itemLabel="Hamburguesa" itemValue="Xbox One" />
-                                    <f:selectItem itemLabel="Sandwich" itemValue="Xbox One" />
-                                    <f:selectItem itemLabel="Panini" itemValue="PS4" />
-                                    <f:selectItem itemLabel="Pizza" itemValue="Wii U" />
-                                </p:selectOneMenu>
-                            </div>
-                            <div class="col-2"></div>
-                        </div>
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="8"><label>Precio:</label> <label>   $16.0</label></div>
-                            <div class="2"></div>
-                        </div>
-                        <br></br>
-                        <div class="row" align="center">
-                            <div class="col-4"><label>Enviar a:</label></div>
-
-                            <div class="4">
-                                <label>Cocina</label>
-                                <input type="radio" name="opciones" value="Cocina" />
-                                <label>Bebidas</label>
-                                <input type="radio" name="opciones" value="Bebida" /></div>
-                            <div class="2"></div>
-                        </div>
-                        <p:separator/>
-                        <p:commandButton value="Confirmar"/>
-                        <p:commandButton value="Cancelar"/>
-                    </div>
-                </p:dialog>
-                <p:dialog header="Cobro" widgetVar="dlg4" modal="true" width="256" height="320">
-                    <h:panelGrid columns="1" cellpadding="5">
-                        <div style="text-align: center;">
-                            <br/>
-                            <label>Efectivo:</label>
-                            <p:inputText/>
-                            <br/><br/>
-                            <label>Total Cuenta:</label>
-                            <label>$20</label>
-                            <br/><br/>                            
-                            <label>Cambio:</label>
-                            <label>$10</label>
-                            <br/><br/><br/>
-                            <p:commandButton type="button" value="OK"/>
-                        </div>                        
-                    </h:panelGrid>
-                </p:dialog>
-
                 <p:dialog header="Opciones de Orden" widgetVar="ordenOptions" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:outputPanel id="ordenOpcionesPanel" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty frmDashboard.selectedOrden}" columnClasses="label,value">
 
-                            <h:outputText value="Id:" />
+                            <h:outputText value="Id:"/>
                             <h:outputText value="#{frmDashboard.selectedOrden.idOrden}" />
 
                             <h:outputText value="Mesero:" />                            
@@ -246,22 +132,79 @@
                             <h:outputText value="#{frmDashboard.selectedOrden.cliente}" />
 
                             <h:outputText value="Fecha:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.fecha}" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.fecha}">
+                                <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
+                            </h:outputText>
 
                             <h:outputText value="Comentario:" />
                             <h:outputText value="#{frmDashboard.selectedOrden.comentario}" />                            
 
                             <h:outputText value="Total:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.total}" />
+                            <h:outputText value="#{frmDashboard.selectedOrden.total}">
+                                <f:convertNumber pattern="#0.00" locale="es_US"/>
+                            </h:outputText>
 
-                        </p:panelGrid>                        
-                        <p:commandButton value="Modificar Orden" type="button" action="/nuevaOrden.xhtml"/>
-                        <p:commandButton value="Agregar Producto" type="button" onclick="PF('dlg3').show()"/>
-                        <p:commandButton value="Imprimir Cuenta" type="button"/>
-                        <p:commandButton value="Tramitar Pago" type="button" onclick="PF('dlg2').show()"/>
+                        </p:panelGrid>                       
+                        <p:commandButton value="Modificar Orden" onclick="PF('modificarDialog').show()"/>
+                        <!--p:button value="Modificar Orden" outcome="nuevaOrden.xhtml"/-->
+                        <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+                        <p:commandButton value="Imprimir Cuenta" onclick="PF('imprimirDialog').show()"/>
+                        <p:commandButton value="Tramitar Pago" onclick="PF('tramitarDialog').show()"/>
                     </p:outputPanel>
 
                 </p:dialog>
+
+                <p:dialog id="modificarPanel" header="Modificar Orden" widgetVar="modificarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">                    
+                    <h:panelGrid columns="3" cellpadding="5px" cellspacing="3px" columnClasses="label, value">                        
+                        <p:outputLabel for="modificarInputIdOrden" value="ID: *" />
+                        <p:inputText id="modificarInputIdOrden" value="#{frmDashboard.selectedOrden.idOrden}" required="true" label="ID" disabled="true"/>
+                        <p:message for="modificarInputIdOrden" />
+
+                        <p:outputLabel for="modificarInputMesero" value="Mesero: *" />
+                        <p:inputText id="modificarInputMesero" value="#{frmDashboard.selectedOrden.mesero}" required="true" label="Mesero"/>
+                        <p:message for="modificarInputMesero" />
+
+                        <p:outputLabel for="modificarInputMesa" value="Mesa: *" />
+                        <p:inputText id="modificarInputMesa" value="#{frmDashboard.selectedOrden.mesa}" required="true" label="Mesa"/>
+                        <p:message for="modificarInputMesa" />
+
+                        <p:outputLabel for="modificarInputCliente" value="Cliente: *" />
+                        <p:inputText id="modificarInputCliente" value="#{frmDashboard.selectedOrden.cliente}" required="true" label="Cliente"/>
+                        <p:message for="modificarInputCliente" />
+
+
+                        <h:outputText value="Comentario: *" />
+                        <p:inputTextarea rows="4" cols="20" value="#{frmDashboard.selectedOrden.comentario}" label="Comentario"/>                                                
+
+                    </h:panelGrid>
+                    <p:commandButton value="OK" actionListener="#{frmDashboard.saveOrden}" update="ordenesTabla ordenOpcionesPanel growl"/>
+                </p:dialog>
+
+                <p:dialog header="Agregar Productos" widgetVar="agregarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="60%">
+                    <p:dataTable id="detalleOrdenTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" style="width: 50%;">
+                        <f:facet name="header">
+                            Detalles de la Orden
+                        </f:facet>
+                        <p:column headerText="Producto" style="text-align: center;">
+                            <h:outputText value="#{detalleOrden.producto.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center;">
+                            <h:outputText value="#{detalleOrden.cantidad}">
+                                <f:convertNumber pattern="#0" locale="es_US"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:dialog>
+
+                <p:dialog header="Imprimir Cuenta" widgetVar="imprimirDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+
+                </p:dialog>
+
+                <p:dialog header="Tramitar Pago" widgetVar="tramitarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+
+                </p:dialog>
+
+
 
             </h:form>
         </p:layout>
