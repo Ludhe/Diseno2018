@@ -75,7 +75,7 @@
                     <div class="row" align="center">
                         <div class="col-2"></div>
                         <div class="col-8">           
-                            <p:commandButton actionListener="#{frmNuevaOrden.save}" value="Agregar Productos" onclick="PF('dlg').show();" icon="ui-icon-circle-plus"></p:commandButton>
+                            <p:commandButton value="Agregar Productos" actionListener="#{frmNuevaOrden.save()}"  onclick="PF('dlg').show();" icon="ui-icon-circle-plus"></p:commandButton>
                         </div>
                         <div class="col-2"></div>
                     </div>
@@ -86,7 +86,7 @@
             <h:panelGrid columns="2" cellpadding="5">
                 <h:outputLabel value="AQUI IRÁN LOS PRODUCTOS JEJE" />
                 <f:facet name="footer">
-                    <p:commandButton value="Aceptar" onclick="PF('dlg').hide();" />
+                    <p:commandButton value="Aceptar" onclick="PF('dlg').hide();"/>
                 </f:facet>  
             </h:panelGrid>
         </p:dialog>
