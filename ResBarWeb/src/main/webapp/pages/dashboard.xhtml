@@ -81,9 +81,9 @@
                                         Ordenes Activas
                                     </f:facet>
                                     <p:ajax event="rowSelect" oncomplete="PF('ordenOptions').show()" update=":form:ordenOpcionesPanel :form:modificarPanel :form:detalleOrdenTabla"/>
-                                    <!--p:column headerText="ID">
+                                    <p:column headerText="ID">
                                         <h:outputText value="#{orden.idOrden}" />
-                                    </p:column-->
+                                    </p:column>
 
                                     <p:column headerText="Mesero">
                                         <h:outputText value="#{orden.mesero}" />
@@ -97,15 +97,15 @@
                                         <h:outputText value="#{orden.cliente}" />
                                     </p:column>                                    
 
-                                    <!--p:column headerText="Fecha">
+                                    <p:column headerText="Fecha">
                                         <h:outputText value="#{orden.fecha}">
                                             <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
                                         </h:outputText>
-                                    </p:column-->
+                                    </p:column>
 
-                                    <!--p:column headerText="Comentario">
+                                    <p:column headerText="Comentario">
                                         <h:outputText value="#{orden.comentario}" />
-                                    </p:column-->
+                                    </p:column>
                                 </p:dataTable>
                             </div>
                             <div class="col-1"></div>
@@ -147,7 +147,7 @@
                         </p:panelGrid>                       
                         <p:commandButton value="Modificar Orden" onclick="PF('modificarDialog').show()"/>
                         <!--p:button value="Modificar Orden" outcome="nuevaOrden.xhtml"/-->
-                        <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+                        <p:commandButton value="Modificar Productos" onclick="PF('modificarProductoDialog').show()"/>
                         <p:commandButton value="Imprimir Cuenta" onclick="PF('imprimirDialog').show()"/>
                         <p:commandButton value="Tramitar Pago" onclick="PF('tramitarDialog').show()"/>
                     </p:outputPanel>
@@ -180,8 +180,8 @@
                     <p:commandButton value="OK" actionListener="#{frmDashboard.saveOrden}" update="ordenesTabla ordenOpcionesPanel growl"/>
                 </p:dialog>
 
-                <p:dialog header="Agregar Productos" widgetVar="agregarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="60%">
-                    <p:dataTable id="detalleOrdenTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" style="width: 50%;">
+                <p:dialog header="Modificar Productos" widgetVar="modificarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="40%">
+                    <p:dataTable id="detalleOrdenTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" style="width: 100%;">
                         <f:facet name="header">
                             Detalles de la Orden
                         </f:facet>
@@ -194,6 +194,14 @@
                             </h:outputText>
                         </p:column>
                     </p:dataTable>
+                    <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()" update="ordenesTabla ordenOpcionesPanel growl"/>
+                </p:dialog>
+
+                <p:dialog header="Agregar Productos" widgetVar="agregarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
+                    <div class="row" align="center">
+                        <div class="col-4">4</div>
+                        <div class="col-8">8</div>
+                    </div>
                 </p:dialog>
 
                 <p:dialog header="Imprimir Cuenta" widgetVar="imprimirDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
