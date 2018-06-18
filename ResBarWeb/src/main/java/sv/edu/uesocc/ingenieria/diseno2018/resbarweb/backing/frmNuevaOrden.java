@@ -6,72 +6,105 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
+import sv.edu.diseno.acceso.ManejadorOrden;
+import sv.edu.diseno.definiciones.DetalleOrden;
+import sv.edu.diseno.definiciones.Orden;
+import sv.edu.diseno.excepciones.ErrorAplicacion;
 
 /**
  *
  * @author dmmaga
  */
-@ManagedBean(name = "frmNuevaOrden")
+@ManagedBean
 @ViewScoped
 public class frmNuevaOrden implements Serializable {
     
-    //para crear la nueva orden
-    private int idOrden;
-    private int noMesa;
-    private String mesero;
-    private String cliente;
-    private String comentario;
+    //Instanciamos los manejadores
+    ManejadorOrden manejadorOrden;
+    private Orden nuevaOrden;
+    Date fecha = new Date();
+    List <DetalleOrden> productos = new ArrayList<>();
+
+    public Orden getNuevaOrden() {
+        return nuevaOrden;
+    }
+
+    public void setNuevaOrden(Orden nuevaOrden) {
+        this.nuevaOrden = nuevaOrden;
+    }
+    
+    //Para que se ejecute al inicio
+    @PostConstruct
+    public void init() {
+        nuevaOrden = new Orden();
+        nuevaOrden.idOrden = manejadorOrden.ObtenerId();
+    }
+    
+    //getter y setter de las propiedades de la orden
 
     public int getIdOrden() {
-        return idOrden;
+        return nuevaOrden.idOrden;
     }
 
     public void setIdOrden(int idOrden) {
-        this.idOrden = idOrden;
+        this.nuevaOrden.idOrden = idOrden;
     }
 
-    public int getNoMesa() {
-        return noMesa;
+    public String getNoMesa() {
+        return nuevaOrden.mesa;
     }
 
-    public void setNoMesa(int noMesa) {
-        this.noMesa = noMesa;
+    public void setNoMesa(String mesa) {
+        this.nuevaOrden.mesa = mesa;
     }
 
     public String getMesero() {
-        return mesero;
+        return nuevaOrden.mesero;
     }
 
     public void setMesero(String mesero) {
-        this.mesero = mesero;
+        this.nuevaOrden.mesero = mesero;
     }
 
     public String getCliente() {
-        return cliente;
+        return nuevaOrden.cliente;
     }
 
     public void setCliente(String cliente) {
-        this.cliente = cliente;
+        this.nuevaOrden.cliente = cliente;
     }
 
     public String getComentario() {
-        return comentario;
+        return nuevaOrden.comentario;
     }
 
     public void setComentario(String comentario) {
-        this.comentario = comentario;
+        this.nuevaOrden.comentario = comentario;
     }
-    
+
     //para hacer post
     public void save() {
-        System.out.println("hola");
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {          
+            nuevaOrden.activa = true;
+            nuevaOrden.fecha = fecha;
+            nuevaOrden.detalleOrdenList = productos;
+            nuevaOrden.total = BigDecimal.valueOf(0);       
+            manejadorOrden.Insertar(nuevaOrden);
+            context.execute("PF('dialogProductos').show();"); 
+        } catch (ErrorAplicacion e) {
+
+        }
     }
-    
-    //para el dialog de agregar productos
-    
-    
+
 }
