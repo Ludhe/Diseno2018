@@ -6,10 +6,12 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -26,14 +28,24 @@ import sv.edu.diseno.definiciones.Producto;
 @ManagedBean(name = "administrar")
 @ViewScoped
 public class frmAdministrar implements Serializable {
-     //Manejador Categorías
+    //Manejador Categorías
     ManejadorCategorias manejadorCategorias;
     ManejadorProductos manejadorProductos;
     private List<Categoria> categorias;
     private List<Producto> productos;
-    private Producto producto;
-      //Para generar el menu con categorías
+    private Producto producto = new Producto();
+    private Categoria categoria = new Categoria();
+    //Para generar el menu con categorías
     private MenuModel model;
+    final static boolean sub = false;
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
     public Producto getProducto() {
         return producto;
@@ -42,7 +54,7 @@ public class frmAdministrar implements Serializable {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-  
+
     public List<Producto> getProductos() {
         return productos;
     }
@@ -56,26 +68,25 @@ public class frmAdministrar implements Serializable {
     }
 
     public List<Categoria> getCategorias() {
-        boolean sub = false;
-        return manejadorCategorias.Obtener(sub);
+        //
+        return ManejadorCategorias.Obtener(false);
     }
-    
-    
 
     @PostConstruct
     public void init() {
+        productos = new ArrayList<>();
         model = new DefaultMenuModel();
-        producto=new Producto();
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
         List<Categoria> cat = getCategorias();
-        setProductos(manejadorProductos.ObtenerxCategoria(cat.get(0).idCategoria));
+        categoria = cat.get(0);
+        setProductos(ManejadorProductos.ObtenerxCategoria(categoria.idCategoria));
         for (int i = 0; i < cat.size(); i++) {
             DefaultMenuItem item = new DefaultMenuItem(cat.get(i).nombre);
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setCommand("#{administrar.recargarProductos("+i+")}");
-            item.setUpdate("form");
-            item.setAjax(false);
+            item.setCommand("#{administrar.recargarProductos(" + i + ")}");
+            item.setUpdate(":form:productos :modales");
+            item.setAjax(true);
             firstSubmenu.addElement(item);
         }
 
@@ -85,25 +96,43 @@ public class frmAdministrar implements Serializable {
     public MenuModel getModel() {
         return model;
     }
-    
 
-    public void recargarProductos(String id){
+    public void recargarProductos(String id) {
         List<Categoria> cat = getCategorias();
         Categoria seleccionada = cat.get(Integer.parseInt(id));
+        setCategoria(seleccionada);
         int idSeleccionada = seleccionada.idCategoria;
-        setProductos(manejadorProductos.ObtenerxCategoria(idSeleccionada));
+        setProductos(ManejadorProductos.ObtenerxCategoria(idSeleccionada));
+    }
+
+    public void agregarProducto() {
+        producto.setIdCategoria(categoria);
+        int idProd = ManejadorProductos.ObtenerId();
+        producto.idProducto = idProd;
+        ManejadorProductos.Insertar(producto);
+        recargarProductos("0");
+        
+    }
+    public void eliminarProducto() {
+        if (producto != null) {
+            ManejadorProductos.Eliminar(producto);
+            recargarProductos("0");
+        }
     }
     
-    public void saludarDiana(){
-        Categoria cat;
-        cat = manejadorCategorias.Obtener(false).get(0);
-        ManejadorProductos mp = new ManejadorProductos();
-        System.out.println(mp.ObtenerId());
-        producto.setIdCategoria(cat);
-        producto.idProducto=mp.ObtenerId();
-       manejadorProductos.Insertar(producto);
-      //  System.out.println("Hola "+getProducto().getNombre());
-        System.out.println("HOLAAA");
+    public void agregarCategoria(){
+        if(categoria!= null){
+            categoria.idCategoria = ManejadorCategorias.ObtenerId();
+            ManejadorCategorias.Insertar(categoria);
+            init();
+        }
+        
     }
     
+    public void abrirEditarProducto(){
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update(":modProd");
+            context.execute("PF(\'addProduct\').show()");
+    }
+
 }
