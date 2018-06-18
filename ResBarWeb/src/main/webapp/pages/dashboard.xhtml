@@ -148,7 +148,7 @@
                         <p:commandButton value="Modificar Orden" onclick="PF('modificarDialog').show()"/>
                         <!--p:button value="Modificar Orden" outcome="nuevaOrden.xhtml"/-->
                         <p:commandButton value="Modificar Productos" onclick="PF('modificarProductoDialog').show()"/>
-                        <p:commandButton value="Imprimir Tickets" onclick="PF('imprimirDialog').show()"/>
+                        <p:commandButton value="Imprimir Cuenta" onclick="PF('imprimirDialog').show()"/>
                         <p:commandButton value="Tramitar Pago" onclick="PF('tramitarDialog').show()"/>
                     </p:outputPanel>
 
@@ -231,7 +231,7 @@
                                     </div>
                                     <div class="col-2"></div>
                                     <div class="col-3">
-                                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":form:detalleOrdenTabla :form:productosTabla"/>
+                                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":form:detalleOrdenTabla"/>
                                     </div>
                                 </div>                                
                             </div>

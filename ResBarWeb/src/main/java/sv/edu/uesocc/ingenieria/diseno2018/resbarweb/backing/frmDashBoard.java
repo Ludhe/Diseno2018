@@ -43,7 +43,6 @@ public class frmDashBoard implements Serializable {
     private Producto selectedProducto;
     private int cantidadSelectedProducto = 1;
     private MenuModel model;
-    NuevoTicket ticket = new NuevoTicket();
 
     @PostConstruct
     public void init() {
@@ -86,15 +85,15 @@ public class frmDashBoard implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
-        List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
-        for (DetalleOrden detOrd : l) {
-            if (detOrd.getProducto().idProducto == selectedProducto.idProducto) {
+        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
+            if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
                 exits = true;
                 break;
             }
         }
         if (exits) {//Sumarle la cantidad de productos
-            System.out.println("Existe");            
+            System.out.println("Existe");
+            List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
             for (DetalleOrden detOrd : l) {
                 if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
                     //BigDecimal v = BigDecimal.valueOf(cantidadSelectedProducto+Integer.parseInt(detOrd.getCantidad()+""));
@@ -105,39 +104,22 @@ public class frmDashBoard implements Serializable {
                     break;
                 }
             }
-            //selectedOrden.setDetalleOrdenList(l);
-            //manejadorOrden.Actualizar(selectedOrden);
+            selectedOrden.setDetalleOrdenList(l);
+            manejadorOrden.Actualizar(selectedOrden);
         } else {//Crear el Detalle de la Orden
-            System.out.println("Agregar");            
-            //DetalleOrden detOrd = new DetalleOrden();
-            //detOrd.setProducto(selectedProducto);
-            //detOrd.setOrden(selectedOrden);
-            //detOrd.setCantidad(new BigDecimal((double) cantidadSelectedProducto));
-            //selectedOrden.getDetalleOrdenList().add(detOrd);
-            //manejadorOrden.Actualizar(selectedOrden);
+            System.out.println("Agregar");
+            DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);            
+            DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadSelectedProducto));
+            detOrd.setProducto(selectedProducto);
+            detOrd.setOrden(selectedOrden);
+            selectedOrden.getDetalleOrdenList().add(detOrd);
+            manejadorOrden.Actualizar(selectedOrden);
         }
-        System.out.println("SelectedProducto="+selectedProducto.nombre);
         context.execute("PF('agregarProductoDialog').hide();");        
     }
 
     public MenuModel getModel() {
         return model;
-    }
-    
-    //para imprimir los tickets
-    public void imprimirCocina(){
-        ticket.TicketCocina(selectedOrden);
-        System.out.println("cocina");
-    }
-    
-    public void imprimirBebida(){
-        ticket.TicketBebida(selectedOrden);
-        System.out.println("bebida");
-    }
-    
-    public void imprimirVenta(){
-        ticket.TicketVenta(selectedOrden);
-        System.out.println("Venta");
     }
 
     //ALL GETTERS AND SETTERS
