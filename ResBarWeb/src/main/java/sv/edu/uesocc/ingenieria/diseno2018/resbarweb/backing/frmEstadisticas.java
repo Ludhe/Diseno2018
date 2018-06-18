@@ -35,26 +35,19 @@ public class frmEstadisticas implements Serializable {
     String fechaSeleccionada;
     String fechaSeleccionada1;
     String fechaSeleccionada2;
-
-
-    public void onDateSelect(SelectEvent event) throws ParseException {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", dateFormat.format(event.getObject())));
-        fechaSeleccionada = dateFormat.format(event.getObject());
-        fecha1 = dateFormat.parse(fechaSeleccionada);
-        fecha2 = dateFormat.parse(fechaSeleccionada);
-        fecha2.setHours(23);
-        fecha2.setMinutes(59);
-        fecha2.setSeconds(59);
-        historico = manejadorOrden.ObtenerVentas(fecha1, fecha2);
-    }
+    private Orden selectedOrden;
     
     public void fechasSeleccionada1(SelectEvent event) throws ParseException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", dateFormat.format(event.getObject())));
         fechaSeleccionada1 = dateFormat.format(event.getObject());
+        fecha1 = dateFormat.parse(fechaSeleccionada1);
+        fecha2 = dateFormat.parse(fechaSeleccionada1);
+        fecha2.setHours(23);
+        fecha2.setMinutes(59);
+        fecha2.setSeconds(59);
+        historico = manejadorOrden.ObtenerVentas(fecha1, fecha2);
     }
     
      public void fechasSeleccionada2(SelectEvent event) throws ParseException {
@@ -101,6 +94,14 @@ public class frmEstadisticas implements Serializable {
 
     public void setHistorico(List<Orden> historico) {
         this.historico = historico;
+    }
+
+    public Orden getSelectedOrden() {
+        return selectedOrden;
+    }
+
+    public void setSelectedOrden(Orden selectedOrden) {
+        this.selectedOrden = selectedOrden;
     }
     
 }
