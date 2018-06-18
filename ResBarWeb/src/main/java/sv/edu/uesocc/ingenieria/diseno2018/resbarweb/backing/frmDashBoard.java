@@ -41,11 +41,10 @@ public class frmDashBoard implements Serializable {
     private List<Categoria> categorias;
     private Categoria selectedCategoria;
     private Producto selectedProducto;
-    private int cantidadSelectedProducto=1;
+    private int cantidadSelectedProducto = 1;
     private MenuModel model;
     NuevoTicket ticket = new NuevoTicket();
 
-        
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
@@ -55,23 +54,22 @@ public class frmDashBoard implements Serializable {
             DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setCommand("#{frmDashboard.generarSelectedCateogia("+categorias.get(i).getIdCategoria()+")}");
+            item.setCommand("#{frmDashboard.generarSelectedCateogia(" + categorias.get(i).getIdCategoria() + ")}");
             item.setUpdate(":form:agregarProductosPanel");
             firstSubmenu.addElement(item);
         }
         model.addElement(firstSubmenu);
     }
-    
-    public void generarSelectedCateogia(int idCategoria){
+
+    public void generarSelectedCateogia(int idCategoria) {
         for (Categoria categoria : categorias) {
-            if(idCategoria == categoria.getIdCategoria()){
-                selectedCategoria = categoria;                
+            if (idCategoria == categoria.getIdCategoria()) {
+                selectedCategoria = categoria;
                 break;
-            }            
+            }
         }
     }
 
-    
     public void saveOrden() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext context2 = FacesContext.getCurrentInstance();
@@ -83,28 +81,45 @@ public class frmDashBoard implements Serializable {
             context2.addMessage(null, new FacesMessage("ERROR", "Orden Modificada"));
         }
     }
-    
-    public void saveDetalleOrden(){
-        //RequestContext context = RequestContext.getCurrentInstance();
+
+    public void saveDetalleOrden() {
+        RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
-        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
-            if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+        List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
+        for (DetalleOrden detOrd : l) {
+            if (detOrd.getProducto().idProducto == selectedProducto.idProducto) {
                 exits = true;
+                break;
             }
         }
-        if (exits) {
-            System.out.println("Existe");
-            
-        }else{
-            System.out.println("Agregar");
+        if (exits) {//Sumarle la cantidad de productos
+            System.out.println("Existe");            
+            for (DetalleOrden detOrd : l) {
+                if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+                    //BigDecimal v = BigDecimal.valueOf(cantidadSelectedProducto+Integer.parseInt(detOrd.getCantidad()+""));
+                    int v = cantidadSelectedProducto + detOrd.getCantidad().intValue();
+                    double vd = (double) v;
+                    System.out.println("Nueva Cantidad = "+v);
+                    detOrd.setCantidad(new BigDecimal(vd));
+                    break;
+                }
+            }
+            //selectedOrden.setDetalleOrdenList(l);
+            //manejadorOrden.Actualizar(selectedOrden);
+        } else {//Crear el Detalle de la Orden
+            System.out.println("Agregar");            
+            //DetalleOrden detOrd = new DetalleOrden();
+            //detOrd.setProducto(selectedProducto);
+            //detOrd.setOrden(selectedOrden);
+            //detOrd.setCantidad(new BigDecimal((double) cantidadSelectedProducto));
+            //selectedOrden.getDetalleOrdenList().add(detOrd);
+            //manejadorOrden.Actualizar(selectedOrden);
         }
-        System.out.println("Producto: "+selectedProducto.nombre);
-        System.out.println("Cantidad: "+cantidadSelectedProducto);
-        
-        
+        System.out.println("SelectedProducto="+selectedProducto.nombre);
+        context.execute("PF('agregarProductoDialog').hide();");        
     }
-    
+
     public MenuModel getModel() {
         return model;
     }
@@ -128,7 +143,7 @@ public class frmDashBoard implements Serializable {
     public List<Orden> getOrdenes() {
         return manejadorOrden.ObtenerActivas();
     }
-    
+
     public void setSelectedOrden(Orden selectedOrden) {
         this.selectedOrden = selectedOrden;
     }
@@ -136,7 +151,7 @@ public class frmDashBoard implements Serializable {
     public Orden getSelectedOrden() {
         return selectedOrden;
     }
-    
+
     public List<DetalleOrden> getDetalleOrden() {
         return selectedOrden.getDetalleOrdenList();
     }
@@ -144,7 +159,7 @@ public class frmDashBoard implements Serializable {
     public void setDetalleOrden(List<DetalleOrden> detalleOrden) {
         this.selectedOrden.setDetalleOrdenList(detalleOrden);
     }
-    
+
     public Categoria getSelectedCategoria() {
         return selectedCategoria;
     }
@@ -152,15 +167,15 @@ public class frmDashBoard implements Serializable {
     public void setSelectedCategoria(Categoria selectedCategoria) {
         this.selectedCategoria = selectedCategoria;
     }
-    
+
     public Producto getSelectedProducto() {
         return selectedProducto;
     }
 
     public void setSelectedProducto(Producto selectedProducto) {
         this.selectedProducto = selectedProducto;
-    }    
-    
+    }
+
     public int getCantidadSelectedProducto() {
         return cantidadSelectedProducto;
     }
@@ -168,5 +183,5 @@ public class frmDashBoard implements Serializable {
     public void setCantidadSelectedProducto(int cantidadSelectedProducto) {
         this.cantidadSelectedProducto = cantidadSelectedProducto;
     }
-    
+
 }
