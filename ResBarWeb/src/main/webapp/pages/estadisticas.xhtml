@@ -45,19 +45,46 @@
                 <p:layoutUnit position="center">
                     ESTADISTICAS
                     <p:separator />
-                    <p:outputLabel for="inline" value="Inline:" />
+<!--
+                    <p:commandButton value="Por Día" onclick="PF('popup').hide()"></p:commandButton>
+                    <p:commandButton value="Por Período" onclick="PF('inline').hide()"></p:commandButton>
+                    <p:separator />
+-->
+                    
+                    CONSULTAR POR DÍA
                     <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
-                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs" />
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs tabla" />
                     </p:calendar>
                     <h:outputText id="msgs" value="#{frmEstadisticas.date1}">
                         <f:convertDateTime pattern="yyyy/MM/dd" />
                     </h:outputText>
                     <p:separator />
-                    <div class="div-tabla">
+                    CONSULTAR POR RANGO DE FECHAS
+                    <br></br>
+                    
+                    
+                    <p:outputLabel for="popup" value="Seleccione fecha 1:" />
+                    <p:calendar id="popup" value="#{frmEstadisticas.date2}">
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada1}" update="msgs" />
+                    </p:calendar>
+                    <h:outputText value="#{frmEstadisticas.date2}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+
+                    <p:outputLabel for="popup" value="Seleccione fecha 2:" />
+                    <p:calendar id="popup2" value="#{frmEstadisticas.date3}" >
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada2}" update="msgs tabla" />
+                    </p:calendar>
+                    <h:outputText value="#{frmEstadisticas.date3}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+
+                    <p:separator />
+                    <div class="div-tabla" >
                         <div class="row">                    
                             <div class="col-1"></div>
                             <div class="col-10">                                
-                                <p:dataTable var="orden" value="#{frmEstadisticas.historico}">
+                                <p:dataTable var="orden" value="#{frmEstadisticas.historico}" id="tabla">
                                     <f:facet name="header">
                                         Ordenes
                                     </f:facet>
