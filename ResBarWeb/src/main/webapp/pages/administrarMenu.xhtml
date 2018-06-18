@@ -40,14 +40,12 @@
             </p:layoutUnit>
             <p:layoutUnit position="center"> 
                 <!--Todas las categorias-->
-                <h:form>
+                <h:form id="categorias">
                     <p:menu model="#{administrar.model}"/>
                 </h:form>
                 <p:separator />
                 <p:separator />
-                <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
                 <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
-                <p:commandButton actionListener="#{administrar.saludarDiana()}" value="Hola" icon="ui-icon-plus"></p:commandButton>          
             </p:layoutUnit>
             <p:layoutUnit position="east" size="1115">
                 <div class="buscador">
@@ -68,7 +66,8 @@
                         <div class="col-1"></div>
                         <div class="col-10">
                             <h:form id="form">
-                                <p:dataTable id="productos" editMode="cell" editable="true" var="product" value="#{administrar.productos}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}">
+                                <p:dataTable id="productos" var="product" value="#{administrar.productos}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}" selectionMode="single" selection="#{administrar.producto}" rowKey="#{product.idProducto}">
+                                    <p:ajax event="rowSelect" listener="#{administrar.abrirEditarProducto()}"/>
                                     <f:facet name="header">
                                         Menú de productos
                                     </f:facet>
@@ -85,25 +84,39 @@
                                             <f:facet name="input"><h:inputText  value="#{product.nombre}" label="Nombre"/></f:facet>
                                         </p:cellEditor>
                                     </p:column>
+                                    <p:column headerText="Precio">
+                                        <p:cellEditor>  
+                                            <f:facet name="output"><h:outputText value="#{product.precio}" /></f:facet>
+                                            <f:facet name="input"><h:inputText  value="#{product.precio}" label="Nombre"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
                                     <p:column headerText="" style="width: 42px">
-                                        <p:commandButton icon="	ui-icon-close"/>
+                                        <p:commandButton action="#{administrar.eliminarProducto()}" icon="ui-icon-close" update=":form:productos" ajax="true">
+                                            <f:setPropertyActionListener value="#{product}" target="#{administrar.producto}"/>
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
+
                             </h:form>
 
                         </div>
                         <div class="col-1"></div>
                     </div>
                 </div>
+                <div class="row" align="center">
+                    <div class="col-12">
+                        <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
+                    </div>
+                </div>
             </p:layoutUnit>
         </p:layout>
         <p:dialog header="Agregar nuevo producto" widgetVar="addProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-
+            <h:form id="modales">
                 <p:outputPanel id="carDetail" style="text-align:center;">
                     <div class="row" align="center">
                         <div class="col-4"></div>
                         <div class="col-4">
-
+                            <p:outputLabel value="#{administrar.categoria.nombre}"/>
                         </div>
                         <div class="col-4"></div>
                     </div>
@@ -113,7 +126,7 @@
                             <label>Nombre del producto: </label>
                         </div>
                         <div class="col-8">
-                            <p:inputText value="#{administrar.producto.nombre}"></p:inputText>
+                            <p:inputText value="#{administrar.producto.nombre}" required="true"></p:inputText>
                         </div>
                     </div>
                     <div class="row" align="center">
@@ -121,43 +134,106 @@
                             <label>Precio del producto: </label>
                         </div>
                         <div class="col-8">
-                            <p:inputText value="#{administrar.producto.precio}"></p:inputText>
+                            <p:inputText value="#{administrar.producto.precio}" required="true"></p:inputText>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Area del producto (b:bebida , c:cocina: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.area}" required="true">
+                                <f:validateLength maximum="2" />
+                            </p:inputText>
                         </div>
                     </div>
                     <div class="row" align="center">
                         <div class="col-2"></div>
                         <div class="col-4">
-                            <p:commandButton value="Agregar" actionListener="#{administrar.saludarDiana()}" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarProducto()}" onclick="PF('addProduct').hide()" update=":form:productos" ajax="true"></p:commandButton>
                         </div>
                         <div class="col-4">
-                            <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                            <p:commandButton value="Cancelar" onclick="PF('addProduct').hide()'"></p:commandButton>
                         </div>
                         <div class="col-2"></div>
                     </div>
                 </p:outputPanel>
-            
+            </h:form>
         </p:dialog>
+
         <p:dialog header="Agregar nueva categoría" widgetVar="addCategoria" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:outputPanel id="carDetail2" style="text-align:center;">
-                <div class="row" align="center">
-                    <div class="col-4">
-                        <label>Nombre de la categoría: </label>
+            <h:form>
+                <p:outputPanel id="carDetail2" style="text-align:center;">
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Nombre de la categoría: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.categoria.nombre}"></p:inputText>
+                        </div>
                     </div>
-                    <div class="col-8">
-                        <p:inputText></p:inputText>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarCategoria()}" onclick="PF('addCategoria').hide()" update=":categorias" ajax="true"></p:commandButton>
+                        </div>
+                        <div class="col-4">
+                            <p:commandButton value="Cancelar" onclick="PF('addCategoria').hide()"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
                     </div>
-                </div>
-                <div class="row" align="center">
-                    <div class="col-2"></div>
-                    <div class="col-4">
-                        <p:commandButton value="Agregar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+         <p:dialog header="Modificar producto" widgetVar="modProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="modProd">
+                <p:outputPanel id="modingProduct" style="text-align:center;">
+                    <div class="row" align="center">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <p:outputLabel value="#{administrar.categoria.nombre}"/>
+                        </div>
+                        <div class="col-4"></div>
                     </div>
-                    <div class="col-4">
-                        <p:commandButton value="Cancelar" onclick="location.href = 'administrarMenu.jsf'"></p:commandButton>
+                    <br></br>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Nombre del producto: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.nombre}" required="true"></p:inputText>
+                        </div>
                     </div>
-                    <div class="col-2"></div>
-                </div>
-            </p:outputPanel>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Precio del producto: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.precio}" required="true"></p:inputText>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-4">
+                            <label>Area del producto (b:bebida , c:cocina: </label>
+                        </div>
+                        <div class="col-8">
+                            <p:inputText value="#{administrar.producto.area}" required="true">
+                                <f:validateLength maximum="2" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarProducto()}" onclick="PF('addProduct').hide()" update=":form:productos" ajax="true"></p:commandButton>
+                        </div>
+                        <div class="col-4">
+                            <p:commandButton value="Cancelar" onclick="PF('addProduct').hide()'"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </p:outputPanel>
+            </h:form>
         </p:dialog>
     </h:body>
 </html>
