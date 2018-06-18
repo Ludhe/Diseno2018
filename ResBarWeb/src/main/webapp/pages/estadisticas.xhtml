@@ -43,51 +43,68 @@
             </p:layoutUnit>
             <h:form id="form">
                 <p:layoutUnit position="center">
-                    ESTADISTICAS
+                    <h1  style="font-family:verdana; font-size: 2.5vw; align-self: center;">CONSULTAR VENTAS</h1>
                     <p:separator />
-<!--
-                    <p:commandButton value="Por Día" onclick="PF('popup').hide()"></p:commandButton>
-                    <p:commandButton value="Por Período" onclick="PF('inline').hide()"></p:commandButton>
-                    <p:separator />
--->
-                    
-                    CONSULTAR POR DÍA
-                    <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
-                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.onDateSelect}" update="msgs tabla" />
-                    </p:calendar>
-                    <h:outputText id="msgs" value="#{frmEstadisticas.date1}">
-                        <f:convertDateTime pattern="yyyy/MM/dd" />
-                    </h:outputText>
-                    <p:separator />
-                    CONSULTAR POR RANGO DE FECHAS
                     <br></br>
-                    
-                    
-                    <p:outputLabel for="popup" value="Seleccione fecha 1:" />
+                    <p:outputLabel for="popup" value="Seleccione fecha 1:" style="font-family:courier; font-size: 2vw; "/>
                     <p:calendar id="popup" value="#{frmEstadisticas.date2}">
-                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada1}" update="msgs" />
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada1}" update="tabla"/>
                     </p:calendar>
                     <h:outputText value="#{frmEstadisticas.date2}">
                         <f:convertDateTime pattern="MM/dd/yyyy" />
                     </h:outputText>
-
-                    <p:outputLabel for="popup" value="Seleccione fecha 2:" />
+                    <p:outputLabel for="popup" value="Seleccione fecha 2:" style="font-family:courier; font-size: 2vw; "/>
                     <p:calendar id="popup2" value="#{frmEstadisticas.date3}" >
-                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada2}" update="msgs tabla" />
+                        <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada2}" update="tabla" />
                     </p:calendar>
                     <h:outputText value="#{frmEstadisticas.date3}">
                         <f:convertDateTime pattern="MM/dd/yyyy" />
                     </h:outputText>
+
+                    <p:dialog id="detallesOrden" header="Detalles de la Orden" widgetVar="detallesDialog" showEffect="fade" resizable="false">                    
+
+                        <h1  style="font-family:courier; font-size: 1.5vw;">ID:</h1>
+                        <p:outputLabel value="#{frmEstadisticas.selectedOrden.idOrden}" />
+                        <br/>
+                        <h1  style="font-family:courier; font-size: 1.5vw;">MESERO:</h1>
+                        <p:outputLabel value="#{frmEstadisticas.selectedOrden.mesero}" />
+                        <br/>
+                        <h1  style="font-family:courier; font-size: 1.5vw;">MESA:</h1>
+                        <p:outputLabel value="#{frmEstadisticas.selectedOrden.mesa}" />
+                        <br/>
+                        <h1  style="font-family:courier; font-size: 1.5vw;">CLIENTE:</h1>
+                        <p:outputLabel value="#{frmEstadisticas.selectedOrden.cliente}" />
+                        <br/>
+                        <p:dataTable var="detalleOrden" value="#{frmEstadisticas.selectedOrden.detalleOrdenList}" id="tablaProductos">
+                            <f:facet name="header">
+                                <h1  style="font-family:courier; font-size: 1.5vw;">PRODUCTOS</h1>
+                            </f:facet>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{detalleOrden.producto.idProducto}" />
+                            </p:column>
+
+                            <p:column headerText="Cliente">
+                                <h:outputText value="#{detalleOrden.producto.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Total">
+                                <h:outputText value="#{detalleOrden.cantidad}" />
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:commandButton value="OK" onclick="PF('detallesDialog').hide()"/>
+                    </p:dialog>
 
                     <p:separator />
                     <div class="div-tabla" >
                         <div class="row">                    
                             <div class="col-1"></div>
                             <div class="col-10">                                
-                                <p:dataTable var="orden" value="#{frmEstadisticas.historico}" id="tabla">
+                                <p:dataTable var="orden" value="#{frmEstadisticas.historico}" id="tabla" selectionMode="single" selection="#{frmEstadisticas.selectedOrden}" rowKey="#{orden.idOrden}">
                                     <f:facet name="header">
                                         Ordenes
                                     </f:facet>
+                                    <p:ajax event="rowSelect" oncomplete="PF('detallesDialog').show()" update=":form:detallesOrden"/>
                                     <p:column headerText="ID">
                                         <h:outputText value="#{orden.idOrden}" />
                                     </p:column>
