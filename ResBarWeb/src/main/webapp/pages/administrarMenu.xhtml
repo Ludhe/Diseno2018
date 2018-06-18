@@ -40,25 +40,14 @@
             </p:layoutUnit>
             <p:layoutUnit position="center"> 
                 <!--Todas las categorias-->
-                <h:form id="categorias">
+                <h:form id="menuCats">
                     <p:menu model="#{administrar.model}"/>
                 </h:form>
                 <p:separator />
                 <p:separator />
-                <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
+                <p:commandButton onclick="PF('manageCategoria').show()" value="Administrar Categorías" icon="ui-icon-plus"></p:commandButton>          
             </p:layoutUnit>
             <p:layoutUnit position="east" size="1115">
-                <div class="buscador">
-                    <div class="row" align="center">
-                        <div class="col-2"></div>
-                        <div class="col-8">
-                            <p:outputLabel value="Buscar:  " for="themePojo"/>
-                            <p:autoComplete id="themePojo" size="50" value="#{autoCompleteView.theme1}" completeMethod="#{autoCompleteView.completeTheme}"
-                                            var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true" />
-                        </div>
-                        <div class="col-2"></div>
-                    </div> 
-                </div>
                 <p:separator />
                 <!--tabla-->
                 <div>
@@ -66,8 +55,8 @@
                         <div class="col-1"></div>
                         <div class="col-10">
                             <h:form id="form">
-                                <p:dataTable id="productos" var="product" value="#{administrar.productos}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}" selectionMode="single" selection="#{administrar.producto}" rowKey="#{product.idProducto}">
-                                    <p:ajax event="rowSelect" listener="#{administrar.abrirEditarProducto()}"/>
+                                <p:dataTable id="productos" var="product" value="#{administrar.productos}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}" selectionMode="single" selection="#{administrar.selectedProduct}" rowKey="#{product.idProducto}">
+                                    <p:ajax event="rowSelect" onstart="PF('modProduct').show()" update=":modProd"/>
                                     <f:facet name="header">
                                         Menú de productos
                                     </f:facet>
@@ -175,7 +164,7 @@
                     <div class="row" align="center">
                         <div class="col-2"></div>
                         <div class="col-4">
-                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarCategoria()}" onclick="PF('addCategoria').hide()" update=":categorias" ajax="true"></p:commandButton>
+                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarCategoria()}" onclick="PF('addCategoria').hide()" update=":menuCats :form:productos :manageCats:categorias" ajax="true"></p:commandButton>
                         </div>
                         <div class="col-4">
                             <p:commandButton value="Cancelar" onclick="PF('addCategoria').hide()"></p:commandButton>
@@ -185,7 +174,7 @@
                 </p:outputPanel>
             </h:form>
         </p:dialog>
-         <p:dialog header="Modificar producto" widgetVar="modProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:dialog header="Modificar producto" widgetVar="modProduct" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="modProd">
                 <p:outputPanel id="modingProduct" style="text-align:center;">
                     <div class="row" align="center">
@@ -201,7 +190,7 @@
                             <label>Nombre del producto: </label>
                         </div>
                         <div class="col-8">
-                            <p:inputText value="#{administrar.producto.nombre}" required="true"></p:inputText>
+                            <p:inputText value="#{administrar.selectedProduct.nombre}" required="true"></p:inputText>
                         </div>
                     </div>
                     <div class="row" align="center">
@@ -209,7 +198,7 @@
                             <label>Precio del producto: </label>
                         </div>
                         <div class="col-8">
-                            <p:inputText value="#{administrar.producto.precio}" required="true"></p:inputText>
+                            <p:inputText value="#{administrar.selectedProduct.precio}" required="true"></p:inputText>
                         </div>
                     </div>
                     <div class="row" align="center">
@@ -217,7 +206,7 @@
                             <label>Area del producto (b:bebida , c:cocina: </label>
                         </div>
                         <div class="col-8">
-                            <p:inputText value="#{administrar.producto.area}" required="true">
+                            <p:inputText value="#{administrar.selectedProduct.area}" required="true">
                                 <f:validateLength maximum="2" />
                             </p:inputText>
                         </div>
@@ -225,14 +214,74 @@
                     <div class="row" align="center">
                         <div class="col-2"></div>
                         <div class="col-4">
-                            <p:commandButton value="Agregar" actionListener="#{administrar.agregarProducto()}" onclick="PF('addProduct').hide()" update=":form:productos" ajax="true"></p:commandButton>
+                            <p:commandButton value="Actualizar" actionListener="#{administrar.modificarProducto()}" onclick="PF('modProduct').hide()" update=":form:productos" ajax="true"></p:commandButton>
                         </div>
                         <div class="col-4">
-                            <p:commandButton value="Cancelar" onclick="PF('addProduct').hide()'"></p:commandButton>
+                            <p:commandButton value="Cancelar" onclick="PF('modProduct').hide()'"></p:commandButton>
                         </div>
                         <div class="col-2"></div>
                     </div>
                 </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Modificar Categorias" widgetVar="modCats" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="modCat">
+                <p:outputPanel id="modingCat" style="text-align:center;">
+                    <div class="row" align="center">
+                        <br></br>
+                        <div class="row" align="center">
+                            <div class="col-4">
+                                <label>Nombre de la categoria: </label>
+                            </div>
+                            <div class="col-8">
+                                <p:inputText value="#{administrar.selectedCategoria.nombre}" required="true"></p:inputText>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <p:commandButton value="Actualizar" actionListener="#{administrar.modificarCategoria()}" onclick="PF('modCats').hide()" update=":manageCats:categorias" ajax="true"></p:commandButton>
+                        </div>
+                        <div class="col-4">
+                            <p:commandButton value="Cancelar" onclick="PF('modProduct').hide()'"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Administrar categorías" widgetVar="manageCategoria" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="manageCats">
+                <p:dataTable id="categorias" var="cat" value="#{administrar.categorias}" paginator="true" rows="5" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}" selectionMode="single" selection="#{administrar.selectedCategoria}" rowKey="#{cat.idCategoria}">
+                    <p:ajax event="rowSelect" onstart="PF('modCats').show()" update=":modCat"/>
+                    <f:facet name="header">
+                        Menú de productos
+                    </f:facet>
+
+                    <p:column headerText="ID Producto">
+                        <p:cellEditor>  
+                            <f:facet name="output"><h:outputText value="#{cat.idCategoria}" /></f:facet>
+                            <f:facet name="input"><h:inputText  value="#{cat.idCategoria}" label="idProducto"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <p:cellEditor>  
+                            <f:facet name="output"><h:outputText value="#{cat.nombre}" /></f:facet>
+                            <f:facet name="input"><h:inputText  value="#{cat.nombre}" label="Nombre"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="" style="width: 42px">
+                        <p:commandButton action="#{administrar.eliminarCategoria()}" icon="ui-icon-close" update=":menuCats :manageCats:categorias" ajax="true">
+                            <f:setPropertyActionListener value="#{cat}" target="#{administrar.categoria}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <div class="row" align="center">
+                    <div class="col-12">
+                        <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
+                    </div>
+                </div>
             </h:form>
         </p:dialog>
     </h:body>

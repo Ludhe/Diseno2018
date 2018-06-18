@@ -28,16 +28,35 @@ import sv.edu.diseno.definiciones.Producto;
 @ManagedBean(name = "administrar")
 @ViewScoped
 public class frmAdministrar implements Serializable {
+
     //Manejador Categorías
     ManejadorCategorias manejadorCategorias;
     ManejadorProductos manejadorProductos;
     private List<Categoria> categorias;
     private List<Producto> productos;
     private Producto producto = new Producto();
+    private Producto selectedProduct = new Producto();
     private Categoria categoria = new Categoria();
+    private Categoria selectedCategoria = new Categoria();
     //Para generar el menu con categorías
     private MenuModel model;
     final static boolean sub = false;
+
+    public Categoria getSelectedCategoria() {
+        return selectedCategoria;
+    }
+
+    public void setSelectedCategoria(Categoria selectedCategoria) {
+        this.selectedCategoria = selectedCategoria;
+    }
+
+    public Producto getSelectedProduct() {
+        return selectedProduct;
+    }
+
+    public void setSelectedProduct(Producto selectedProduct) {
+        this.selectedProduct = selectedProduct;
+    }
 
     public Categoria getCategoria() {
         return categoria;
@@ -69,7 +88,7 @@ public class frmAdministrar implements Serializable {
 
     public List<Categoria> getCategorias() {
         //
-        return ManejadorCategorias.Obtener(false);
+        return ManejadorCategorias.Obtener(sub);
     }
 
     @PostConstruct
@@ -111,28 +130,41 @@ public class frmAdministrar implements Serializable {
         producto.idProducto = idProd;
         ManejadorProductos.Insertar(producto);
         recargarProductos("0");
-        
+
     }
+
     public void eliminarProducto() {
         if (producto != null) {
             ManejadorProductos.Eliminar(producto);
             recargarProductos("0");
         }
     }
-    
-    public void agregarCategoria(){
-        if(categoria!= null){
+
+    public void agregarCategoria() {
+        if (categoria != null) {
             categoria.idCategoria = ManejadorCategorias.ObtenerId();
             ManejadorCategorias.Insertar(categoria);
-            init();
         }
-        
-    }
-    
-    public void abrirEditarProducto(){
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.update(":modProd");
-            context.execute("PF(\'addProduct\').show()");
+
     }
 
+     public void eliminarCategoria() {
+        if (categoria != null) {
+            List<Producto> list = categoria.getProductoList();
+            for (Producto prod : list) {
+                ManejadorProductos.Eliminar(prod);
+            }
+            ManejadorCategorias.Eliminar(categoria);
+            recargarProductos("0");
+        }
+    }
+    
+    public void modificarProducto(){
+            ManejadorProductos.Actualizar(selectedProduct);
+            recargarProductos("0");
+    }
+    
+    public void modificarCategoria(){
+            ManejadorCategorias.Actualizar(selectedCategoria);
+    }
 }
