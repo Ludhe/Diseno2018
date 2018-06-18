@@ -84,15 +84,15 @@ public class frmDashBoard implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
-        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
-            if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+        List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
+        for (DetalleOrden detOrd : l) {
+            if (detOrd.getProducto().idProducto == selectedProducto.idProducto) {
                 exits = true;
                 break;
             }
         }
         if (exits) {//Sumarle la cantidad de productos
-            System.out.println("Existe");
-            List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
+            System.out.println("Existe");            
             for (DetalleOrden detOrd : l) {
                 if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
                     //BigDecimal v = BigDecimal.valueOf(cantidadSelectedProducto+Integer.parseInt(detOrd.getCantidad()+""));
@@ -103,17 +103,18 @@ public class frmDashBoard implements Serializable {
                     break;
                 }
             }
-            selectedOrden.setDetalleOrdenList(l);
-            manejadorOrden.Actualizar(selectedOrden);
+            //selectedOrden.setDetalleOrdenList(l);
+            //manejadorOrden.Actualizar(selectedOrden);
         } else {//Crear el Detalle de la Orden
-            System.out.println("Agregar");
-            DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);            
-            DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadSelectedProducto));
-            detOrd.setProducto(selectedProducto);
-            detOrd.setOrden(selectedOrden);
-            selectedOrden.getDetalleOrdenList().add(detOrd);
-            manejadorOrden.Actualizar(selectedOrden);
+            System.out.println("Agregar");            
+            //DetalleOrden detOrd = new DetalleOrden();
+            //detOrd.setProducto(selectedProducto);
+            //detOrd.setOrden(selectedOrden);
+            //detOrd.setCantidad(new BigDecimal((double) cantidadSelectedProducto));
+            //selectedOrden.getDetalleOrdenList().add(detOrd);
+            //manejadorOrden.Actualizar(selectedOrden);
         }
+        System.out.println("SelectedProducto="+selectedProducto.nombre);
         context.execute("PF('agregarProductoDialog').hide();");        
     }
 
