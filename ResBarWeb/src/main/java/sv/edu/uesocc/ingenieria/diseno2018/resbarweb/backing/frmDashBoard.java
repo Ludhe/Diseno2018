@@ -6,6 +6,7 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -22,9 +23,11 @@ import sv.edu.diseno.acceso.ManejadorCategorias;
 import sv.edu.diseno.acceso.ManejadorOrden;
 import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
+import sv.edu.diseno.definiciones.DetalleOrdenPK;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Producto;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
+import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 
 @ManagedBean(name = "frmDashboard")
 @ViewScoped
@@ -37,9 +40,11 @@ public class frmDashBoard implements Serializable {
     ManejadorCategorias manejadorCategorias;
     private List<Categoria> categorias;
     private Categoria selectedCategoria;
+    private Producto selectedProducto;
+    private int cantidadSelectedProducto = 1;
     private MenuModel model;
+    NuevoTicket ticket = new NuevoTicket();
 
-    
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
@@ -49,29 +54,22 @@ public class frmDashBoard implements Serializable {
             DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
             item.setIcon("ui-icon-arrowthick-1-e");
             //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setCommand("#{frmDashboard.generarSelectedCateogia("+categorias.get(i).getIdCategoria()+")}");
+            item.setCommand("#{frmDashboard.generarSelectedCateogia(" + categorias.get(i).getIdCategoria() + ")}");
             item.setUpdate(":form:agregarProductosPanel");
             firstSubmenu.addElement(item);
         }
         model.addElement(firstSubmenu);
     }
-    
-    public void generarSelectedCateogia(int idCategoria){
-        System.out.println("idCategoria = "+idCategoria);
+
+    public void generarSelectedCateogia(int idCategoria) {
         for (Categoria categoria : categorias) {
-            if(idCategoria == categoria.getIdCategoria()){
+            if (idCategoria == categoria.getIdCategoria()) {
                 selectedCategoria = categoria;
-                List<Producto> lp = selectedCategoria.getProductoList();
-                System.out.println(lp);
-                for (Producto producto : lp) {
-                    System.out.println(producto.nombre);
-                }
                 break;
-            }            
+            }
         }
     }
 
-    
     public void saveOrden() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext context2 = FacesContext.getCurrentInstance();
@@ -83,9 +81,58 @@ public class frmDashBoard implements Serializable {
             context2.addMessage(null, new FacesMessage("ERROR", "Orden Modificada"));
         }
     }
-    
+
+    public void saveDetalleOrden() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        //FacesContext context2 = FacesContext.getCurrentInstance();
+        boolean exits = false;
+        List<DetalleOrden> l = selectedOrden.getDetalleOrdenList();
+        for (DetalleOrden detOrd : l) {
+            if (detOrd.getProducto().idProducto == selectedProducto.idProducto) {
+                exits = true;
+                break;
+            }
+        }
+        if (exits) {//Sumarle la cantidad de productos
+            System.out.println("Existe");            
+            for (DetalleOrden detOrd : l) {
+                if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+                    //BigDecimal v = BigDecimal.valueOf(cantidadSelectedProducto+Integer.parseInt(detOrd.getCantidad()+""));
+                    int v = cantidadSelectedProducto + detOrd.getCantidad().intValue();
+                    double vd = (double) v;
+                    System.out.println("Nueva Cantidad = "+v);
+                    detOrd.setCantidad(new BigDecimal(vd));
+                    break;
+                }
+            }
+            //selectedOrden.setDetalleOrdenList(l);
+            //manejadorOrden.Actualizar(selectedOrden);
+        } else {//Crear el Detalle de la Orden
+            System.out.println("Agregar");            
+            //DetalleOrden detOrd = new DetalleOrden();
+            //detOrd.setProducto(selectedProducto);
+            //detOrd.setOrden(selectedOrden);
+            //detOrd.setCantidad(new BigDecimal((double) cantidadSelectedProducto));
+            //selectedOrden.getDetalleOrdenList().add(detOrd);
+            //manejadorOrden.Actualizar(selectedOrden);
+        }
+        System.out.println("SelectedProducto="+selectedProducto.nombre);
+        context.execute("PF('agregarProductoDialog').hide();");        
+    }
+
     public MenuModel getModel() {
         return model;
+    }
+    
+    //para imprimir los tickets
+    public void imprimirCocina(){
+        ticket.TicketCocina(selectedOrden);
+        System.out.println("cocina");
+    }
+    
+    public void imprimirBebida(){
+        ticket.TicketBebida(selectedOrden);
+        System.out.println("bebida");
     }
 
     //ALL GETTERS AND SETTERS
@@ -96,7 +143,7 @@ public class frmDashBoard implements Serializable {
     public List<Orden> getOrdenes() {
         return manejadorOrden.ObtenerActivas();
     }
-    
+
     public void setSelectedOrden(Orden selectedOrden) {
         this.selectedOrden = selectedOrden;
     }
@@ -104,7 +151,7 @@ public class frmDashBoard implements Serializable {
     public Orden getSelectedOrden() {
         return selectedOrden;
     }
-    
+
     public List<DetalleOrden> getDetalleOrden() {
         return selectedOrden.getDetalleOrdenList();
     }
@@ -112,7 +159,7 @@ public class frmDashBoard implements Serializable {
     public void setDetalleOrden(List<DetalleOrden> detalleOrden) {
         this.selectedOrden.setDetalleOrdenList(detalleOrden);
     }
-    
+
     public Categoria getSelectedCategoria() {
         return selectedCategoria;
     }
@@ -120,6 +167,21 @@ public class frmDashBoard implements Serializable {
     public void setSelectedCategoria(Categoria selectedCategoria) {
         this.selectedCategoria = selectedCategoria;
     }
-    
-    
+
+    public Producto getSelectedProducto() {
+        return selectedProducto;
+    }
+
+    public void setSelectedProducto(Producto selectedProducto) {
+        this.selectedProducto = selectedProducto;
+    }
+
+    public int getCantidadSelectedProducto() {
+        return cantidadSelectedProducto;
+    }
+
+    public void setCantidadSelectedProducto(int cantidadSelectedProducto) {
+        this.cantidadSelectedProducto = cantidadSelectedProducto;
+    }
+
 }

@@ -148,7 +148,7 @@
                         <p:commandButton value="Modificar Orden" onclick="PF('modificarDialog').show()"/>
                         <!--p:button value="Modificar Orden" outcome="nuevaOrden.xhtml"/-->
                         <p:commandButton value="Modificar Productos" onclick="PF('modificarProductoDialog').show()"/>
-                        <p:commandButton value="Imprimir Cuenta" onclick="PF('imprimirDialog').show()"/>
+                        <p:commandButton value="Imprimir Tickets" onclick="PF('imprimirDialog').show()"/>
                         <p:commandButton value="Tramitar Pago" onclick="PF('tramitarDialog').show()"/>
                     </p:outputPanel>
 
@@ -204,10 +204,12 @@
                                 <p:menu  model="#{frmDashboard.model}"/>
                             </div>
                             <div class="col-8">
-                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" rendered="true">
+                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" emptyMessage="Selecione una Categoria"
+                                             selectionMode="single" selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idCategoria}">
                                     <f:facet name="header">
                                         Productos
                                     </f:facet>
+                                    <p:ajax event="rowSelect" listener="#{frmDashboard.setCantidadSelectedProducto(1)}" update=":form:keypadPanel"/>
                                     <p:column headerText="Nombre" style="text-align: center;">
                                         <h:outputText value="#{producto.nombre}"/>
                                     </p:column>
@@ -216,14 +218,30 @@
                                             <f:convertNumber pattern="$#0.00" locale="es_US"/>
                                         </h:outputText>
                                     </p:column>
-                                </p:dataTable>
+                                    <p:column headerText="Nombre" style="text-align: center;">
+                                        <h:outputText value="#{producto.nombre}"/>
+                                    </p:column>
+                                </p:dataTable>                                
+                                <div class="row" align="center">
+                                    <div class="col-7">
+                                        <p:outputPanel id="keypadPanel" style="text-align:center;">
+                                            <h:outputText value="Cantidad: " rendered="#{not empty frmDashboard.selectedProducto}"/>
+                                            <p:keyboard id="keypad" value="#{frmDashboard.cantidadSelectedProducto}" keypadOnly="true" rendered="#{not empty frmDashboard.selectedProducto}"/>
+                                        </p:outputPanel>
+                                    </div>
+                                    <div class="col-2"></div>
+                                    <div class="col-3">
+                                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":form:detalleOrdenTabla :form:productosTabla"/>
+                                    </div>
+                                </div>                                
                             </div>
                         </div>                        
                     </p:outputPanel>                    
                 </p:dialog>
 
                 <p:dialog header="Imprimir Cuenta" widgetVar="imprimirDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-
+                    <p:commandButton value="Ticket cocina" actionListener="#{frmDashboard.imprimirCocina()}"/>
+                    <p:commandButton value="Ticket bebida" actionListener="#{frmDashboard.imprimirBebida()}"/>
                 </p:dialog>
 
                 <p:dialog header="Tramitar Pago" widgetVar="tramitarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
