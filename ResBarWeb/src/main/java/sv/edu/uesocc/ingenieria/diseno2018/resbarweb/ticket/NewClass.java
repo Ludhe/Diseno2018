@@ -23,7 +23,7 @@ public class NewClass {
         String ticket;
         ticket = "------------------------------------------------";
         ticket += "                  COCINA                        \n";
-        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + orden.fecha.getYear() + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
+        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear()+1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
         ticket += " N° Ticket: " + orden.idOrden + "                                 \n";
         ticket += " Mesa:      " + orden.mesa + "               Hora:  " + orden.fecha.getHours() + ":" + orden.fecha.getMinutes() + "     \n";
         ticket += "   ------------------------------------------   ";
@@ -31,17 +31,12 @@ public class NewClass {
         ticket += "   ------------------------------------------   ";
         for (DetalleOrden detalleOrdenList : orden.detalleOrdenList) {
             if (detalleOrdenList.producto.area == 'C' || detalleOrdenList.producto.area == 'c') {
-                String espacio = "";
-                if (detalleOrdenList.producto.nombre.length() <= 5) {
-                    espacio = "\t\t\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 5 && detalleOrdenList.producto.nombre.length() <= 16) {
-                    espacio = "\t\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 16 && detalleOrdenList.producto.nombre.length() <= 20) {
-                    espacio = "\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 20) {
-                    espacio = "\t";
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
                 }
-                ticket += detalleOrdenList.producto.nombre + espacio + detalleOrdenList.cantidad + "   \n";
+                ticket += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket += "   ------------------------------------------   ";
@@ -56,7 +51,7 @@ public class NewClass {
         String ticket2;
         ticket2 = "------------------------------------------------";
         ticket2 += "                  BEBIDA                        \n";
-        ticket2 += " Cliente:   " + orden.cliente + "     Fecha: " + orden.fecha.getYear() + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
+        ticket2 += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear()+1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
         ticket2 += " N° Ticket: " + orden.idOrden + "                                 \n";
         ticket2 += " Mesa:      " + orden.mesa + "               Hora:  " + orden.fecha.getHours() + ":" + orden.fecha.getMinutes() + "     \n";
         ticket2 += "   ------------------------------------------   ";
@@ -64,18 +59,12 @@ public class NewClass {
         ticket2 += "   ------------------------------------------   ";
         for (DetalleOrden detalleOrdenList : orden.detalleOrdenList) {
             if (detalleOrdenList.producto.area == 'B' || detalleOrdenList.producto.area == 'b') {
-                String espacio = "";
-                if (detalleOrdenList.producto.nombre.length() <= 5) {
-                    espacio = "\t\t\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 5 && detalleOrdenList.producto.nombre.length() <= 16) {
-                    espacio = "\t\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 16 && detalleOrdenList.producto.nombre.length() <= 20) {
-                    espacio = "\t\t\t";
-                } else if (detalleOrdenList.producto.nombre.length() > 20) {
-                    espacio = "\t";
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
                 }
-                ticket2 += detalleOrdenList.producto.nombre + espacio + detalleOrdenList.cantidad + "   \n";
-
+                ticket2 += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket2 += "   ------------------------------------------   ";

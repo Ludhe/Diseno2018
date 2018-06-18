@@ -28,7 +28,12 @@ public class NuevoTicket {
         ticket += "   ------------------------------------------   ";
         for (DetalleOrden detalleOrdenList : orden.detalleOrdenList) {
             if (detalleOrdenList.producto.area == 'C' || detalleOrdenList.producto.area == 'c') {
-                ticket += "    " + detalleOrdenList.producto.nombre + "\t\t" + detalleOrdenList.cantidad + "   \n";
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
+                }
+                ticket += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket += "   ------------------------------------------   ";
@@ -52,7 +57,12 @@ public class NuevoTicket {
         ticket += "   ------------------------------------------   ";
         for (DetalleOrden detalleOrdenList : orden.detalleOrdenList) {
             if (detalleOrdenList.producto.area == 'B' || detalleOrdenList.producto.area == 'b') {
-                ticket += "    " + detalleOrdenList.producto.nombre + "\t\t" + detalleOrdenList.cantidad + "\n";
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
+                }
+                ticket += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket += "   ------------------------------------------   ";
