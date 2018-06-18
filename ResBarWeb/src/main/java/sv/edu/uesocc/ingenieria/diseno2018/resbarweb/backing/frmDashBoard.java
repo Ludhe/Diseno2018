@@ -7,25 +7,69 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
+import sv.edu.diseno.acceso.ManejadorCategorias;
 import sv.edu.diseno.acceso.ManejadorOrden;
+import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
 import sv.edu.diseno.definiciones.Orden;
+import sv.edu.diseno.definiciones.Producto;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
 
 @ManagedBean(name = "frmDashboard")
 @ViewScoped
 public class frmDashBoard implements Serializable {
 
-    ManejadorOrden manejadorOrden;    
+    ManejadorOrden manejadorOrden;
     private List<Orden> ordenes;
     private Orden selectedOrden;
     private List<DetalleOrden> detalleOrden;
+    ManejadorCategorias manejadorCategorias;
+    private List<Categoria> categorias;
+    private Categoria selectedCategoria;
+    private MenuModel model;
+
+    
+    @PostConstruct
+    public void init() {
+        model = new DefaultMenuModel();
+        categorias = manejadorCategorias.Obtener(true);
+        DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
+        for (int i = 0; i < categorias.size(); i++) {
+            DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
+            item.setIcon("ui-icon-arrowthick-1-e");
+            //item.setCommand("#{administrar.setIdCategoria("+i+")}");
+            item.setCommand("#{frmDashboard.generarSelectedCateogia("+categorias.get(i).getIdCategoria()+")}");
+            item.setUpdate(":form:agregarProductosPanel");
+            firstSubmenu.addElement(item);
+        }
+        model.addElement(firstSubmenu);
+    }
+    
+    public void generarSelectedCateogia(int idCategoria){
+        System.out.println("idCategoria = "+idCategoria);
+        for (Categoria categoria : categorias) {
+            if(idCategoria == categoria.getIdCategoria()){
+                selectedCategoria = categoria;
+                List<Producto> lp = selectedCategoria.getProductoList();
+                System.out.println(lp);
+                for (Producto producto : lp) {
+                    System.out.println(producto.nombre);
+                }
+                break;
+            }            
+        }
+    }
 
     
     public void saveOrden() {
@@ -38,7 +82,10 @@ public class frmDashBoard implements Serializable {
         } catch (ErrorAplicacion e) {
             context2.addMessage(null, new FacesMessage("ERROR", "Orden Modificada"));
         }
-
+    }
+    
+    public MenuModel getModel() {
+        return model;
     }
 
     //ALL GETTERS AND SETTERS
@@ -64,6 +111,14 @@ public class frmDashBoard implements Serializable {
 
     public void setDetalleOrden(List<DetalleOrden> detalleOrden) {
         this.selectedOrden.setDetalleOrdenList(detalleOrden);
+    }
+    
+    public Categoria getSelectedCategoria() {
+        return selectedCategoria;
+    }
+
+    public void setSelectedCategoria(Categoria selectedCategoria) {
+        this.selectedCategoria = selectedCategoria;
     }
     
     
