@@ -134,6 +134,11 @@ public class frmDashBoard implements Serializable {
         ticket.TicketBebida(selectedOrden);
         System.out.println("bebida");
     }
+    
+    public void imprimirVenta(){
+        ticket.TicketVenta(selectedOrden);
+        System.out.println("Venta");
+    }
 
     //ALL GETTERS AND SETTERS
     public void setOrdenes(List<Orden> ordenes) {
