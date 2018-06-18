@@ -8,10 +8,8 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -34,16 +32,10 @@ public class frmEstadisticas implements Serializable {
     private Date date3;
     private Date fecha1;
     private Date fecha2;
-    private String seleccionado = "";
-    private List<String> opciones;
     String fechaSeleccionada;
-    
-    @PostConstruct
-    public void init() {
-        opciones = new ArrayList<>();
-        opciones.add("Por dia");
-        opciones.add("Por periodo");
-    }  
+    String fechaSeleccionada1;
+    String fechaSeleccionada2;
+
 
     public void onDateSelect(SelectEvent event) throws ParseException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -56,13 +48,29 @@ public class frmEstadisticas implements Serializable {
         fecha2.setMinutes(59);
         fecha2.setSeconds(59);
         historico = manejadorOrden.ObtenerVentas(fecha1, fecha2);
-        
     }
-    public  void imprimir(){
-        System.out.println(seleccionado);
+    
+    public void fechasSeleccionada1(SelectEvent event) throws ParseException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", dateFormat.format(event.getObject())));
+        fechaSeleccionada1 = dateFormat.format(event.getObject());
     }
-        
-    //ALL GETTERS AND SETTERS
+    
+     public void fechasSeleccionada2(SelectEvent event) throws ParseException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", dateFormat.format(event.getObject())));
+        fechaSeleccionada2 = dateFormat.format(event.getObject());
+        fecha1 = dateFormat.parse(fechaSeleccionada1);
+        fecha2 = dateFormat.parse(fechaSeleccionada2);
+        fecha2.setHours(23);
+        fecha2.setMinutes(59);
+        fecha2.setSeconds(59);
+        historico = manejadorOrden.ObtenerVentas(fecha1, fecha2);
+    }
+
+     //ALL GETTERS AND SETTERS
     public Date getDate1() {
         return date1;
     }
@@ -95,19 +103,4 @@ public class frmEstadisticas implements Serializable {
         this.historico = historico;
     }
     
-     public String getSeleccionado() {
-        return seleccionado;
-    }
-
-    public void setSeleccionado(String seleccionado) {
-        this.seleccionado = seleccionado;
-    }
-        
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
-    }
 }
