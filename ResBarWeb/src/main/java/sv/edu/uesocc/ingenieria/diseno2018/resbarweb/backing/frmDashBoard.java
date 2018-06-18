@@ -27,6 +27,7 @@ import sv.edu.diseno.definiciones.DetalleOrdenPK;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Producto;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
+import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 
 @ManagedBean(name = "frmDashboard")
 @ViewScoped
@@ -42,6 +43,7 @@ public class frmDashBoard implements Serializable {
     private Producto selectedProducto;
     private int cantidadSelectedProducto=1;
     private MenuModel model;
+    NuevoTicket ticket = new NuevoTicket();
 
         
     @PostConstruct
@@ -105,6 +107,17 @@ public class frmDashBoard implements Serializable {
     
     public MenuModel getModel() {
         return model;
+    }
+    
+    //para imprimir los tickets
+    public void imprimirCocina(){
+        ticket.TicketCocina(selectedOrden);
+        System.out.println("cocina");
+    }
+    
+    public void imprimirBebida(){
+        ticket.TicketBebida(selectedOrden);
+        System.out.println("bebida");
     }
 
     //ALL GETTERS AND SETTERS

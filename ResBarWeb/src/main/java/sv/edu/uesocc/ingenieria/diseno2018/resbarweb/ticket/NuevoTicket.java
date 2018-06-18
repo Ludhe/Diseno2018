@@ -14,13 +14,12 @@ import sv.edu.diseno.definiciones.Orden;
  */
 public class NuevoTicket {
 
-    PrinterService printerService = new PrinterService();
-    String ticket = "";
-
     public void TicketCocina(Orden orden) {
+        PrinterService printerService = new PrinterService();
+        String ticket = "";
         ticket = "------------------------------------------------";
         ticket += "                  COCINA                        \n";
-        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear()+1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
+        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear() + 1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
         ticket += " N° Ticket: " + orden.idOrden + "                                 \n";
         ticket += " Mesa:      " + orden.mesa + "               Hora:  " + orden.fecha.getHours() + ":" + orden.fecha.getMinutes() + "     \n";
         ticket += "   ------------------------------------------   ";
@@ -33,13 +32,13 @@ public class NuevoTicket {
                 for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
                     producto += " ";
                 }
-                ticket += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
+                ticket += "    " + producto + "\t\t\t" + detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket += "   ------------------------------------------   ";
         ticket += "   Comentario:                                  \n";
         ticket += "   " + orden.comentario + "                             \n\n";
-        ticket += "------------------------------------------------";
+        ticket += "------------------------------------------------ \n\n\n\n";
 
         printerService.printString("POS-80 (copy 1)", ticket);
         byte[] cutP = new byte[]{29, 'V', 1};
@@ -47,9 +46,11 @@ public class NuevoTicket {
     }
 
     public void TicketBebida(Orden orden) {
+        PrinterService printerService = new PrinterService();
+        String ticket = "";
         ticket = "------------------------------------------------";
         ticket += "                  BEBIDA                        \n";
-        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear()+1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
+        ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear() + 1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
         ticket += " N° Ticket: " + orden.idOrden + "                                 \n";
         ticket += " Mesa:      " + orden.mesa + "               Hora:  " + orden.fecha.getHours() + ":" + orden.fecha.getMinutes() + "     \n";
         ticket += "   ------------------------------------------   ";
@@ -62,17 +63,29 @@ public class NuevoTicket {
                 for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
                     producto += " ";
                 }
-                ticket += "    "+producto +"\t\t\t"+ detalleOrdenList.cantidad + "   \n";
+                ticket += "    " + producto + "\t\t\t" + detalleOrdenList.cantidad + "   \n";
             }
         }
         ticket += "   ------------------------------------------   ";
         ticket += "   Comentario:                                  \n";
         ticket += "   " + orden.comentario + "                             \n\n";
-        ticket += "------------------------------------------------\n\n\n\n\n";
+        ticket += "------------------------------------------------\n\n\n\n";
 
         printerService.printString("POS-80 (copy 1)", ticket);
         byte[] cutP = new byte[]{29, 'V', 1};
         printerService.printBytes("POS-80 (copy 1)", cutP);
+    }
+    
+    public void TicketVenta(Orden orden){
+        PrinterService printerService = new PrinterService();
+        String ticket = "";
+        ticket = "------------------------------------------------";
+        //Aqui diseña el ticket jejejeje
+        ticket += "------------------------------------------------\n\n\n\n";
+
+        printerService.printString("POS-80 (copy 1)", ticket);
+        byte[] cutP = new byte[]{29, 'V', 1};
+        printerService.printBytes("POS-80 (copy 1)", cutP);      
     }
 
 }
