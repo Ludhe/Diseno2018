@@ -45,10 +45,11 @@
                 <p:layoutUnit position="center">
                     ESTADISTICAS
                     <p:separator />
-
+<!--
                     <p:commandButton value="Por Día" onclick="PF('popup').hide()"></p:commandButton>
                     <p:commandButton value="Por Período" onclick="PF('inline').hide()"></p:commandButton>
                     <p:separator />
+-->
                     
                     CONSULTAR POR DÍA
                     <p:calendar id="inline" value="#{frmEstadisticas.date1}" mode="inline">
@@ -60,6 +61,8 @@
                     <p:separator />
                     CONSULTAR POR RANGO DE FECHAS
                     <br></br>
+                    
+                    
                     <p:outputLabel for="popup" value="Seleccione fecha 1:" />
                     <p:calendar id="popup" value="#{frmEstadisticas.date2}">
                         <p:ajax event="dateSelect" listener="#{frmEstadisticas.fechasSeleccionada1}" update="msgs" />
