@@ -198,10 +198,28 @@
                 </p:dialog>
 
                 <p:dialog header="Agregar Productos" widgetVar="agregarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
-                    <div class="row" align="center">
-                        <div class="col-4">4</div>
-                        <div class="col-8">8</div>
-                    </div>
+                    <p:outputPanel id="agregarProductosPanel" style="text-align:center;">
+                        <div class="row" align="center">
+                            <div class="col-4">
+                                <p:menu  model="#{frmDashboard.model}"/>
+                            </div>
+                            <div class="col-8">
+                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" rendered="true">
+                                    <f:facet name="header">
+                                        Productos
+                                    </f:facet>
+                                    <p:column headerText="Nombre" style="text-align: center;">
+                                        <h:outputText value="#{producto.nombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Precio" style="text-align: center;">
+                                        <h:outputText value="#{producto.precio}">
+                                            <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>                        
+                    </p:outputPanel>                    
                 </p:dialog>
 
                 <p:dialog header="Imprimir Cuenta" widgetVar="imprimirDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
