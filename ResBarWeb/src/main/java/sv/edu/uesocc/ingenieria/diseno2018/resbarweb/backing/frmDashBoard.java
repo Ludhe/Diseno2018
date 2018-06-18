@@ -6,6 +6,7 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -22,6 +23,7 @@ import sv.edu.diseno.acceso.ManejadorCategorias;
 import sv.edu.diseno.acceso.ManejadorOrden;
 import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
+import sv.edu.diseno.definiciones.DetalleOrdenPK;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Producto;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
@@ -37,9 +39,11 @@ public class frmDashBoard implements Serializable {
     ManejadorCategorias manejadorCategorias;
     private List<Categoria> categorias;
     private Categoria selectedCategoria;
+    private Producto selectedProducto;
+    private int cantidadSelectedProducto=1;
     private MenuModel model;
 
-    
+        
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
@@ -57,15 +61,9 @@ public class frmDashBoard implements Serializable {
     }
     
     public void generarSelectedCateogia(int idCategoria){
-        System.out.println("idCategoria = "+idCategoria);
         for (Categoria categoria : categorias) {
             if(idCategoria == categoria.getIdCategoria()){
-                selectedCategoria = categoria;
-                List<Producto> lp = selectedCategoria.getProductoList();
-                System.out.println(lp);
-                for (Producto producto : lp) {
-                    System.out.println(producto.nombre);
-                }
+                selectedCategoria = categoria;                
                 break;
             }            
         }
@@ -82,6 +80,27 @@ public class frmDashBoard implements Serializable {
         } catch (ErrorAplicacion e) {
             context2.addMessage(null, new FacesMessage("ERROR", "Orden Modificada"));
         }
+    }
+    
+    public void saveDetalleOrden(){
+        //RequestContext context = RequestContext.getCurrentInstance();
+        //FacesContext context2 = FacesContext.getCurrentInstance();
+        boolean exits = false;
+        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
+            if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+                exits = true;
+            }
+        }
+        if (exits) {
+            System.out.println("Existe");
+            
+        }else{
+            System.out.println("Agregar");
+        }
+        System.out.println("Producto: "+selectedProducto.nombre);
+        System.out.println("Cantidad: "+cantidadSelectedProducto);
+        
+        
     }
     
     public MenuModel getModel() {
@@ -121,5 +140,20 @@ public class frmDashBoard implements Serializable {
         this.selectedCategoria = selectedCategoria;
     }
     
+    public Producto getSelectedProducto() {
+        return selectedProducto;
+    }
+
+    public void setSelectedProducto(Producto selectedProducto) {
+        this.selectedProducto = selectedProducto;
+    }    
+    
+    public int getCantidadSelectedProducto() {
+        return cantidadSelectedProducto;
+    }
+
+    public void setCantidadSelectedProducto(int cantidadSelectedProducto) {
+        this.cantidadSelectedProducto = cantidadSelectedProducto;
+    }
     
 }

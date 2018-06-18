@@ -204,10 +204,12 @@
                                 <p:menu  model="#{frmDashboard.model}"/>
                             </div>
                             <div class="col-8">
-                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" rendered="true">
+                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" emptyMessage="Selecione una Categoria"
+                                             selectionMode="single" selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idCategoria}">
                                     <f:facet name="header">
                                         Productos
                                     </f:facet>
+                                    <p:ajax event="rowSelect" listener="#{frmDashboard.setCantidadSelectedProducto(1)}" update=":form:keypadPanel"/>
                                     <p:column headerText="Nombre" style="text-align: center;">
                                         <h:outputText value="#{producto.nombre}"/>
                                     </p:column>
@@ -216,7 +218,22 @@
                                             <f:convertNumber pattern="$#0.00" locale="es_US"/>
                                         </h:outputText>
                                     </p:column>
-                                </p:dataTable>
+                                    <p:column headerText="Nombre" style="text-align: center;">
+                                        <h:outputText value="#{producto.nombre}"/>
+                                    </p:column>
+                                </p:dataTable>                                
+                                <div class="row" align="center">
+                                    <div class="col-7">
+                                        <p:outputPanel id="keypadPanel" style="text-align:center;">
+                                            <h:outputText value="Cantidad: " rendered="#{not empty frmDashboard.selectedProducto}"/>
+                                            <p:keyboard id="keypad" value="#{frmDashboard.cantidadSelectedProducto}" keypadOnly="true" rendered="#{not empty frmDashboard.selectedProducto}"/>
+                                        </p:outputPanel>
+                                    </div>
+                                    <div class="col-2"></div>
+                                    <div class="col-3">
+                                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}"/>
+                                    </div>
+                                </div>                                
                             </div>
                         </div>                        
                     </p:outputPanel>                    
