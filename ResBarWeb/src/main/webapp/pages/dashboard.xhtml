@@ -158,7 +158,7 @@
                                      style="width: 100%;" emptyMessage="Selecione una Categoria" selectionMode="single" 
                                      selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idProducto}">
                             <f:facet name="header">Productos</f:facet>
-                            <p:ajax event="rowSelect" listener="#{frmDashboard.logDatos()}"/>
+                            <p:ajax event="rowSelect" update=":formCategorias:productosContador"/>
                             <p:column headerText="Nombre" style="text-align: center;">
                                 <h:outputText value="#{producto.nombre}"/>
                             </p:column>
@@ -168,6 +168,10 @@
                                 </h:outputText>
                             </p:column>
                         </p:dataTable>
+                        <br></br>
+                        <h:outputLabel for="productosContador" value="Cantidad"/>
+                        <p:inputText id="productosContador" type="number" value="#{frmDashboard.cantidadProducto}"/>
+                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}"/>
                     </div>
                 </div>
             </h:form>

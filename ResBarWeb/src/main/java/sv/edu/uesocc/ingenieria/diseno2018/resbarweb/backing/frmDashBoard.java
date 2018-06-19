@@ -6,6 +6,7 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import sv.edu.diseno.acceso.ManejadorCategorias;
 import sv.edu.diseno.acceso.ManejadorOrden;
 import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
+import sv.edu.diseno.definiciones.DetalleOrdenPK;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Producto;
 
@@ -31,46 +33,73 @@ public class frmDashBoard implements Serializable {
     private List<Orden> ordenes;
     private Orden selectedOrden;
     private DetalleOrden selectedDetalleOrden;
-    
+
     ManejadorCategorias manejadorCategorias;
     private List<Categoria> categorias;
     private Categoria selectedCategoria;
-    
+
     private Producto selectedProducto;
+    private int cantidadProducto = 1;
 
     private MenuModel model;
 
-    
     //Metodos De la Importantes del FRM
     @PostConstruct
     public void init() {
-        ordenes = new ArrayList<>();        
+        ordenes = new ArrayList<>();
         ordenes = manejadorOrden.ObtenerActivas();
-        
+
         categorias = new ArrayList<>();
         categorias = manejadorCategorias.Obtener(true);
-        
+
         selectedOrden = new Orden();
         selectedProducto = new Producto();
         selectedDetalleOrden = new DetalleOrden();
-        
+
         model = new DefaultMenuModel();
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
         for (Categoria categoria : categorias) {
             DefaultMenuItem item = new DefaultMenuItem(categoria.getNombre());
-            item.setCommand("#{frmDashboard.selectCategoria("+categoria.getIdCategoria()+")}");
+            item.setCommand("#{frmDashboard.selectCategoria(" + categoria.getIdCategoria() + ")}");
             item.setUpdate("productosTabla");
             firstSubmenu.addElement(item);
         }
         model.addElement(firstSubmenu);
     }
-    
-    public void saveOrden(){
+
+    public void saveOrden() {
         manejadorOrden.Actualizar(selectedOrden);
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('modificarOrdenDialog').hide();");        
+        context.execute("PF('modificarOrdenDialog').hide();");
     }
-    
+
+    public void saveDetalleOrden() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        //FacesContext context2 = FacesContext.getCurrentInstance();
+        boolean exits = false;
+        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
+            if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+                System.out.println("Existe");
+                int v = cantidadProducto + detOrd.getCantidad().intValue();
+                double vd = (double) v;
+                System.out.println("Nueva Cantidad = " + v);
+                detOrd.setCantidad(new BigDecimal(vd));
+                break;
+            }
+        }
+        if (!exits) {
+            System.out.println("Agregar");
+            DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);
+            DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadProducto));
+            detOrd.setProducto(selectedProducto);
+            detOrd.setOrden(selectedOrden);
+            selectedOrden.getDetalleOrdenList().add(detOrd);
+            System.out.println(detOrd);
+            manejadorOrden.Actualizar(selectedOrden);
+        }
+        context.execute("PF('agregarProductoDialog').hide();");
+    }
+
     public void selectCategoria(int idCategoria) {
         for (Categoria categoria : categorias) {
             if (idCategoria == categoria.getIdCategoria()) {
@@ -79,15 +108,15 @@ public class frmDashBoard implements Serializable {
             }
         }
     }
-    
-    public void logDatos(){
+
+    public void logDatos() {
         //System.out.println("Manejador: "+manejadorOrden);
         //System.out.println("ordenes: "+ordenes);
         //System.out.println("selectedOrden: "+selectedOrden);
-        System.out.println("selectedProduct: "+selectedProducto);
+        System.out.println("selectedProduct: " + selectedProducto);
+        System.out.println("cantida: " + cantidadProducto);
     }
-    
-    
+
     //GETTERS Y SETTERS DE ORDEN
     public List<Orden> getOrdenes() {
         return ordenes;
@@ -104,7 +133,7 @@ public class frmDashBoard implements Serializable {
     public void setSelectedOrden(Orden selectedOrden) {
         this.selectedOrden = selectedOrden;
     }
-    
+
     public DetalleOrden getSelectedDetalleOrden() {
         return selectedDetalleOrden;
     }
@@ -112,9 +141,8 @@ public class frmDashBoard implements Serializable {
     public void setSelectedDetalleOrden(DetalleOrden selectedDetalleOrden) {
         this.selectedDetalleOrden = selectedDetalleOrden;
     }
-    
+
     //GETTERS Y SETTERS DE CATEGORIOAS
-    
     public List<Categoria> getCategorias() {
         return categorias;
     }
@@ -122,7 +150,7 @@ public class frmDashBoard implements Serializable {
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
     }
-    
+
     public Categoria getSelectedCategoria() {
         return selectedCategoria;
     }
@@ -130,7 +158,7 @@ public class frmDashBoard implements Serializable {
     public void setSelectedCategoria(Categoria selectedCategoria) {
         this.selectedCategoria = selectedCategoria;
     }
-    
+
     //GETTERS Y SETTERS DEL PRODUCTO
     public Producto getSelectedProducto() {
         return selectedProducto;
@@ -139,7 +167,7 @@ public class frmDashBoard implements Serializable {
     public void setSelectedProducto(Producto selectedProducto) {
         this.selectedProducto = selectedProducto;
     }
-    
+
     //GETTERS Y SETTERS DEL MODELO
     public MenuModel getModel() {
         return model;
@@ -148,5 +176,14 @@ public class frmDashBoard implements Serializable {
     public void setModel(MenuModel model) {
         this.model = model;
     }
-    
+
+    //GETTER y SETTERS DE cantidad Producto
+    public int getCantidadProducto() {
+        return cantidadProducto;
+    }
+
+    public void setCantidadProducto(int cantidadProducto) {
+        this.cantidadProducto = cantidadProducto;
+    }
+
 }
