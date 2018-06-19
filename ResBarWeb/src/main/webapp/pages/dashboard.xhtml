@@ -38,7 +38,7 @@
                                      selectionMode="single" selection="#{frmDashboard.selectedOrden}"
                                      rowKey="#{orden.idOrden}">
                             <f:facet name="header">Ordenes Activas</f:facet>
-                            <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update="opcionesOrden modificarOrden"/>
+                            <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update="opcionesOrden modificarOrden formOrdenProductos"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{orden.idOrden}" />
                             </p:column>
@@ -74,34 +74,32 @@
         <p:dialog id="opcionesOrden" header="Opciones de Orden" widgetVar="opcionesOrdenDialog" modal="true" 
                   showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="formOpcionesOrden">
-                <p:outputPanel style="font-size: 1.5vw;text-align: center">
-                    <p:panelGrid id="panelOpcionesOrden" columns="2" rendered="#{not empty frmDashboard.selectedOrden}">
-                        <h:outputText value="Id:"/>
-                        <h:outputText value="#{frmDashboard.selectedOrden.idOrden}"/>
-                        <h:outputText value="Mesero:" />                            
-                        <h:outputText value="#{frmDashboard.selectedOrden.mesero}"/>
-                        <h:outputText value="Mesa:" />
-                        <h:outputText value="#{frmDashboard.selectedOrden.mesa}"/>
-                        <h:outputText value="Cliente:" />
-                        <h:outputText value="#{frmDashboard.selectedOrden.cliente}"/>
-                        <h:outputText value="Fecha:" />
-                        <h:outputText value="#{frmDashboard.selectedOrden.fecha}">
-                            <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
-                        </h:outputText>
-                        <h:outputText value="Comentario:"/>
-                        <h:outputText value="#{frmDashboard.selectedOrden.comentario}"/>
-                        <h:outputText value="Total:"/>
-                        <h:outputText value="#{frmDashboard.selectedOrden.total}">
-                            <f:convertNumber pattern="$#0.00" locale="es_US"/>
-                        </h:outputText>
-                    </p:panelGrid>
-                    <br></br>
-                    <p:commandButton value="Modificar Orden" onclick="PF('modificarOrdenDialog').show()"/>
-                    <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"/>
-                    <br></br>
-                    <p:commandButton value="Imprimir Cuenta"/>
-                    <p:commandButton value="Tramitar Pago"/>                    
-                </p:outputPanel>                
+                <p:panelGrid id="panelOpcionesOrden" columns="2" rendered="#{not empty frmDashboard.selectedOrden}">
+                    <h:outputText value="Id:"/>
+                    <h:outputText value="#{frmDashboard.selectedOrden.idOrden}"/>
+                    <h:outputText value="Mesero:" />                            
+                    <h:outputText value="#{frmDashboard.selectedOrden.mesero}"/>
+                    <h:outputText value="Mesa:" />
+                    <h:outputText value="#{frmDashboard.selectedOrden.mesa}"/>
+                    <h:outputText value="Cliente:" />
+                    <h:outputText value="#{frmDashboard.selectedOrden.cliente}"/>
+                    <h:outputText value="Fecha:" />
+                    <h:outputText value="#{frmDashboard.selectedOrden.fecha}">
+                        <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
+                    </h:outputText>
+                    <h:outputText value="Comentario:"/>
+                    <h:outputText value="#{frmDashboard.selectedOrden.comentario}"/>
+                    <h:outputText value="Total:"/>
+                    <h:outputText value="#{frmDashboard.selectedOrden.total}">
+                        <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                    </h:outputText>
+                </p:panelGrid>
+                <br></br>
+                <p:commandButton value="Modificar Orden" onclick="PF('modificarOrdenDialog').show()"/>
+                <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"/>
+                <br></br>
+                <p:commandButton value="Imprimir Cuenta"/>
+                <p:commandButton value="Tramitar Pago"/>
             </h:form>
         </p:dialog>
         <!--2 Modificar Orden Dialog-->
@@ -127,15 +125,51 @@
                 <p:commandButton value="Guardar" actionListener="#{frmDashboard.saveOrden()}" update="form:ordenesTabla formOpcionesOrden:panelOpcionesOrden"/>
             </h:form>            
         </p:dialog>
-        <!--3 Modificar Productos-->
+        <!--2.1 Dialog Modificar Productos-->
         <p:dialog id="modificarOrdenProductos" header="Modificar Productos" widgetVar="modificarOrdenProductosDialog" 
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="50%">
             <h:form id="formOrdenProductos">
                 <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" 
                              selectionMode="single" selection="#{frmDashboard.selectedDetalleOrden}"
                              rowKey="#{detalleOrden.orden.idOrden}">
-                    
+                    <f:facet name="header">Detalles de la Orden</f:facet>                    
+                    <p:column headerText="Producto" style="text-align: center;">
+                        <h:outputText value="#{detalleOrden.producto.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center;">
+                        <h:outputText value="#{detalleOrden.cantidad}">
+                            <f:convertNumber pattern="#0" locale="es_US"/>
+                        </h:outputText>
+                    </p:column>
                 </p:dataTable>
+                <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+            </h:form>            
+        </p:dialog>
+        <!--2.2 Dialog Agregar Productos-->
+        <p:dialog id="agregarProductos" header="Agregar Productos" widgetVar="agregarProductoDialog" 
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
+            <h:form id="formCategorias">
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <p:menu model="#{frmDashboard.model}" />
+                    </div>
+                    <div class="col-8">
+                        <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" 
+                                     style="width: 100%;" emptyMessage="Selecione una Categoria" selectionMode="single" 
+                                     selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idProducto}">
+                            <f:facet name="header">Productos</f:facet>
+                            <p:ajax event="rowSelect" listener="#{frmDashboard.logDatos()}"/>
+                            <p:column headerText="Nombre" style="text-align: center;">
+                                <h:outputText value="#{producto.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Precio" style="text-align: center;">
+                                <h:outputText value="#{producto.precio}">
+                                    <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
             </h:form>
         </p:dialog>
     </h:body>
