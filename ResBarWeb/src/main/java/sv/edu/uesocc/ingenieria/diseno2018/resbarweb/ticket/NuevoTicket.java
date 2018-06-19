@@ -8,6 +8,7 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket;
 import java.util.List;
 import sv.edu.diseno.acceso.ManejadorParametros;
 import sv.edu.diseno.definiciones.DetalleOrden;
+import static sv.edu.diseno.definiciones.DetalleOrden_.orden;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Parametro;
 
@@ -85,7 +86,7 @@ public class NuevoTicket {
         PrinterService printerService = new PrinterService();
         String ticket = "";
         for (Parametro p : parametros) {
-            ticket += p.nombre+": " +p.valor + "     \n";
+            ticket += p.nombre + ": " + p.valor + "     \n";
         }
         ticket += "------------------------------------------------";
         ticket += "           Gracias por visitarnos               \n";
@@ -109,8 +110,70 @@ public class NuevoTicket {
         ticket += "   " + orden.total + "                             \n\n";
         ticket += "------------------------------------------------\n\n\n\n";
         System.out.println(ticket);
-//        printerService.printString("POS-80 (copy 1)", ticket);
-//        byte[] cutP = new byte[]{29, 'V', 1};
-//        printerService.printBytes("POS-80 (copy 1)", cutP);
+        printerService.printString("POS-80 (copy 1)", ticket);
+        byte[] cutP = new byte[]{29, 'V', 1};
+        printerService.printBytes("POS-80 (copy 1)", cutP);
+    }
+
+    public void TicketExtraCocina(List<DetalleOrden> ordenDet) {
+        PrinterService printerService = new PrinterService();
+        String ticket = "";
+        ticket = "------------------------------------------------";
+        ticket += "                  COCINA                        \n";
+        ticket += " Cliente:   " + ordenDet.get(0).orden.cliente + "     Fecha: " + (ordenDet.get(0).orden.fecha.getYear() + 1900) + "/" + ordenDet.get(0).orden.fecha.getMonth() + "/" + ordenDet.get(0).orden.fecha.getDay() + " \n";
+        ticket += " N° Ticket: " + ordenDet.get(0).orden.idOrden + "                                 \n";
+        ticket += " Mesa:      " + ordenDet.get(0).orden.mesa + "               Hora:  " + ordenDet.get(0).orden.fecha.getHours() + ":" + ordenDet.get(0).orden.fecha.getMinutes() + "     \n";
+        ticket += "   ------------------------------------------   ";
+        ticket += "  | Concepto                        Cantidad |  ";
+        ticket += "   ------------------------------------------   ";
+        for (DetalleOrden detalleOrdenList : ordenDet) {
+            if (detalleOrdenList.producto.area == 'C' || detalleOrdenList.producto.area == 'c') {
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
+                }
+                ticket += "    " + producto + "\t\t\t" + detalleOrdenList.cantidad + "   \n";
+            }
+        }           
+        ticket += "   ------------------------------------------   ";
+        ticket += "   Comentario:                                  \n";
+        ticket += "   " + ordenDet.get(0).orden.comentario + "                             \n\n";
+        ticket += "------------------------------------------------ \n\n\n\n";
+
+        printerService.printString("POS-80 (copy 1)", ticket);
+        byte[] cutP = new byte[]{29, 'V', 1};
+        printerService.printBytes("POS-80 (copy 1)", cutP);
+    }
+    
+    public void TicketExtraBebida(List<DetalleOrden> ordenDet) {
+        PrinterService printerService = new PrinterService();
+        String ticket = "";
+        ticket = "------------------------------------------------";
+        ticket += "                  BEBIDA                        \n";
+        ticket += " Cliente:   " + ordenDet.get(0).orden.cliente + "     Fecha: " + (ordenDet.get(0).orden.fecha.getYear() + 1900) + "/" + ordenDet.get(0).orden.fecha.getMonth() + "/" + ordenDet.get(0).orden.fecha.getDay() + " \n";
+        ticket += " N° Ticket: " + ordenDet.get(0).orden.idOrden + "                                 \n";
+        ticket += " Mesa:      " + ordenDet.get(0).orden.mesa + "               Hora:  " + ordenDet.get(0).orden.fecha.getHours() + ":" + ordenDet.get(0).orden.fecha.getMinutes() + "     \n";
+        ticket += "   ------------------------------------------   ";
+        ticket += "  | Concepto                        Cantidad |  ";
+        ticket += "   ------------------------------------------   ";
+        for (DetalleOrden detalleOrdenList : ordenDet) {
+            if (detalleOrdenList.producto.area == 'B' || detalleOrdenList.producto.area == 'b') {
+                String producto = "";
+                producto += detalleOrdenList.producto.nombre;
+                for (int i = detalleOrdenList.producto.nombre.length(); i < 20; i++) {
+                    producto += " ";
+                }
+                ticket += "    " + producto + "\t\t\t" + detalleOrdenList.cantidad + "   \n";
+            }
+        }           
+        ticket += "   ------------------------------------------   ";
+        ticket += "   Comentario:                                  \n";
+        ticket += "   " + ordenDet.get(0).orden.comentario + "                             \n\n";
+        ticket += "------------------------------------------------ \n\n\n\n";
+
+        printerService.printString("POS-80 (copy 1)", ticket);
+        byte[] cutP = new byte[]{29, 'V', 1};
+        printerService.printBytes("POS-80 (copy 1)", cutP);
     }
 }
