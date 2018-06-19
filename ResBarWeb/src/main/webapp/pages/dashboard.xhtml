@@ -38,7 +38,7 @@
                                      selectionMode="single" selection="#{frmDashboard.selectedOrden}"
                                      rowKey="#{orden.idOrden}">
                             <f:facet name="header">Ordenes Activas</f:facet>
-                            <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update="opcionesOrden modificarOrden formOrdenProductos"/>
+                            <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update=":opcionesOrden :modificarOrden :formOrdenProductos"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{orden.idOrden}" />
                             </p:column>
@@ -122,7 +122,7 @@
                     <h:outputText value="Comentario: *"/>
                     <p:inputTextarea rows="4" cols="20" value="#{frmDashboard.selectedOrden.comentario}" label="Comentario"/>
                 </h:panelGrid>
-                <p:commandButton value="Guardar" actionListener="#{frmDashboard.saveOrden()}" update="form:ordenesTabla formOpcionesOrden:panelOpcionesOrden"/>
+                <p:commandButton value="Guardar" actionListener="#{frmDashboard.saveOrden()}" update=":form:ordenesTabla :formOpcionesOrden:panelOpcionesOrden"/>
             </h:form>            
         </p:dialog>
         <!--2.1 Dialog Modificar Productos-->
