@@ -6,15 +6,12 @@
 package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
@@ -26,6 +23,7 @@ import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
+import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 
 /**
  *
@@ -43,6 +41,33 @@ public class frmNuevaOrden implements Serializable {
     Date fecha = new Date();
     List<DetalleOrden> productos = new ArrayList<>();
     private MenuModel model;
+    NuevoTicket ticket = new NuevoTicket();
+
+    //Para que se ejecute al inicio
+    @PostConstruct
+    public void init() {
+
+        manejadorOrden = new ManejadorOrden();
+        manejadorCategorias = new ManejadorCategorias();
+        nuevaOrden = new Orden();
+
+        //para mostrar las categorias
+        model = new DefaultMenuModel();
+        categorias = manejadorCategorias.Obtener(true);
+        nuevaOrden.idOrden = manejadorOrden.ObtenerId();
+        DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
+        for (int i = 0; i < categorias.size(); i++) {
+            DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
+            item.setIcon("ui-icon-arrowthick-1-e");
+            firstSubmenu.addElement(item);
+        }
+        model.addElement(firstSubmenu);
+    }
+
+    //getter y setter de las propiedades de la orden
+    public MenuModel getModel() {
+        return model;
+    }
 
     public Orden getNuevaOrden() {
         return nuevaOrden;
@@ -52,26 +77,6 @@ public class frmNuevaOrden implements Serializable {
         this.nuevaOrden = nuevaOrden;
     }
 
-    //Para que se ejecute al inicio
-    @PostConstruct
-    public void init() {
-        model = new DefaultMenuModel();
-        categorias = manejadorCategorias.Obtener(true);
-        nuevaOrden = new Orden();
-        nuevaOrden.idOrden = manejadorOrden.ObtenerId();
-        DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
-        for (int i = 0; i < categorias.size(); i++) {
-            DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
-            item.setIcon("ui-icon-arrowthick-1-e");
-            //item.setCommand("#{administrar.setIdCategoria("+i+")}");
-            item.setCommand("#{frmDashboard.generarSelectedCateogia(" + categorias.get(i).getIdCategoria() + ")}");
-            item.setUpdate(":form:formProductosPanel");
-            firstSubmenu.addElement(item);
-        }
-        model.addElement(firstSubmenu);
-    }
-
-    //getter y setter de las propiedades de la orden
     public int getIdOrden() {
         return nuevaOrden.idOrden;
     }
@@ -112,18 +117,35 @@ public class frmNuevaOrden implements Serializable {
         this.nuevaOrden.comentario = comentario;
     }
 
-    //para hacer post
-    public void save() {
+    //para hacer pasar a agregar productos
+    public void productos() {
         RequestContext context = RequestContext.getCurrentInstance();
+        nuevaOrden.fecha = fecha;
+        context.execute("PF('addProductos').show();");
+    }
+
+    public void addProductos() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        //no ponerlo vacio --->  nuevaOrden.detalleOrdenList = productos; 
+        context.execute("PF('addProductos').hide();");
+    }
+
+    public void cancelar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('addProductos').hide();");
+    }
+
+    //para crear la orden
+    public void guardar() {
         try {
             nuevaOrden.activa = true;
-            nuevaOrden.fecha = fecha;
-            nuevaOrden.detalleOrdenList = productos;
-            nuevaOrden.total = BigDecimal.valueOf(0);
+            nuevaOrden.CalcularTotal();
             manejadorOrden.Insertar(nuevaOrden);
-            context.execute("PF('modificarProductoDialog').show();");
-        } catch (ErrorAplicacion e) {
-
+            //si se crea la nueva orden se imprimen los tickets automaticos
+            ticket.TicketBebida(nuevaOrden);
+            ticket.TicketCocina(nuevaOrden);
+        } catch (Exception e) {
+            
         }
     }
 
