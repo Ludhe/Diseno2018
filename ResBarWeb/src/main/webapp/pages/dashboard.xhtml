@@ -1,258 +1,142 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
     <h:head>
-        <title>DASHBOARD</title>        
-        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
-        <link rel="stylesheet" href="css/simple-grid.css"></link>        
-        <link rel="stylesheet" href="css/dashboard.css"></link>
+        <title>DASHBOARD</title>
         <link rel="stylesheet" href="css/reset.css"></link>
-        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>        
+        <link rel="stylesheet" href="css/simple-grid.css"></link>
+        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
     </h:head>
     <h:body>
-
-        <p:layout fullPage="true">
-            <!--Accesos Rapidos-->
-            <p:layoutUnit position="north" size="150" >
-                <div class="div-accesos-rapidos" style="background-color: #363030;">
-                    <div class="row" align="center">
-                        <div class="col-4">
-                            <a href="dashboard.jsf">
-                                <img src="img/home.png" alt="Ordenes de Trabajo"/>
-                                <br/><label style="color: white; font-size: 1vw;">Inicio</label>
-                            </a>
-                        </div>
-                        <div class="col-4">
-                            <a href="estadisticas.jsf">
-                                <img src="img/dashboard.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
-                            </a>
-                        </div>
-                        <div class="col-4">
-                            <a href="administrarMenu.jsf">
-                                <img src="img/nuevaOrden.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Administrar Menu</label>
-                            </a>
-                        </div>
-                    </div>
+        <!--Top Nav-->
+        <div class="row" align="center" style="background-color: #363030;">
+            <div class="col-4"><a href="dashboard.jsf"><img src="img/home.png" alt="Ordenes de Trabajo"/><br/><label style="color: white; font-size: 1.5vw;">Inicio</label></a></div>
+            <div class="col-4"><a href="estadisticas.jsf"><img src="img/dashboard.png"/><br/><label style="color: white; font-size: 1.5vw;">Estadísticas</label></a></div>
+            <div class="col-4"><a href="administrarMenu.jsf"><img src="img/nuevaOrden.png"/><br/><label style="color: white; font-size: 1.5vw;">Administrar Menu</label></a></div>
+        </div>
+        <!--Body-->
+        <div class="row" align="center">
+            <div class="col-9">
+                <!--Div Buscador-->
+                <div class="row" align="center">
+                    <br></br>
+                    <h:form id="formBuscador">
+                        <p:outputLabel value="Buscar:  " for="autocomplete"/>
+                        <p:inputText id="autocomplete" value="Convertirlo a AUTOCOMPLETE"/>
+                    </h:form>
+                    <br></br>
                 </div>
-            </p:layoutUnit>
-            <p:layoutUnit position="east" size="300">
-                <!--Buscador-->
-
-                <div class="div-buscador">
-                    <div class="row" align="center">
-                        <div class="col-2"></div>
-                        <div class="col-10">
-                            <p:outputLabel value="Agregar Nueva Orden: " for="nueva" />
-                            <a href="nuevaOrden.jsf">
-                                <p:graphicImage id="nueva" url="img/plus.png" class="img-plus-minus" onclick=""/>
-                            </a>
-                        </div>
-                    </div>
-                </div> 
-            </p:layoutUnit>
-            <h:form id="form">
-                <p:growl id="growl" showDetail="true" sticky="true" />
-                <p:layoutUnit position="center">
-
-                    <!--Tabla-->
-                    <div class="buscador">
-                        <div class="row" align="center">
-                            <div class="col-2"></div>
-                            <div class="col-8">
-                                <p:outputLabel value="Buscar:  " for="autocomplete"/>
-                                <p:inputText id="autocomplete" value="Convertirlo a AUTOCOMPLETE"/>
-                            </div>
-                            <div class="col-2"></div>
-                        </div> 
-                    </div>
-                    <p:separator />
-                    <div class="div-tabla">
-                        <div class="row">                    
-                            <div class="col-1"></div>
-                            <div class="col-10">                                
-                                <p:dataTable id="ordenesTabla" var="orden" value="#{frmDashboard.ordenes}"  selectionMode="single" selection="#{frmDashboard.selectedOrden}" rowKey="#{orden.idOrden}">
-                                    <f:facet name="header">
-                                        Ordenes Activas
-                                    </f:facet>
-                                    <p:ajax event="rowSelect" oncomplete="PF('ordenOptions').show()" update=":form:ordenOpcionesPanel :form:modificarPanel :form:detalleOrdenTabla"/>
-                                    <p:column headerText="ID">
-                                        <h:outputText value="#{orden.idOrden}" />
-                                    </p:column>
-
-                                    <p:column headerText="Mesero">
-                                        <h:outputText value="#{orden.mesero}" />
-                                    </p:column>
-
-                                    <p:column headerText="Mesa">
-                                        <h:outputText value="#{orden.mesa}" />
-                                    </p:column>
-
-                                    <p:column headerText="Cliente">
-                                        <h:outputText value="#{orden.cliente}" />
-                                    </p:column>                                    
-
-                                    <p:column headerText="Fecha">
-                                        <h:outputText value="#{orden.fecha}">
-                                            <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
-                                        </h:outputText>
-                                    </p:column>
-
-                                    <p:column headerText="Comentario">
-                                        <h:outputText value="#{orden.comentario}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </div>
-                            <div class="col-1"></div>
-                        </div>            
-                    </div>
-
-
-                </p:layoutUnit>
-
-                <p:dialog header="Opciones de Orden" widgetVar="ordenOptions" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="ordenOpcionesPanel" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty frmDashboard.selectedOrden}" columnClasses="label,value">
-
-                            <h:outputText value="Id:"/>
-                            <h:outputText value="#{frmDashboard.selectedOrden.idOrden}" />
-
-                            <h:outputText value="Mesero:" />                            
-                            <h:outputText value="#{frmDashboard.selectedOrden.mesero}" />                            
-
-                            <h:outputText value="Mesa:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.mesa}" />
-
-                            <h:outputText value="Cliente:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.cliente}" />
-
-                            <h:outputText value="Fecha:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.fecha}">
-                                <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
-                            </h:outputText>
-
-                            <h:outputText value="Comentario:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.comentario}" />                            
-
-                            <h:outputText value="Total:" />
-                            <h:outputText value="#{frmDashboard.selectedOrden.total}">
-                                <f:convertNumber pattern="#0.00" locale="es_US"/>
-                            </h:outputText>
-
-                        </p:panelGrid>                       
-                        <p:commandButton value="Modificar Orden" onclick="PF('modificarDialog').show()"/>
-                        <!--p:button value="Modificar Orden" outcome="nuevaOrden.xhtml"/-->
-                        <p:commandButton value="Modificar Productos" onclick="PF('modificarProductoDialog').show()"/>
-                        <p:commandButton value="Imprimir Cuenta" onclick="PF('imprimirDialog').show()"/>
-                        <p:commandButton value="Tramitar Pago" onclick="PF('tramitarDialog').show()"/>
-                    </p:outputPanel>
-
-                </p:dialog>
-
-                <p:dialog id="modificarPanel" header="Modificar Orden" widgetVar="modificarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">                    
-                    <h:panelGrid columns="3" cellpadding="5px" cellspacing="3px" columnClasses="label, value">                        
-                        <p:outputLabel for="modificarInputIdOrden" value="ID: *" />
-                        <p:inputText id="modificarInputIdOrden" value="#{frmDashboard.selectedOrden.idOrden}" required="true" label="ID" disabled="true"/>
-                        <p:message for="modificarInputIdOrden" />
-
-                        <p:outputLabel for="modificarInputMesero" value="Mesero: *" />
-                        <p:inputText id="modificarInputMesero" value="#{frmDashboard.selectedOrden.mesero}" required="true" label="Mesero"/>
-                        <p:message for="modificarInputMesero" />
-
-                        <p:outputLabel for="modificarInputMesa" value="Mesa: *" />
-                        <p:inputText id="modificarInputMesa" value="#{frmDashboard.selectedOrden.mesa}" required="true" label="Mesa"/>
-                        <p:message for="modificarInputMesa" />
-
-                        <p:outputLabel for="modificarInputCliente" value="Cliente: *" />
-                        <p:inputText id="modificarInputCliente" value="#{frmDashboard.selectedOrden.cliente}" required="true" label="Cliente"/>
-                        <p:message for="modificarInputCliente" />
-
-
-                        <h:outputText value="Comentario: *" />
-                        <p:inputTextarea rows="4" cols="20" value="#{frmDashboard.selectedOrden.comentario}" label="Comentario"/>                                                
-
-                    </h:panelGrid>
-                    <p:commandButton value="OK" actionListener="#{frmDashboard.saveOrden}" update="ordenesTabla ordenOpcionesPanel growl"/>
-                </p:dialog>
-
-                <p:dialog header="Modificar Productos" widgetVar="modificarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="40%">
-                    <p:dataTable id="detalleOrdenTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" style="width: 100%;">
-                        <f:facet name="header">
-                            Detalles de la Orden
-                        </f:facet>
-                        <p:column headerText="Producto" style="text-align: center;">
-                            <h:outputText value="#{detalleOrden.producto.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Cantidad" style="text-align: center;">
-                            <h:outputText value="#{detalleOrden.cantidad}">
-                                <f:convertNumber pattern="#0" locale="es_US"/>
-                            </h:outputText>
-                        </p:column>
-                    </p:dataTable>
-                    <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()" update="ordenesTabla ordenOpcionesPanel growl"/>
-                </p:dialog>
-
-                <p:dialog header="Agregar Productos" widgetVar="agregarProductoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
-                    <p:outputPanel id="agregarProductosPanel" style="text-align:center;">
-                        <div class="row" align="center">
-                            <div class="col-4">
-                                <p:menu  model="#{frmDashboard.model}"/>
-                            </div>
-                            <div class="col-8">
-                                <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" style="width: 100%;" emptyMessage="Selecione una Categoria"
-                                             selectionMode="single" selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idCategoria}">
-                                    <f:facet name="header">
-                                        Productos
-                                    </f:facet>
-                                    <p:ajax event="rowSelect" listener="#{frmDashboard.setCantidadSelectedProducto(1)}" update=":form:keypadPanel"/>
-                                    <p:column headerText="Nombre" style="text-align: center;">
-                                        <h:outputText value="#{producto.nombre}"/>
-                                    </p:column>
-                                    <p:column headerText="Precio" style="text-align: center;">
-                                        <h:outputText value="#{producto.precio}">
-                                            <f:convertNumber pattern="$#0.00" locale="es_US"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="Nombre" style="text-align: center;">
-                                        <h:outputText value="#{producto.nombre}"/>
-                                    </p:column>
-                                </p:dataTable>                                
-                                <div class="row" align="center">
-                                    <div class="col-7">
-                                        <p:outputPanel id="keypadPanel" style="text-align:center;">
-                                            <h:outputText value="Cantidad: " rendered="#{not empty frmDashboard.selectedProducto}"/>
-                                            <p:keyboard id="keypad" value="#{frmDashboard.cantidadSelectedProducto}" keypadOnly="true" rendered="#{not empty frmDashboard.selectedProducto}"/>
-                                        </p:outputPanel>
-                                    </div>
-                                    <div class="col-2"></div>
-                                    <div class="col-3">
-                                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":form:detalleOrdenTabla"/>
-                                    </div>
-                                </div>                                
-                            </div>
-                        </div>                        
-                    </p:outputPanel>                    
-                </p:dialog>
-
-                <p:dialog header="Imprimir Cuenta" widgetVar="imprimirDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:commandButton value="Ticket cocina" actionListener="#{frmDashboard.imprimirCocina()}"/>
-                    <p:commandButton value="Ticket bebida" actionListener="#{frmDashboard.imprimirBebida()}"/>
-                </p:dialog>
-
-                <p:dialog header="Tramitar Pago" widgetVar="tramitarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:commandButton value="Ticket Venta" actionListener="#{frmDashboard.imprimirVenta()}"/>
-
-                </p:dialog>
-
-
-
+                <!--Tabla de Ordenes-->
+                <div class="row" align="center">
+                    <h:form id="form">
+                        <p:growl id="msgs" showDetail="true" />
+                        <p:dataTable id="ordenesTabla" var="orden" value="#{frmDashboard.ordenes}" 
+                                     selectionMode="single" selection="#{frmDashboard.selectedOrden}"
+                                     rowKey="#{orden.idOrden}">
+                            <f:facet name="header">Ordenes Activas</f:facet>
+                            <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update="opcionesOrden modificarOrden"/>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{orden.idOrden}" />
+                            </p:column>
+                            <p:column headerText="Mesero">
+                                <h:outputText value="#{orden.mesero}" />
+                            </p:column>
+                            <p:column headerText="Mesa">
+                                <h:outputText value="#{orden.mesa}" />
+                            </p:column>
+                            <p:column headerText="Cliente">
+                                <h:outputText value="#{orden.cliente}" />
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{orden.fecha}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Comentario">
+                                <h:outputText value="#{orden.comentario}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+            <div class="col-3">
+                <br></br><br></br><br></br>
+                <p:outputLabel value="Agregar Nueva Orden: " for="nueva" />
+                <a href="nuevaOrden.jsf"><p:graphicImage id="nueva" url="img/plus.png" class="img-plus-minus" onclick=""/></a>
+            </div>            
+        </div>
+        <!--Todos los Dialogs-->
+        <!--1 Opciones de la Orden-->
+        <p:dialog id="opcionesOrden" header="Opciones de Orden" widgetVar="opcionesOrdenDialog" modal="true" 
+                  showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="formOpcionesOrden">
+                <p:outputPanel style="font-size: 1.5vw;text-align: center">
+                    <p:panelGrid id="panelOpcionesOrden" columns="2" rendered="#{not empty frmDashboard.selectedOrden}">
+                        <h:outputText value="Id:"/>
+                        <h:outputText value="#{frmDashboard.selectedOrden.idOrden}"/>
+                        <h:outputText value="Mesero:" />                            
+                        <h:outputText value="#{frmDashboard.selectedOrden.mesero}"/>
+                        <h:outputText value="Mesa:" />
+                        <h:outputText value="#{frmDashboard.selectedOrden.mesa}"/>
+                        <h:outputText value="Cliente:" />
+                        <h:outputText value="#{frmDashboard.selectedOrden.cliente}"/>
+                        <h:outputText value="Fecha:" />
+                        <h:outputText value="#{frmDashboard.selectedOrden.fecha}">
+                            <f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss"/>
+                        </h:outputText>
+                        <h:outputText value="Comentario:"/>
+                        <h:outputText value="#{frmDashboard.selectedOrden.comentario}"/>
+                        <h:outputText value="Total:"/>
+                        <h:outputText value="#{frmDashboard.selectedOrden.total}">
+                            <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                        </h:outputText>
+                    </p:panelGrid>
+                    <br></br>
+                    <p:commandButton value="Modificar Orden" onclick="PF('modificarOrdenDialog').show()"/>
+                    <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"/>
+                    <br></br>
+                    <p:commandButton value="Imprimir Cuenta"/>
+                    <p:commandButton value="Tramitar Pago"/>                    
+                </p:outputPanel>                
             </h:form>
-        </p:layout>
+        </p:dialog>
+        <!--2 Modificar Orden Dialog-->
+        <p:dialog id="modificarOrden" header="Modificar Orden" widgetVar="modificarOrdenDialog" 
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="formModificarOrden">
+                <h:panelGrid columns="3" cellpadding="5px" cellspacing="3px" columnClasses="label, value">
+                    <p:outputLabel for="modificarInputIdOrden" value="ID: *"/>
+                    <p:inputText id="modificarInputIdOrden" value="#{frmDashboard.selectedOrden.idOrden}" required="true" label="ID" disabled="true"/>
+                    <p:message for="modificarInputIdOrden"/>
+                    <p:outputLabel for="modificarInputMesero" value="Mesero: *"/>
+                    <p:inputText id="modificarInputMesero" value="#{frmDashboard.selectedOrden.mesero}" required="true" label="Mesero"/>
+                    <p:message for="modificarInputMesero"/>
+                    <p:outputLabel for="modificarInputMesa" value="Mesa: *"/>
+                    <p:inputText id="modificarInputMesa" value="#{frmDashboard.selectedOrden.mesa}" required="true" label="Mesa"/>
+                    <p:message for="modificarInputMesa"/>
+                    <p:outputLabel for="modificarInputCliente" value="Cliente: *"/>
+                    <p:inputText id="modificarInputCliente" value="#{frmDashboard.selectedOrden.cliente}" required="true" label="Cliente"/>
+                    <p:message for="modificarInputCliente"/>
+                    <h:outputText value="Comentario: *"/>
+                    <p:inputTextarea rows="4" cols="20" value="#{frmDashboard.selectedOrden.comentario}" label="Comentario"/>
+                </h:panelGrid>
+                <p:commandButton value="Guardar" actionListener="#{frmDashboard.saveOrden()}" update="form:ordenesTabla formOpcionesOrden:panelOpcionesOrden"/>
+            </h:form>            
+        </p:dialog>
+        <!--3 Modificar Productos-->
+        <p:dialog id="modificarOrdenProductos" header="Modificar Productos" widgetVar="modificarOrdenProductosDialog" 
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="50%">
+            <h:form id="formOrdenProductos">
+                <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" 
+                             selectionMode="single" selection="#{frmDashboard.selectedDetalleOrden}"
+                             rowKey="#{detalleOrden.orden.idOrden}">
+                    
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
     </h:body>
 </html>
-
