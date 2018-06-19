@@ -43,6 +43,7 @@ public class frmDashBoard implements Serializable {
     private Producto selectedProducto;
     private int cantidadSelectedProducto = 1;
     private MenuModel model;
+    NuevoTicket ticket = new NuevoTicket();
 
     @PostConstruct
     public void init() {
@@ -120,6 +121,22 @@ public class frmDashBoard implements Serializable {
 
     public MenuModel getModel() {
         return model;
+    }
+    
+    public void imprimirCocina(){
+        ticket.TicketCocina(selectedOrden);
+    }
+    
+    public void imprimirBebida(){
+        ticket.TicketBebida(selectedOrden);
+    }
+    
+    public void imprimirVenta(){
+        ticket.TicketVenta(selectedOrden);
+    }
+    
+    public void calcularTotal(){
+        selectedOrden.CalcularTotal();
     }
 
     //ALL GETTERS AND SETTERS

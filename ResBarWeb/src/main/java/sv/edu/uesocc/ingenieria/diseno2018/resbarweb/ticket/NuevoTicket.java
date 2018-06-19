@@ -88,7 +88,7 @@ public class NuevoTicket {
             ticket += p.nombre+": " +p.valor + "     \n";
         }
         ticket += "------------------------------------------------";
-        ticket += "                 VENTA                         \n";
+        ticket += "           Gracias por visitarnos               \n";
         ticket += "------------------------------------------------\n\n\n\n";
         ticket += " Cliente:   " + orden.cliente + "     Fecha: " + (orden.fecha.getYear() + 1900) + "/" + orden.fecha.getMonth() + "/" + orden.fecha.getDay() + " \n";
         ticket += " N° Ticket: " + orden.idOrden + "                                 \n";
