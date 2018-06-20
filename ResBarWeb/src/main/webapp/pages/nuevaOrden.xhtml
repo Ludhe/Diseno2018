@@ -61,7 +61,7 @@
                             <br></br>
                             <div class="row">
                                 <div class="col-8">
-                                    <p:commandButton value="Agregar Productos" actionListener="#{frmNuevaOrden.clearAllSelectionAgregarProducto()}" rendered="#{frmNuevaOrden.nuevaOrden.detalleOrdenList==null}" icon=" ui-icon-circle-plus" update=":formCategorias"/>
+                                    <p:commandButton value="Agregar Productos" actionListener="#{frmNuevaOrden.clearAllSelectionAgregarProducto()}" rendered="#{frmNuevaOrden.nuevaOrden.detalleOrdenList!=null}" icon=" ui-icon-circle-plus" update=":formCategorias"/>
                                     
                                 </div>                    
                                 <div class="col-4"></div>
