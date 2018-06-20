@@ -74,29 +74,30 @@ public class frmDashBoard implements Serializable {
         context.execute("PF('modificarOrdenDialog').hide();");
     }
 
-    public void saveDetalleOrden() {
+    public void saveTempDetalleOrden() {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
-        List<DetalleOrden> list = selectedOrden.getDetalleOrdenList();
+        List<DetalleOrden> list = tempListDetalleOrden;
         for (DetalleOrden detOrd : list) {
             if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
+                System.out.println("Existe el Detalle Orden");
                 int v = cantidadProducto + detOrd.getCantidad().intValue();
                 System.out.println("Nueva Cantidad = " + v);
                 detOrd.setCantidad(new BigDecimal((double) v));
                 exits = true;
-                manejadorOrden.Actualizar(selectedOrden);
+                //manejadorOrden.Actualizar(selectedOrden);
                 break;
             }
         }
         if (!exits) {
+            System.out.println("Creando el Detalle Orden");
             DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);
             DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadProducto));
             detOrd.setProducto(selectedProducto);
             detOrd.setOrden(selectedOrden);
-            selectedOrden.getDetalleOrdenList().add(detOrd);
-            System.out.println(detOrd);
-            manejadorOrden.Actualizar(selectedOrden);
+            tempListDetalleOrden.add(detOrd);
+            //manejadorOrden.Actualizar(selectedOrden);
         }
         context.execute("PF('agregarProductoDialog').hide();");
     }
@@ -109,13 +110,18 @@ public class frmDashBoard implements Serializable {
             }
         }
     }
+    
+    public void cacheTempDetalleOrde(){
+        tempListDetalleOrden = new ArrayList<>();
+    }
 
     public void logDatos() {
         //System.out.println("Manejador: "+manejadorOrden);
         //System.out.println("ordenes: "+ordenes);
         //System.out.println("selectedOrden: "+selectedOrden);
-        System.out.println("selectedProduct: " + selectedProducto);
-        System.out.println("cantida: " + cantidadProducto);
+        //System.out.println("selectedProduct: " + selectedProducto);
+        //System.out.println("cantida: " + cantidadProducto);
+        System.out.println("tempDetallOrden:"+tempListDetalleOrden);
     }
 
     //GETTERS Y SETTERS DE ORDEN

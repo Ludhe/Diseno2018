@@ -96,7 +96,8 @@
                 </p:panelGrid>
                 <br></br>
                 <p:commandButton value="Modificar Orden" onclick="PF('modificarOrdenDialog').show()"/>
-                <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"/>
+                <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"
+                                 actionListener="#{frmDashboard.cacheTempDetalleOrde()}"/>
                 <br></br>
                 <p:commandButton value="Imprimir Cuenta"/>
                 <p:commandButton value="Tramitar Pago"/>
@@ -153,6 +154,8 @@
                         </h:outputText>
                     </p:column>
                 </p:dataTable>
+                <p:commandButton value="Guardar e Imprimir En Espera"/>
+                <p:commandButton value="LOGS" actionListener="#{frmDashboard.logDatos()}"/>
                 <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
             </h:form>            
         </p:dialog>
@@ -182,7 +185,7 @@
                         <br></br>
                         <h:outputLabel for="productosContador" value="Cantidad"/>
                         <p:inputText id="productosContador" type="number" value="#{frmDashboard.cantidadProducto}"/>
-                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>
+                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveTempDetalleOrden()}" update=":formOrdenProductos"/>
                     </div>
                 </div>
             </h:form>
