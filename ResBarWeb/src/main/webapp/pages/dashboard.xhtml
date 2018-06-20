@@ -9,11 +9,11 @@
         <title>DASHBOARD</title>
         <link rel="stylesheet" href="css/reset.css"></link>
         <link rel="stylesheet" href="css/simple-grid.css"></link>
-        <link rel="icon" href="http://localhost:8080/ResBarWeb/pages/img/favicon.png" type="image/png"></link>
+        <link rel="icon" href="img/favicon.png" type="image/png"></link>
     </h:head>
     <h:body>
         <!--Top Nav-->
-        <div class="row" align="center" style="background-color: #363030;">
+        <div class="row" align="center" style="background-color: #363030; position: static;">
             <div class="col-4"><a href="dashboard.jsf"><img src="img/home.png" alt="Ordenes de Trabajo"/><br/><label style="color: white; font-size: 1.5vw;">Inicio</label></a></div>
             <div class="col-4"><a href="estadisticas.jsf"><img src="img/dashboard.png"/><br/><label style="color: white; font-size: 1.5vw;">Estadísticas</label></a></div>
             <div class="col-4"><a href="administrarMenu.jsf"><img src="img/nuevaOrden.png"/><br/><label style="color: white; font-size: 1.5vw;">Administrar Menu</label></a></div>
@@ -26,7 +26,9 @@
                     <br></br>
                     <h:form id="formBuscador">
                         <p:outputLabel value="Buscar:  " for="autocomplete"/>
-                        <p:inputText id="autocomplete" value="Convertirlo a AUTOCOMPLETE"/>
+                        <p:inputText id="autocomplete" value="#{frmDashboard.txtBuscador}">
+                            <p:ajax event="keyup" listener="#{frmDashboard.actualizarOrdenesActivas()}" update=":form"/>
+                        </p:inputText>
                     </h:form>
                     <br></br>
                 </div>
@@ -155,8 +157,17 @@
                     </p:column>
                 </p:dataTable>
                 <br></br>
-                <p:commandButton value="Guardar e Imprimir" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>                
-                <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+                <div class="row">
+                    <div class="col-8">
+                        <p:commandButton value="Guardar e Imprimir" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>                
+                        <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+                    </div>                    
+                    <div class="col-4">
+                        <p:commandButton value="Cancelar Cambios" actionListener="#{frmDashboard.clearTempDetalleOrde()}" onclick="PF('modificarOrdenProductosDialog').hide()"/>
+                    </div>
+
+                </div>
+
             </h:form>            
         </p:dialog>
         <!--2.2 Dialog Agregar Productos-->

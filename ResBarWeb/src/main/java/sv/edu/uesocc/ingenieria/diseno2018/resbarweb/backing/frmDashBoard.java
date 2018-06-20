@@ -28,6 +28,8 @@ import sv.edu.diseno.definiciones.Producto;
 @ManagedBean(name = "frmDashboard")
 @ViewScoped
 public class frmDashBoard implements Serializable {
+    
+    private String txtBuscador;
 
     ManejadorOrden manejadorOrden;
     private List<Orden> ordenes;
@@ -154,6 +156,14 @@ public class frmDashBoard implements Serializable {
     public void clearTempDetalleOrde() {
         tempListDetalleOrden = new ArrayList<>();
     }
+    
+    public void actualizarOrdenesActivas(){
+        if (txtBuscador.isEmpty()) {
+            ordenes = manejadorOrden.ObtenerActivas();
+        }else{
+            ordenes = manejadorOrden.BuscarActivas(txtBuscador);
+        }        
+    }
 
     public void logDatos() {
         //System.out.println("Manejador: "+manejadorOrden);
@@ -241,5 +251,15 @@ public class frmDashBoard implements Serializable {
     public void setTempListDetalleOrden(List<DetalleOrden> tempListDetalleOrden) {
         this.tempListDetalleOrden = tempListDetalleOrden;
     }
+    
+    //GETTES Y SETTER DEL BUSCADOR STRING
+    public String getTxtBuscador() {
+        return txtBuscador;
+    }
+
+    public void setTxtBuscador(String txtBuscador) {
+        this.txtBuscador = txtBuscador;
+    }
+    
 
 }
