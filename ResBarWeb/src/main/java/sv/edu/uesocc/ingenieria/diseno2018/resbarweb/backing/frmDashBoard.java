@@ -79,16 +79,15 @@ public class frmDashBoard implements Serializable {
         boolean exits = false;
         for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
             if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
-                System.out.println("Existe");
                 int v = cantidadProducto + detOrd.getCantidad().intValue();
                 double vd = (double) v;
                 System.out.println("Nueva Cantidad = " + v);
                 detOrd.setCantidad(new BigDecimal(vd));
+                exits = true;
                 break;
             }
         }
         if (!exits) {
-            System.out.println("Agregar");
             DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);
             DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadProducto));
             detOrd.setProducto(selectedProducto);

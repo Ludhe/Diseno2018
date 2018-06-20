@@ -171,7 +171,7 @@
                         <br></br>
                         <h:outputLabel for="productosContador" value="Cantidad"/>
                         <p:inputText id="productosContador" type="number" value="#{frmDashboard.cantidadProducto}"/>
-                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}"/>
+                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>
                     </div>
                 </div>
             </h:form>
