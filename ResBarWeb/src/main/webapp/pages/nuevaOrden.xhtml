@@ -13,38 +13,19 @@
     </h:head>
 
     <h:body>
-        <p:layout fullPage="true">            
+        <!--Top Nav-->
+        <div class="row" align="center" style="background-color: #363030; position: static;">
+            <div class="col-4"><a href="dashboard.jsf"><img src="img/home.png" alt="Ordenes de Trabajo"/><br/><label style="color: white; font-size: 1.5vw;">Inicio</label></a></div>
+            <div class="col-4"><a href="estadisticas.jsf"><img src="img/dashboard.png"/><br/><label style="color: white; font-size: 1.5vw;">Estadísticas</label></a></div>
+            <div class="col-4"><a href="administrarMenu.jsf"><img src="img/nuevaOrden.png"/><br/><label style="color: white; font-size: 1.5vw;">Administrar Menu</label></a></div>
+        </div>
 
-            <!--Accesos Rapidos-->
-            <p:layoutUnit position="north" size="150" >
-                <div class="div-accesos-rapidos" style="background-color: #363030;">
-                    <div class="row" align="center">
-                        <div class="col-4">
-                            <a href="dashboard.jsf">
-                                <img src="img/home.png" alt="Ordenes de Trabajo"/>
-                                <br/><label style="color: white; font-size: 1vw;">Inicio</label>
-                            </a>
-                        </div>
-                        <div class="col-4">
-                            <a href="estadisticas.jsf">
-                                <img src="img/dashboard.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Estadísticas</label>
-                            </a>
-                        </div>
-                        <div class="col-4">
-                            <a href="administrarMenu.jsf">
-                                <img src="img/nuevaOrden.png"/>
-                                <br/><label style="color: white; font-size: 1vw;">Administrar Menú</label>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </p:layoutUnit>
-
-            <!--Datos para la orden-->
-            <p:layoutUnit position="center">
-                <h:form id="form">
-                    <p:panel id="panel" header="NUEVA ORDEN">
+        <!--Datos para la orden-->
+        <div class="row">
+            <div class="col-2"/>
+            <div class="col-8">
+                <p:panel id="panel" header="NUEVA ORDEN">
+                    <h:form id="form">
                         <h:panelGrid columns="2" cellpadding="5">
                             <p:outputLabel value="Orden: " for="idOrden" />
                             <p:inputText readonly="true"  id="idOrden" value="#{frmNuevaOrden.nuevaOrden.idOrden}" />
@@ -62,27 +43,51 @@
                             <p:outputLabel value="Comentario: " for="comentario" /> 
                             <p:inputTextarea id="comentario" value="#{frmNuevaOrden.nuevaOrden.comentario}" ></p:inputTextarea>
                         </h:panelGrid>
-                        <p:commandButton value="Agregar Productos" update="panel" actionListener="#{frmNuevaOrden.productos}" icon=" ui-icon-circle-plus" />
+                        <p:commandButton value="Agregar Productos" actionListener="#{frmNuevaOrden.initDetalleOrden()}" rendered="#{frmNuevaOrden.nuevaOrden.detalleOrdenList==null}" update=":form" icon=" ui-icon-circle-plus"/>
+                        <h:form id="formOrdenProductos" rendered="#{frmNuevaOrden.nuevaOrden.detalleOrdenList!=null}">
+                            <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmNuevaOrden.nuevaOrden.detalleOrdenList}" 
+                                         selectionMode="single" selection="#{frmNuevaOrden.selectedDetalleOrden}" rowKey="#{detalleOrden.detalleOrdenPK}">
+                                <f:facet name="header">Detalles de la Orden</f:facet>
+                                <p:ajax event="rowSelect" listener="#{frmNuevaOrden.logDatos()}"/>
+                                <p:column headerText="Producto" style="text-align: center;">
+                                    <h:outputText value="#{detalleOrden.producto.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad" style="text-align: center;">
+                                    <h:outputText value="#{detalleOrden.cantidad}">
+                                        <f:convertNumber pattern="#0" locale="es_US"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>                                                        
+                            <br></br>
+                            <div class="row">
+                                <div class="col-8">
+                                    <p:commandButton value="Agregar Productos" actionListener="#{frmNuevaOrden.clearAllSelectionAgregarProducto()}" rendered="#{frmNuevaOrden.nuevaOrden.detalleOrdenList==null}" icon=" ui-icon-circle-plus" update=":formCategorias"/>
+                                    
+                                </div>                    
+                                <div class="col-4"></div>
+                            </div>
+                        </h:form>  
                         <p:separator />
                         <p:commandButton value="Crear Orden" actionListener="#{frmNuevaOrden.guardar}" icon="ui-icon-check" />
-                    </p:panel>
-                </h:form>
-            </p:layoutUnit>
+                    </h:form>
+                </p:panel>                            
+            </div>
+            <div class="col-2"/>
+        </div>                    
 
-
-        </p:layout>
-
+        <!--TODOS LOS DIALOG-->
         <!--Agregando Productos -->
-        <p:dialog header="Agregar Productos" widgetVar="addProductos" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
-           <h:form id="formCategorias">
+        <p:dialog id="agregarProductos" header="Agregar Productos" widgetVar="agregarProductoDialog" 
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
+            <h:form id="formCategorias">
                 <div class="row" align="center">
                     <div class="col-4">
-                        <p:menu model="#{frmDashboard.model}" />
+                        <p:menu model="#{frmNuevaOrden.model}" />
                     </div>
                     <div class="col-8">
-                        <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" 
+                        <p:dataTable id="productosTabla" var="producto" value="#{frmNuevaOrden.selectedCategoria.productoList}" 
                                      style="width: 100%;" emptyMessage="Selecione una Categoria" selectionMode="single" 
-                                     selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idProducto}">
+                                     selection="#{frmNuevaOrden.selectedProducto}" rowKey="#{producto.idProducto}">
                             <f:facet name="header">Productos</f:facet>
                             <p:ajax event="rowSelect" update=":formCategorias:productosContador"/>
                             <p:column headerText="Nombre" style="text-align: center;">
@@ -96,8 +101,8 @@
                         </p:dataTable>
                         <br></br>
                         <h:outputLabel for="productosContador" value="Cantidad"/>
-                        <p:inputText id="productosContador" type="number" value="#{frmDashboard.cantidadProducto}"/>
-                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}"/>
+                        <p:inputText id="productosContador" type="number" value="#{frmNuevaOrden.cantidadProducto}"/>
+                        <p:commandButton value="Agregar" actionListener="#{frmNuevaOrden.saveDetalleOrden()}" update=":form:formOrdenProductos:ordenesTabla"/>
                     </div>
                 </div>
             </h:form>
