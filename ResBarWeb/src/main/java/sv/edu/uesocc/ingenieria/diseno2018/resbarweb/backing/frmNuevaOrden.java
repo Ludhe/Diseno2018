@@ -7,7 +7,9 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -108,6 +110,8 @@ public class frmNuevaOrden implements Serializable {
 
     public void guardar() {
         if (!nuevaOrden.detalleOrdenList.isEmpty()) {
+            nuevaOrden.fecha = Date.from(Instant.now());
+            nuevaOrden.activa = true;
             manejadorOrden.Insertar(nuevaOrden);
             NuevoTicket ticket = new NuevoTicket();
             boolean cocina = false, bebidas = false;
