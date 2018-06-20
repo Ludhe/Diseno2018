@@ -129,15 +129,26 @@
         <p:dialog id="modificarOrdenProductos" header="Modificar Productos" widgetVar="modificarOrdenProductosDialog" 
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="50%">
             <h:form id="formOrdenProductos">
-                <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" 
-                             selectionMode="single" selection="#{frmDashboard.selectedDetalleOrden}"
-                             rowKey="#{detalleOrden.orden.idOrden}">
+                <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" >
                     <f:facet name="header">Detalles de la Orden</f:facet>                    
                     <p:column headerText="Producto" style="text-align: center;">
                         <h:outputText value="#{detalleOrden.producto.nombre}"/>
                     </p:column>
                     <p:column headerText="Cantidad" style="text-align: center;">
                         <h:outputText value="#{detalleOrden.cantidad}">
+                            <f:convertNumber pattern="#0" locale="es_US"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+                <br></br>
+                <p:dataTable id="ordenesTemporalesTabla" var="tempDetalleOrden" value="#{frmDashboard.tempListDetalleOrden}"
+                             rendered="#{not empty frmDashboard.tempListDetalleOrden}">
+                    <f:facet name="header">Productos en Espera</f:facet>
+                    <p:column headerText="Producto" style="text-align: center;">
+                        <h:outputText value="#{tempDetalleOrden.producto.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center;">
+                        <h:outputText value="#{tempDetalleOrden.cantidad}">
                             <f:convertNumber pattern="#0" locale="es_US"/>
                         </h:outputText>
                     </p:column>

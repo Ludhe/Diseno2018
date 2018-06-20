@@ -40,6 +40,7 @@ public class frmDashBoard implements Serializable {
 
     private Producto selectedProducto;
     private int cantidadProducto = 1;
+    private List<DetalleOrden> tempListDetalleOrden;
 
     private MenuModel model;
 
@@ -51,7 +52,7 @@ public class frmDashBoard implements Serializable {
 
         categorias = new ArrayList<>();
         categorias = manejadorCategorias.Obtener(true);
-
+        
         selectedOrden = new Orden();
         selectedProducto = new Producto();
         selectedDetalleOrden = new DetalleOrden();
@@ -77,13 +78,14 @@ public class frmDashBoard implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
-        for (DetalleOrden detOrd : selectedOrden.getDetalleOrdenList()) {
+        List<DetalleOrden> list = selectedOrden.getDetalleOrdenList();
+        for (DetalleOrden detOrd : list) {
             if (detOrd.getProducto().idProducto.equals(selectedProducto.idProducto)) {
                 int v = cantidadProducto + detOrd.getCantidad().intValue();
-                double vd = (double) v;
                 System.out.println("Nueva Cantidad = " + v);
-                detOrd.setCantidad(new BigDecimal(vd));
+                detOrd.setCantidad(new BigDecimal((double) v));
                 exits = true;
+                manejadorOrden.Actualizar(selectedOrden);
                 break;
             }
         }
@@ -184,5 +186,16 @@ public class frmDashBoard implements Serializable {
     public void setCantidadProducto(int cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
     }
+    
+    //GETTERS Y SETTERS DE LA LISTA TEMPORAL DE DETALLEORDEN
+    public List<DetalleOrden> getTempListDetalleOrden() {
+        return tempListDetalleOrden;
+    }
+
+    public void setTempListDetalleOrden(List<DetalleOrden> tempListDetalleOrden) {
+        this.tempListDetalleOrden = tempListDetalleOrden;
+    }
+    
+    
 
 }
