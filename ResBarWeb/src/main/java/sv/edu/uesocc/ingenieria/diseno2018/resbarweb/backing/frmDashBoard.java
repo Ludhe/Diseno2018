@@ -101,8 +101,8 @@ public class frmDashBoard implements Serializable {
                 Producto pro = tempDetOrd.getProducto();
                 DetalleOrdenPK detOrdPri = new DetalleOrdenPK(ord.idOrden, pro.idProducto);
                 DetalleOrden detOrd = new DetalleOrden(detOrdPri, cantidad);
-                detOrd.setProducto(selectedProducto);
-                detOrd.setOrden(selectedOrden);
+                detOrd.setProducto(pro);
+                detOrd.setOrden(ord);
                 list.add(detOrd);
                 selectedOrden.setDetalleOrdenList(list);
 
@@ -114,7 +114,7 @@ public class frmDashBoard implements Serializable {
         context.execute("PF('agregarProductoDialog').hide();");
     }
 
-    public void saveTempDetalleOrden() {
+    public void saveTempDetalleOrden() {        
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
