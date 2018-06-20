@@ -41,7 +41,7 @@ public class frmDashBoard implements Serializable {
     private Categoria selectedCategoria;
 
     private Producto selectedProducto;
-    private int cantidadProducto = 1;
+    private int cantidadProducto;
     private List<DetalleOrden> tempListDetalleOrden;
 
     private MenuModel model;
@@ -110,6 +110,7 @@ public class frmDashBoard implements Serializable {
 
             }
         }
+        selectedOrden.CalcularTotal();
         manejadorOrden.Actualizar(selectedOrden);        
         //Mandar a Imprimir la tempList antes de borrarla
         clearTempDetalleOrde();
@@ -128,18 +129,15 @@ public class frmDashBoard implements Serializable {
                 System.out.println("Nueva Cantidad = " + v);
                 detOrd.setCantidad(new BigDecimal((double) v));
                 exits = true;
-                //manejadorOrden.Actualizar(selectedOrden);
                 break;
             }
         }
         if (!exits) {
-            System.out.println("Creando el Detalle Orden");
             DetalleOrdenPK detOrdPri = new DetalleOrdenPK(selectedOrden.idOrden, selectedProducto.idProducto);
             DetalleOrden detOrd = new DetalleOrden(detOrdPri, new BigDecimal((double) cantidadProducto));
             detOrd.setProducto(selectedProducto);
             detOrd.setOrden(selectedOrden);
             tempListDetalleOrden.add(detOrd);
-            //manejadorOrden.Actualizar(selectedOrden);
         }
         context.execute("PF('agregarProductoDialog').hide();");
     }
@@ -151,6 +149,12 @@ public class frmDashBoard implements Serializable {
                 break;
             }
         }
+    }
+    
+    public void clearAllSelectionAgregarProducto(){
+        selectedCategoria = null;
+        selectedProducto = null;
+        cantidadProducto = 1;
     }
 
     public void clearTempDetalleOrde() {
@@ -172,6 +176,7 @@ public class frmDashBoard implements Serializable {
         //System.out.println("selectedProduct: " + selectedProducto);
         //System.out.println("cantida: " + cantidadProducto);
         //System.out.println("tempDetallOrden:"+tempListDetalleOrden);
+        System.out.println("selectedDetalleOrden"+selectedDetalleOrden);
     }
 
     //GETTERS Y SETTERS DE ORDEN

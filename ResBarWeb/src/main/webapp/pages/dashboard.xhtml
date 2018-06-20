@@ -38,7 +38,7 @@
                         <p:growl id="msgs" showDetail="true" />
                         <p:dataTable id="ordenesTabla" var="orden" value="#{frmDashboard.ordenes}" 
                                      selectionMode="single" selection="#{frmDashboard.selectedOrden}"
-                                     rowKey="#{orden.idOrden}">
+                                     rowKey="#{orden.idOrden}" scrollable="true" scrollHeight="300">
                             <f:facet name="header">Ordenes Activas</f:facet>
                             <p:ajax event="rowSelect" oncomplete="PF('opcionesOrdenDialog').show()" update=":opcionesOrden :modificarOrden :formOrdenProductos"/>
                             <p:column headerText="ID">
@@ -132,8 +132,10 @@
         <p:dialog id="modificarOrdenProductos" header="Modificar Productos" widgetVar="modificarOrdenProductosDialog" 
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="50%">
             <h:form id="formOrdenProductos">
-                <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" >
-                    <f:facet name="header">Detalles de la Orden</f:facet>                    
+                <p:dataTable id="ordenesTabla" var="detalleOrden" value="#{frmDashboard.selectedOrden.detalleOrdenList}" 
+                             selectionMode="single" selection="#{frmDashboard.selectedDetalleOrden}" rowKey="#{detalleOrden.detalleOrdenPK}">
+                    <f:facet name="header">Detalles de la Orden</f:facet>
+                    <p:ajax event="rowSelect" listener="#{frmDashboard.logDatos()}"/>
                     <p:column headerText="Producto" style="text-align: center;">
                         <h:outputText value="#{detalleOrden.producto.nombre}"/>
                     </p:column>
@@ -159,11 +161,11 @@
                 <br></br>
                 <div class="row">
                     <div class="col-8">
-                        <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
+                        <p:commandButton value="Agregar Productos" actionListener="#{frmDashboard.clearAllSelectionAgregarProducto()}" onclick="PF('agregarProductoDialog').show()" update=":formCategorias"/>
                         <p:commandButton value="Cancelar Cambios" actionListener="#{frmDashboard.clearTempDetalleOrde()}" onclick="PF('modificarOrdenProductosDialog').hide()"/>
                     </div>                    
                     <div class="col-4">
-                        <p:commandButton value="Guardar e Imprimir" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>                                        
+                        <p:commandButton value="Guardar e Imprimir" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos :form:ordenesTabla :formOpcionesOrden:panelOpcionesOrden"/>
                     </div>
 
                 </div>
