@@ -50,15 +50,14 @@
                             <p:inputText readonly="true"  id="idOrden" value="#{frmNuevaOrden.nuevaOrden.idOrden}" />
 
                             <p:outputLabel value="Mesa: " for="noMesa" />
-                            <p:inputText id="noMesa" required="true" value="#{frmNuevaOrden.nuevaOrden.mesa}" >
-                                <f:validateLength minimum="2" />
+                            <p:inputText id="noMesa" value="#{frmNuevaOrden.nuevaOrden.mesa}" >
                             </p:inputText>
 
                             <p:outputLabel value="Mesero: " for="mesero" />                        
-                            <p:inputText id="mesero" required="true" value="#{frmNuevaOrden.nuevaOrden.mesero}" />
+                            <p:inputText id="mesero" value="#{frmNuevaOrden.nuevaOrden.mesero}" />
 
                             <p:outputLabel value="Cliente: " for="cliente" />                     
-                            <p:inputText id="cliente" required="true" value="#{frmNuevaOrden.nuevaOrden.cliente}" />
+                            <p:inputText id="cliente" value="#{frmNuevaOrden.nuevaOrden.cliente}" />
 
                             <p:outputLabel value="Comentario: " for="comentario" /> 
                             <p:inputTextarea id="comentario" value="#{frmNuevaOrden.nuevaOrden.comentario}" ></p:inputTextarea>
@@ -75,19 +74,32 @@
 
         <!--Agregando Productos -->
         <p:dialog header="Agregar Productos" widgetVar="addProductos" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
-            <h:form id="addProductosForm">
-                <p:outputPanel id="agregarProductosPanel" style="text-align:center;">
-                    <div class="row" align="center">
-                        <div class="col-4">
-                            <p:menu  model="#{frmNuevaOrden.model}"/>
-                        </div>
-                        <div class="col-8">
-
-                        </div>
-                        <p:commandButton value="Aceptar" actionListener="#{frmNuevaOrden.addProductos}" />
-                        <p:commandButton value="Cancelar" actionListener="#{frmNuevaOrden.cancelar}"/>
+           <h:form id="formCategorias">
+                <div class="row" align="center">
+                    <div class="col-4">
+                        <p:menu model="#{frmDashboard.model}" />
                     </div>
-                </p:outputPanel>
+                    <div class="col-8">
+                        <p:dataTable id="productosTabla" var="producto" value="#{frmDashboard.selectedCategoria.productoList}" 
+                                     style="width: 100%;" emptyMessage="Selecione una Categoria" selectionMode="single" 
+                                     selection="#{frmDashboard.selectedProducto}" rowKey="#{producto.idProducto}">
+                            <f:facet name="header">Productos</f:facet>
+                            <p:ajax event="rowSelect" update=":formCategorias:productosContador"/>
+                            <p:column headerText="Nombre" style="text-align: center;">
+                                <h:outputText value="#{producto.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Precio" style="text-align: center;">
+                                <h:outputText value="#{producto.precio}">
+                                    <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                        <br></br>
+                        <h:outputLabel for="productosContador" value="Cantidad"/>
+                        <p:inputText id="productosContador" type="number" value="#{frmDashboard.cantidadProducto}"/>
+                        <p:commandButton value="Agregar" actionListener="#{frmDashboard.saveDetalleOrden()}"/>
+                    </div>
+                </div>
             </h:form>
         </p:dialog>
 

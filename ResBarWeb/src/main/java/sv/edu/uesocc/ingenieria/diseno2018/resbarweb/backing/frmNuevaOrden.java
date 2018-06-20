@@ -22,6 +22,7 @@ import sv.edu.diseno.acceso.ManejadorOrden;
 import sv.edu.diseno.definiciones.Categoria;
 import sv.edu.diseno.definiciones.DetalleOrden;
 import sv.edu.diseno.definiciones.Orden;
+import sv.edu.diseno.definiciones.Producto;
 import sv.edu.diseno.excepciones.ErrorAplicacion;
 import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 
@@ -33,41 +34,15 @@ import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 @ViewScoped
 public class frmNuevaOrden implements Serializable {
 
-    //Instanciamos los manejadores
     ManejadorOrden manejadorOrden;
-    private List<Categoria> categorias;
     ManejadorCategorias manejadorCategorias;
+    private List<Categoria> categorias;
+    private Categoria selectedCategoria;
     private Orden nuevaOrden;
-    Date fecha = new Date();
-    List<DetalleOrden> productos = new ArrayList<>();
+    private List<Producto> productList;
+    private Producto selectedProducto;
+
     private MenuModel model;
-    NuevoTicket ticket = new NuevoTicket();
-
-    //Para que se ejecute al inicio
-    @PostConstruct
-    public void init() {
-
-        manejadorOrden = new ManejadorOrden();
-        manejadorCategorias = new ManejadorCategorias();
-        nuevaOrden = new Orden();
-
-        //para mostrar las categorias
-        model = new DefaultMenuModel();
-        categorias = manejadorCategorias.Obtener(true);
-        nuevaOrden.idOrden = manejadorOrden.ObtenerId();
-        DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
-        for (int i = 0; i < categorias.size(); i++) {
-            DefaultMenuItem item = new DefaultMenuItem(categorias.get(i).nombre);
-            item.setIcon("ui-icon-arrowthick-1-e");
-            firstSubmenu.addElement(item);
-        }
-        model.addElement(firstSubmenu);
-    }
-
-    //getter y setter de las propiedades de la orden
-    public MenuModel getModel() {
-        return model;
-    }
 
     public Orden getNuevaOrden() {
         return nuevaOrden;
@@ -77,51 +52,74 @@ public class frmNuevaOrden implements Serializable {
         this.nuevaOrden = nuevaOrden;
     }
 
-    public int getIdOrden() {
-        return nuevaOrden.idOrden;
+    public List<Producto> getProductList() {
+        return productList;
     }
 
-    public void setIdOrden(int idOrden) {
-        this.nuevaOrden.idOrden = idOrden;
+    public void setProductList(List<Producto> productList) {
+        this.productList = productList;
     }
 
-    public String getNoMesa() {
-        return nuevaOrden.mesa;
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 
-    public void setNoMesa(String mesa) {
-        this.nuevaOrden.mesa = mesa;
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 
-    public String getMesero() {
-        return nuevaOrden.mesero;
+    public Categoria getSelectedCategoria() {
+        return selectedCategoria;
     }
 
-    public void setMesero(String mesero) {
-        this.nuevaOrden.mesero = mesero;
+    public void setSelectedCategoria(Categoria selectedCategoria) {
+        this.selectedCategoria = selectedCategoria;
     }
 
-    public String getCliente() {
-        return nuevaOrden.cliente;
+    //GETTERS Y SETTERS DEL PRODUCTO
+    public Producto getSelectedProducto() {
+        return selectedProducto;
     }
 
-    public void setCliente(String cliente) {
-        this.nuevaOrden.cliente = cliente;
+    public void setSelectedProducto(Producto selectedProducto) {
+        this.selectedProducto = selectedProducto;
     }
 
-    public String getComentario() {
-        return nuevaOrden.comentario;
+    //GETTERS Y SETTERS DEL MODELO
+    public MenuModel getModel() {
+        return model;
     }
 
-    public void setComentario(String comentario) {
-        this.nuevaOrden.comentario = comentario;
+    public void setModel(MenuModel model) {
+        this.model = model;
+    }
+
+    @PostConstruct
+    public void init() {
+        categorias = new ArrayList<>();
+        categorias = manejadorCategorias.Obtener(true);
+        selectedProducto = new Producto();
+        model = new DefaultMenuModel();
+        nuevaOrden = new Orden();
+        nuevaOrden.idOrden = ManejadorOrden.ObtenerId();
+        DefaultSubMenu firstSubmenu = new DefaultSubMenu("CATEGORÍAS");
+        for (Categoria categoria : categorias) {
+            DefaultMenuItem item = new DefaultMenuItem(categoria.getNombre());
+            item.setCommand("#{frmDashboard.selectCategoria(" + categoria.getIdCategoria() + ")}");
+            item.setUpdate("productosTabla");
+            firstSubmenu.addElement(item);
+        }
+        model.addElement(firstSubmenu);
     }
 
     //para hacer pasar a agregar productos
     public void productos() {
-        RequestContext context = RequestContext.getCurrentInstance();
-        nuevaOrden.fecha = fecha;
-        context.execute("PF('addProductos').show();");
+        if ((!nuevaOrden.cliente.isEmpty()) || (!nuevaOrden.mesa.isEmpty()) || (!nuevaOrden.mesero.isEmpty())) {
+            System.out.println("LLEGUE CON ALGUNO NO VACIO");
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('addProductos').show();");
+        }
+
     }
 
     public void addProductos() {
@@ -140,12 +138,12 @@ public class frmNuevaOrden implements Serializable {
         try {
             nuevaOrden.activa = true;
             nuevaOrden.CalcularTotal();
-            manejadorOrden.Insertar(nuevaOrden);
+            ManejadorOrden.Insertar(nuevaOrden);
             //si se crea la nueva orden se imprimen los tickets automaticos
-            ticket.TicketBebida(nuevaOrden);
-            ticket.TicketCocina(nuevaOrden);
+            // ticket.TicketBebida(nuevaOrden);
+            // ticket.TicketCocina(nuevaOrden);
         } catch (Exception e) {
-            
+
         }
     }
 
