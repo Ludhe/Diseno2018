@@ -52,7 +52,7 @@ public class frmDashBoard implements Serializable {
 
         categorias = new ArrayList<>();
         categorias = manejadorCategorias.Obtener(true);
-        
+
         selectedOrden = new Orden();
         selectedProducto = new Producto();
         selectedDetalleOrden = new DetalleOrden();
@@ -72,6 +72,46 @@ public class frmDashBoard implements Serializable {
         manejadorOrden.Actualizar(selectedOrden);
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('modificarOrdenDialog').hide();");
+    }
+
+    public void saveDetalleOrden() {        
+        RequestContext context = RequestContext.getCurrentInstance();
+        //FacesContext context2 = FacesContext.getCurrentInstance();
+        List<DetalleOrden> list = selectedOrden.getDetalleOrdenList();
+        List<DetalleOrden> tempList = tempListDetalleOrden;
+        
+        for (DetalleOrden tempDetOrd : tempList) {
+            boolean exist = false;
+            for (DetalleOrden detOrd : list) {
+                if (tempDetOrd.getOrden().getIdOrden().equals(detOrd.getOrden().getIdOrden())
+                        && tempDetOrd.getProducto().getIdProducto().equals(detOrd.getProducto().getIdProducto())) {
+                    //Producto ya exisite entonces solo sumar el nuevo valor
+                    int v = tempDetOrd.getCantidad().intValue() + detOrd.getCantidad().intValue();
+                    detOrd.setCantidad(new BigDecimal((double) v));                    
+                    //manejadorOrden.Actualizar(selectedOrden);
+                    exist = true;
+                    break;
+                }
+
+            }
+            if (!exist) {
+                //Creando el Detalle Orden
+                BigDecimal cantidad = tempDetOrd.getCantidad();
+                Orden ord = tempDetOrd.getOrden();
+                Producto pro = tempDetOrd.getProducto();
+                DetalleOrdenPK detOrdPri = new DetalleOrdenPK(ord.idOrden, pro.idProducto);
+                DetalleOrden detOrd = new DetalleOrden(detOrdPri, cantidad);
+                detOrd.setProducto(selectedProducto);
+                detOrd.setOrden(selectedOrden);
+                list.add(detOrd);
+                selectedOrden.setDetalleOrdenList(list);
+
+            }
+        }
+        manejadorOrden.Actualizar(selectedOrden);        
+        //Mandar a Imprimir la tempList antes de borrarla
+        clearTempDetalleOrde();
+        context.execute("PF('agregarProductoDialog').hide();");
     }
 
     public void saveTempDetalleOrden() {
@@ -110,8 +150,8 @@ public class frmDashBoard implements Serializable {
             }
         }
     }
-    
-    public void cacheTempDetalleOrde(){
+
+    public void clearTempDetalleOrde() {
         tempListDetalleOrden = new ArrayList<>();
     }
 
@@ -121,7 +161,7 @@ public class frmDashBoard implements Serializable {
         //System.out.println("selectedOrden: "+selectedOrden);
         //System.out.println("selectedProduct: " + selectedProducto);
         //System.out.println("cantida: " + cantidadProducto);
-        System.out.println("tempDetallOrden:"+tempListDetalleOrden);
+        //System.out.println("tempDetallOrden:"+tempListDetalleOrden);
     }
 
     //GETTERS Y SETTERS DE ORDEN
@@ -192,7 +232,7 @@ public class frmDashBoard implements Serializable {
     public void setCantidadProducto(int cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
     }
-    
+
     //GETTERS Y SETTERS DE LA LISTA TEMPORAL DE DETALLEORDEN
     public List<DetalleOrden> getTempListDetalleOrden() {
         return tempListDetalleOrden;
@@ -201,7 +241,5 @@ public class frmDashBoard implements Serializable {
     public void setTempListDetalleOrden(List<DetalleOrden> tempListDetalleOrden) {
         this.tempListDetalleOrden = tempListDetalleOrden;
     }
-    
-    
 
 }

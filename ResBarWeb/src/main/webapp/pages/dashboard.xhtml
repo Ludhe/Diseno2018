@@ -97,7 +97,7 @@
                 <br></br>
                 <p:commandButton value="Modificar Orden" onclick="PF('modificarOrdenDialog').show()"/>
                 <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"
-                                 actionListener="#{frmDashboard.cacheTempDetalleOrde()}"/>
+                                 actionListener="#{frmDashboard.clearTempDetalleOrde()}" update=":formOrdenProductos"/>
                 <br></br>
                 <p:commandButton value="Imprimir Cuenta"/>
                 <p:commandButton value="Tramitar Pago"/>
@@ -144,7 +144,7 @@
                 <br></br>
                 <p:dataTable id="ordenesTemporalesTabla" var="tempDetalleOrden" value="#{frmDashboard.tempListDetalleOrden}"
                              rendered="#{not empty frmDashboard.tempListDetalleOrden}">
-                    <f:facet name="header">Productos en Espera</f:facet>
+                    <f:facet name="header">Productos a Agregar</f:facet>
                     <p:column headerText="Producto" style="text-align: center;">
                         <h:outputText value="#{tempDetalleOrden.producto.nombre}"/>
                     </p:column>
@@ -154,8 +154,7 @@
                         </h:outputText>
                     </p:column>
                 </p:dataTable>
-                <p:commandButton value="Guardar e Imprimir En Espera"/>
-                <p:commandButton value="LOGS" actionListener="#{frmDashboard.logDatos()}"/>
+                <p:commandButton value="Guardar e Imprimir" actionListener="#{frmDashboard.saveDetalleOrden()}" update=":formOrdenProductos"/>                
                 <p:commandButton value="Agregar Productos" onclick="PF('agregarProductoDialog').show()"/>
             </h:form>            
         </p:dialog>
