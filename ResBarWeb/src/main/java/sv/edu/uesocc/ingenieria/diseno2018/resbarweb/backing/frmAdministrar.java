@@ -8,6 +8,7 @@ package sv.edu.uesocc.ingenieria.diseno2018.resbarweb.backing;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -129,14 +130,28 @@ public class frmAdministrar implements Serializable {
         int idProd = ManejadorProductos.ObtenerId();
         producto.idProducto = idProd;
         ManejadorProductos.Insertar(producto);
-        recargarProductos("0");
+         int pos =0;
+            List<Categoria> cats = getCategorias();
+            for(int i=0; i<cats.size(); i++){
+                if(producto.idCategoria.idCategoria == cats.get(i).idCategoria){
+                    pos = i;
+                }
+            }
+        recargarProductos(String.valueOf(pos));
 
     }
 
     public void eliminarProducto() {
         if (producto != null) {
+             int pos =0;
+            List<Categoria> cats = getCategorias();
+            for(int i=0; i<cats.size(); i++){
+                if(Objects.equals(producto.idCategoria.idCategoria, cats.get(i).idCategoria)){
+                    pos = i;
+                }
+            }
             ManejadorProductos.Eliminar(producto);
-            recargarProductos("0");
+            recargarProductos(String.valueOf(pos));
         }
     }
 
@@ -144,6 +159,7 @@ public class frmAdministrar implements Serializable {
         if (categoria != null) {
             categoria.idCategoria = ManejadorCategorias.ObtenerId();
             ManejadorCategorias.Insertar(categoria);
+            init();
         }
 
     }
@@ -156,15 +172,31 @@ public class frmAdministrar implements Serializable {
             }
             ManejadorCategorias.Eliminar(categoria);
             recargarProductos("0");
+            init();
         }
     }
     
     public void modificarProducto(){
             ManejadorProductos.Actualizar(selectedProduct);
-            recargarProductos("0");
+             int pos =0;
+            List<Categoria> cats = getCategorias();
+            for(int i=0; i<cats.size(); i++){
+                if(selectedProduct.idCategoria.idCategoria == cats.get(i).idCategoria){
+                    pos = i;
+                }
+            }
+            recargarProductos(String.valueOf(pos));
     }
     
     public void modificarCategoria(){
             ManejadorCategorias.Actualizar(selectedCategoria);
+    }
+    
+    public void nuevoProducto(){
+        producto = new Producto();
+    }
+    
+    public void nuevaCategoria(){
+        categoria=new Categoria();
     }
 }

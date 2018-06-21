@@ -62,22 +62,13 @@
                                     </f:facet>
 
                                     <p:column headerText="ID Producto">
-                                        <p:cellEditor>  
-                                            <f:facet name="output"><h:outputText value="#{product.idProducto}" /></f:facet>
-                                            <f:facet name="input"><h:inputText  value="#{product.idProducto}" label="idProducto"/></f:facet>
-                                        </p:cellEditor>
+                                           <h:outputText value="#{product.idProducto}" />
                                     </p:column>
                                     <p:column headerText="Nombre">
-                                        <p:cellEditor>  
-                                            <f:facet name="output"><h:outputText value="#{product.nombre}" /></f:facet>
-                                            <f:facet name="input"><h:inputText  value="#{product.nombre}" label="Nombre"/></f:facet>
-                                        </p:cellEditor>
+                                           <h:outputText value="#{product.nombre}" />
                                     </p:column>
                                     <p:column headerText="Precio">
-                                        <p:cellEditor>  
-                                            <f:facet name="output"><h:outputText value="#{product.precio}" /></f:facet>
-                                            <f:facet name="input"><h:inputText  value="#{product.precio}" label="Nombre"/></f:facet>
-                                        </p:cellEditor>
+                                           <h:outputText value="#{product.precio}" />
                                     </p:column>
                                     <p:column headerText="" style="width: 42px">
                                         <p:commandButton action="#{administrar.eliminarProducto()}" icon="ui-icon-close" update=":form:productos" ajax="true">
@@ -94,7 +85,7 @@
                 </div>
                 <div class="row" align="center">
                     <div class="col-12">
-                        <p:commandButton onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus"></p:commandButton>          
+                        <p:commandButton actionListener="#{administrar.nuevoProducto()}" onclick="PF('addProduct').show()" value="Agregar Nuevo Producto" icon="ui-icon-plus" update=":modales"></p:commandButton>          
                     </div>
                 </div>
             </p:layoutUnit>
@@ -151,7 +142,7 @@
         </p:dialog>
 
         <p:dialog header="Agregar nueva categoría" widgetVar="addCategoria" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <h:form>
+            <h:form id="agregarCat">
                 <p:outputPanel id="carDetail2" style="text-align:center;">
                     <div class="row" align="center">
                         <div class="col-4">
@@ -260,16 +251,10 @@
                     </f:facet>
 
                     <p:column headerText="ID Producto">
-                        <p:cellEditor>  
-                            <f:facet name="output"><h:outputText value="#{cat.idCategoria}" /></f:facet>
-                            <f:facet name="input"><h:inputText  value="#{cat.idCategoria}" label="idProducto"/></f:facet>
-                        </p:cellEditor>
+                           <h:outputText value="#{cat.idCategoria}" />
                     </p:column>
                     <p:column headerText="Nombre">
-                        <p:cellEditor>  
-                            <f:facet name="output"><h:outputText value="#{cat.nombre}" /></f:facet>
-                            <f:facet name="input"><h:inputText  value="#{cat.nombre}" label="Nombre"/></f:facet>
-                        </p:cellEditor>
+                           <h:outputText value="#{cat.nombre}" />
                     </p:column>
                     <p:column headerText="" style="width: 42px">
                         <p:commandButton action="#{administrar.eliminarCategoria()}" icon="ui-icon-close" update=":menuCats :manageCats:categorias" ajax="true">
@@ -279,7 +264,7 @@
                 </p:dataTable>
                 <div class="row" align="center">
                     <div class="col-12">
-                        <p:commandButton onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus"></p:commandButton>          
+                        <p:commandButton actionListener="#{administrar.nuevaCategoria()}" onclick="PF('addCategoria').show()" value="Agregar Nueva Categoría" icon="ui-icon-plus" update=":agregarCat"></p:commandButton>          
                     </div>
                 </div>
             </h:form>
