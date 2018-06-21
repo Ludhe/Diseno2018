@@ -224,7 +224,7 @@
                 <h:outputLabel for="check" value="Imprimir ticket"></h:outputLabel>
                 <p:selectBooleanCheckbox id="check" value="#{frmDashboard.imprimirTicket}"></p:selectBooleanCheckbox>
                 <br></br><br></br>
-                <p:commandButton value="Confirmar pago" actionListener="#{frmDashboard.tramitarPago()}" update=":form" oncomplete="PF('tramitarPagowv').hide(); PF('opcionesOrdenDialog').hide()" onclick="window.opener.location.reload()"/>
+                <p:commandButton value="Confirmar pago" actionListener="#{frmDashboard.tramitarPago()}" update=":form" ajax="true" oncomplete="PF('tramitarPagowv').hide(); PF('opcionesOrdenDialog').hide()" onclick="window.opener.location.reload()"/>
             </h:form>
         </p:dialog>
 

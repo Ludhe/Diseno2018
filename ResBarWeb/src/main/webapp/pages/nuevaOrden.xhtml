@@ -68,7 +68,7 @@
                             </div>
                         </h:form>  
                         <p:separator />
-                        <p:commandButton value="Crear Orden" actionListener="#{frmNuevaOrden.guardar}" icon="ui-icon-check" />
+                        <p:commandButton value="Crear Orden" actionListener="#{frmNuevaOrden.guardar}" icon="ui-icon-check"  onclick="window.location.href='dashboard.jsf'; window.opener.location.reload()"/>
                     </h:form>
                 </p:panel>                            
             </div>
