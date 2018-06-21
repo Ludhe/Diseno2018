@@ -101,8 +101,8 @@
                 <p:commandButton value="Modificar Productos" onclick="PF('modificarOrdenProductosDialog').show()"
                                  actionListener="#{frmDashboard.clearTempDetalleOrde()}" update=":formOrdenProductos"/>
                 <br></br>
-                <p:commandButton value="Imprimir Cuenta"/>
-                <p:commandButton value="Tramitar Pago"/>
+                <p:commandButton value="Imprimir Cuenta" actionListener="#{frmDashboard.imprimirCuenta()}"/>
+                <p:commandButton value="Tramitar Pago" onclick="PF('tramitarPagowv').show()" update=":tramitPago"/>
             </h:form>
         </p:dialog>
         <!--2 Modificar Orden Dialog-->
@@ -203,5 +203,30 @@
                 </div>
             </h:form>
         </p:dialog>
+        <p:dialog id="tramitarPago" header="Tramitar Pago" widgetVar="tramitarPagowv" 
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="70%">
+            <h:form id="tramitPago">
+                <h:outputLabel value="Total"></h:outputLabel>
+                <h:outputText value="#{frmDashboard.selectedOrden.total}">
+                    <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                </h:outputText>
+                <br></br><br></br>
+                <h:outputLabel for="efectivo" value="Efectivo"></h:outputLabel>
+                <p:inputText id="efectivo" value="#{frmDashboard.efectivo}">
+                    <p:ajax event="keyup" listener="#{frmDashboard.calcularVuelto()}" update=":tramitPago:cambio"/>
+                </p:inputText>
+                <br></br><br></br>
+                <h:outputLabel for="cambio" value="Cambio"></h:outputLabel>
+                <h:outputText id="cambio" value="#{frmDashboard.cambio}">
+                    <f:convertNumber pattern="$#0.00" locale="es_US"/>
+                </h:outputText>
+                <br></br><br></br>
+                <h:outputLabel for="check" value="Imprimir ticket"></h:outputLabel>
+                <p:selectBooleanCheckbox id="check" value="#{frmDashboard.imprimirTicket}"></p:selectBooleanCheckbox>
+                <br></br><br></br>
+                <p:commandButton value="Confirmar pago" actionListener="#{frmDashboard.tramitarPago()}" update=":form" oncomplete="PF('tramitarPagowv').hide(); PF('opcionesOrdenDialog').hide()" onclick="window.opener.location.reload()"/>
+            </h:form>
+        </p:dialog>
+
     </h:body>
 </html>

@@ -110,9 +110,9 @@ public class NuevoTicket {
         ticket += "   " + orden.total + "                             \n\n";
         ticket += "------------------------------------------------\n\n\n\n";
         System.out.println(ticket);
-        printerService.printString("POS-80 (copy 1)", ticket);
+        printerService.printString("POS-80", ticket);
         byte[] cutP = new byte[]{29, 'V', 1};
-        printerService.printBytes("POS-80 (copy 1)", cutP);
+        printerService.printBytes("POS-80", cutP);
     }
 
     public void TicketExtraCocina(List<DetalleOrden> ordenDet) {
@@ -141,9 +141,9 @@ public class NuevoTicket {
         ticket += "   " + ordenDet.get(0).orden.comentario + "                             \n\n";
         ticket += "------------------------------------------------ \n\n\n\n";
 
-        printerService.printString("POS-80 (copy 1)", ticket);
+        printerService.printString("POS-80", ticket);
         byte[] cutP = new byte[]{29, 'V', 1};
-        printerService.printBytes("POS-80 (copy 1)", cutP);
+        printerService.printBytes("POS-80", cutP);
     }
     
     public void TicketExtraBebida(List<DetalleOrden> ordenDet) {
@@ -172,8 +172,8 @@ public class NuevoTicket {
         ticket += "   " + ordenDet.get(0).orden.comentario + "                             \n\n";
         ticket += "------------------------------------------------ \n\n\n\n";
 
-        printerService.printString("POS-80 (copy 1)", ticket);
+        printerService.printString("POS-80", ticket);
         byte[] cutP = new byte[]{29, 'V', 1};
-        printerService.printBytes("POS-80 (copy 1)", cutP);
+        printerService.printBytes("POS-80", cutP);
     }
 }

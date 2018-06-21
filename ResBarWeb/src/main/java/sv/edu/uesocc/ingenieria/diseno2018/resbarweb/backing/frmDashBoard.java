@@ -24,11 +24,12 @@ import sv.edu.diseno.definiciones.DetalleOrden;
 import sv.edu.diseno.definiciones.DetalleOrdenPK;
 import sv.edu.diseno.definiciones.Orden;
 import sv.edu.diseno.definiciones.Producto;
+import sv.edu.uesocc.ingenieria.diseno2018.resbarweb.ticket.NuevoTicket;
 
 @ManagedBean(name = "frmDashboard")
 @ViewScoped
 public class frmDashBoard implements Serializable {
-    
+
     private String txtBuscador;
 
     ManejadorOrden manejadorOrden;
@@ -45,6 +46,34 @@ public class frmDashBoard implements Serializable {
     private List<DetalleOrden> tempListDetalleOrden;
 
     private MenuModel model;
+    private double efectivo, cambio;
+    private boolean imprimirTicket;
+
+    NuevoTicket ticket = new NuevoTicket();
+
+    public boolean isImprimirTicket() {
+        return imprimirTicket;
+    }
+
+    public void setImprimirTicket(boolean imprimirTicket) {
+        this.imprimirTicket = imprimirTicket;
+    }
+    
+    public double getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(double cambio) {
+        this.cambio = cambio;
+    }
+    
+    public double getEfectivo() {
+        return efectivo;
+    }
+
+    public void setEfectivo(double efectivo) {
+        this.efectivo = efectivo;
+    }
 
     //Metodos De la Importantes del FRM
     @PostConstruct
@@ -76,12 +105,12 @@ public class frmDashBoard implements Serializable {
         context.execute("PF('modificarOrdenDialog').hide();");
     }
 
-    public void saveDetalleOrden() {        
+    public void saveDetalleOrden() {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         List<DetalleOrden> list = selectedOrden.getDetalleOrdenList();
         List<DetalleOrden> tempList = tempListDetalleOrden;
-        
+
         for (DetalleOrden tempDetOrd : tempList) {
             boolean exist = false;
             for (DetalleOrden detOrd : list) {
@@ -89,7 +118,7 @@ public class frmDashBoard implements Serializable {
                         && tempDetOrd.getProducto().getIdProducto().equals(detOrd.getProducto().getIdProducto())) {
                     //Producto ya exisite entonces solo sumar el nuevo valor
                     int v = tempDetOrd.getCantidad().intValue() + detOrd.getCantidad().intValue();
-                    detOrd.setCantidad(new BigDecimal((double) v));                    
+                    detOrd.setCantidad(new BigDecimal((double) v));
                     //manejadorOrden.Actualizar(selectedOrden);
                     exist = true;
                     break;
@@ -109,15 +138,33 @@ public class frmDashBoard implements Serializable {
                 selectedOrden.setDetalleOrdenList(list);
 
             }
+
         }
         selectedOrden.CalcularTotal();
-        manejadorOrden.Actualizar(selectedOrden);        
+        manejadorOrden.Actualizar(selectedOrden);
         //Mandar a Imprimir la tempList antes de borrarla
+        if (!tempList.isEmpty()) {
+            boolean bebidas = false, cocina = false;
+            for (DetalleOrden detalleOrden : tempList) {
+                if (detalleOrden.producto.area == 'C') {
+                    cocina = true;
+                }
+                if (detalleOrden.producto.area == 'B') {
+                    bebidas = true;
+                }
+            }
+            if (bebidas) {
+                ticket.TicketExtraBebida(tempList);
+            }
+            if (cocina) {
+                ticket.TicketExtraCocina(tempList);
+            }
+        }
         clearTempDetalleOrde();
         context.execute("PF('agregarProductoDialog').hide();");
     }
 
-    public void saveTempDetalleOrden() {        
+    public void saveTempDetalleOrden() {
         RequestContext context = RequestContext.getCurrentInstance();
         //FacesContext context2 = FacesContext.getCurrentInstance();
         boolean exits = false;
@@ -141,6 +188,10 @@ public class frmDashBoard implements Serializable {
         }
         context.execute("PF('agregarProductoDialog').hide();");
     }
+    
+    public void calcularVuelto(){
+            cambio = efectivo-selectedOrden.total.doubleValue();
+    }
 
     public void selectCategoria(int idCategoria) {
         for (Categoria categoria : categorias) {
@@ -150,8 +201,8 @@ public class frmDashBoard implements Serializable {
             }
         }
     }
-    
-    public void clearAllSelectionAgregarProducto(){
+
+    public void clearAllSelectionAgregarProducto() {
         selectedCategoria = null;
         selectedProducto = null;
         cantidadProducto = 1;
@@ -160,24 +211,22 @@ public class frmDashBoard implements Serializable {
     public void clearTempDetalleOrde() {
         tempListDetalleOrden = new ArrayList<>();
     }
-    
-    public void actualizarOrdenesActivas(){
+
+    public void actualizarOrdenesActivas() {
         if (txtBuscador.isEmpty()) {
             ordenes = manejadorOrden.ObtenerActivas();
-        }else{
+        } else {
             ordenes = manejadorOrden.BuscarActivas(txtBuscador);
-        }        
+        }
     }
 
-    public void logDatos() {
-        //System.out.println("Manejador: "+manejadorOrden);
-        //System.out.println("ordenes: "+ordenes);
-        //System.out.println("selectedOrden: "+selectedOrden);
-        //System.out.println("selectedProduct: " + selectedProducto);
-        //System.out.println("cantida: " + cantidadProducto);
-        //System.out.println("tempDetallOrden:"+tempListDetalleOrden);
-        System.out.println("selectedDetalleOrden"+selectedDetalleOrden);
-    }
+   public void tramitarPago(){
+       selectedOrden.activa=false;
+       ManejadorOrden.Actualizar(selectedOrden);
+       if(imprimirTicket){
+           ticket.TicketVenta(selectedOrden);
+       }
+   }
 
     //GETTERS Y SETTERS DE ORDEN
     public List<Orden> getOrdenes() {
@@ -256,7 +305,7 @@ public class frmDashBoard implements Serializable {
     public void setTempListDetalleOrden(List<DetalleOrden> tempListDetalleOrden) {
         this.tempListDetalleOrden = tempListDetalleOrden;
     }
-    
+
     //GETTES Y SETTER DEL BUSCADOR STRING
     public String getTxtBuscador() {
         return txtBuscador;
@@ -266,5 +315,8 @@ public class frmDashBoard implements Serializable {
         this.txtBuscador = txtBuscador;
     }
     
+    public void imprimirCuenta(){
+        ticket.TicketVenta(selectedOrden);
+    }
 
 }
