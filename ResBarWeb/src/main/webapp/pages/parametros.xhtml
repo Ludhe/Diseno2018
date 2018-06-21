@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>PARAMETROS</title>
+        <link rel="stylesheet" href="css/reset.css"></link>
+        <link rel="stylesheet" href="css/simple-grid.css"></link>
+        <link rel="icon" href="img/favicon.png" type="image/png"></link>
+    </h:head>
+    <h:body>
+        <!--Top Nav-->
+        <div class="row" align="center" style="background-color: #363030; position: static;">
+            <div class="col-3"><a href="dashboard.jsf"><img src="img/home.png" alt="Ordenes de Trabajo"/><br/><label style="color: white; font-size: 1.5vw;">Inicio</label></a></div>
+            <div class="col-3"><a href="estadisticas.jsf"><img src="img/dashboard.png"/><br/><label style="color: white; font-size: 1.5vw;">Estadísticas</label></a></div>
+            <div class="col-3"><a href="administrarMenu.jsf"><img src="img/nuevaOrden.png"/><br/><label style="color: white; font-size: 1.5vw;">Administrar Menu</label></a></div>
+            <div class="col-3"><a href="parametros.jsf"><img src="img/param.png" alt="Parametros"/><br/><label style="color: white; font-size: 1.5vw;">Parametros</label></a></div>
+
+        </div>
+        <p:separator />
+        <h1  style="font-family:verdana; font-size: 2.5vw; align-self: center;">PARÁMETROS</h1>
+        <p:separator />
+
+        <div class="div-tabla" >
+            <div class="row">                    
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <h:form id="tablaPar">
+                        <p:dataTable var="parametro" value="#{frmParametros.parametros}" id="tabla" selectionMode="single" selection="#{frmParametros.selectedParametro}" rowKey="#{parametro.idParametro}">
+                            <f:facet name="header">
+                                Parametros
+                            </f:facet>
+                            <p:ajax event="rowSelect" oncomplete="PF('modificarParametro').show()" update=":modificarPar"/>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{parametro.idParametro}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{parametro.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Valor">
+                                <h:outputText value="#{parametro.valor}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div class="col-1"></div>
+            </div>            
+        </div> 
+
+        <p:dialog header="MODIFICAR PARAMETRO" widgetVar="modificarParametro" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="modificarPar">
+                <p:outputPanel id="modingCat" style="text-align:center;">
+                    <div class="row" align="center">
+                        <br></br>
+                        <div class="row" align="center">
+                            <div class="col-4">
+                                <label>Nombre del Parámetro: </label>
+                            </div>
+                            <div class="col-8">
+                                <p:outputLabel value="#{frmParametros.selectedParametro.nombre}"></p:outputLabel>
+                            </div>
+                        </div>
+                        <div class="row" align="center">
+                            <div class="col-4">
+                                <label>Valor del Parámetro: </label>
+                            </div>
+                            <div class="col-8">
+                                <p:inputText value="#{frmParametros.selectedParametro.valor}" required="true"></p:inputText>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <p:commandButton value="Actualizar" actionListener="#{frmParametros.modificarParametro()}" onclick="PF('modificarParametro').hide()" update=":tablaPar:tabla" ajax="true"></p:commandButton>
+                        </div>
+                        <div class="col-4">
+                            <p:commandButton value="Cancelar" onclick="PF('modificarParametro').hide()'"></p:commandButton>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>
+</html>
